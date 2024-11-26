@@ -4,7 +4,7 @@ import BusinessLogicException from "../exceptions/business/business_logic_except
 import TrustedException from "../exceptions/trusted_exception";
 import logger from "../lib/logger";
 
-function handleApiError(error: any, req: Request, res: Response, next: NextFunction) {
+function handleApiErrorMiddleware(error: any, req: Request, res: Response, next: NextFunction) {
     const response = {
         details: "It was not possible to process your request, please try it again later"
     };
@@ -28,4 +28,4 @@ function handleApiError(error: any, req: Request, res: Response, next: NextFunct
     res.status(statusCode).json(response);
 }
 
-export default handleApiError;
+export default handleApiErrorMiddleware;
