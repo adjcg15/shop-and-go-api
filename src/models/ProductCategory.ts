@@ -26,8 +26,7 @@ export default class ProductCategory extends Model<InferAttributes<ProductCatego
 
     static associate(models: IDB) {
         ProductCategory.hasMany(models.Product, {
-            sourceKey: "id",
-            foreignKey: "idCategory",
+            foreignKey: "idCategoria",
             as: "products"
         });
     }
