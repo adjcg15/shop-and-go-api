@@ -10,7 +10,7 @@ export default (sequelize: Sequelize) => {
             field: "idProducto"
         },
         barCode: {
-            type: DataTypes.STRING(13),
+            type: DataTypes.CHAR(13),
             unique: true,
             field: "codigoBarras",
             allowNull: false
@@ -21,7 +21,7 @@ export default (sequelize: Sequelize) => {
             allowNull: false
         },
         description: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             field: "descripcion",
             allowNull: false
         },

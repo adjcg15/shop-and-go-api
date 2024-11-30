@@ -12,7 +12,8 @@ export default (sequelize: Sequelize) => {
         name: {
             type: DataTypes.STRING,
             field: "nombre",
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
         isActive: {
             type: DataTypes.BOOLEAN,
