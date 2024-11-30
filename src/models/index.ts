@@ -16,7 +16,7 @@ fs
         return file.indexOf(".") !== 0 && file.slice(-3) === ".ts";
     })
     .forEach(async file => {
-        const { default: modelFactory } = await import(path.join(__dirname, "factories", file));
+        const { default: modelFactory } = require(path.join(__dirname, "factories", file));
         const model = modelFactory(sequelize);
         db[model.name as keyof IDB] = model;
     });
