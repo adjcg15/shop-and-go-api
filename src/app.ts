@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import handleApiErrorMiddleware from "./middlewares/error_handler";
-import productsRouter from "./routes/products_router";
+import storesRouter from "./routes/stores_router";
 
 dotenv.config();
 
@@ -16,7 +16,7 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use("/products", productsRouter);
+app.use("/stores", storesRouter);
 
 app.use(handleApiErrorMiddleware);
 
