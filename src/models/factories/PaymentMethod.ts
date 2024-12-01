@@ -50,7 +50,10 @@ export default (sequelize: Sequelize) => {
     }, {
         sequelize,
         tableName: "MetodosPago",
-        timestamps: false
+        timestamps: false,
+        defaultScope: {
+            attributes: { exclude: ["idEmisor", "idCliente"] }
+        }
     });
 
     return PaymentMethod;

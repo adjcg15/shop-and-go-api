@@ -50,7 +50,10 @@ export default (sequelize: Sequelize) => {
     }, {
         sequelize,
         tableName: "Trabajadores",
-        timestamps: false
+        timestamps: false,
+        defaultScope: {
+            attributes: { exclude: ["idSucursal", "idCargoTrabajador"] }
+        }
     });
 
     return Employee;

@@ -25,7 +25,10 @@ export default (sequelize: Sequelize) => {
     }, {
         sequelize,
         tableName: "Inventarios",
-        timestamps: false
+        timestamps: false,
+        defaultScope: {
+            attributes: { exclude: ["idProducto", "idSucursal"] }
+        }
     });
 
     return Inventory;

@@ -26,7 +26,10 @@ export default (sequelize: Sequelize) => {
     }, {
         sequelize,
         tableName: "Incidencias",
-        timestamps: false
+        timestamps: false,
+        defaultScope: {
+            attributes: { exclude: ["idPedido"] }
+        }
     });
 
     return Incident;

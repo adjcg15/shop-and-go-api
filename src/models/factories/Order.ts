@@ -38,7 +38,10 @@ export default (sequelize: Sequelize) => {
     }, {
         sequelize,
         tableName: "Pedidos",
-        timestamps: false
+        timestamps: false,
+        defaultScope: {
+            attributes: { exclude: ["idEstadoPedido", "idDireccionEntrega", "idCliente", "idMetodoPago"] }
+        }
     });
 
     return Order;

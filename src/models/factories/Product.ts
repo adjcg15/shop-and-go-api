@@ -52,7 +52,10 @@ export default (sequelize: Sequelize) => {
     }, {
         sequelize,
         tableName: "Productos",
-        timestamps: false
+        timestamps: false,
+        defaultScope: {
+            attributes: { exclude: ["idCategoria"] }
+        }
     });
 
     return Product;

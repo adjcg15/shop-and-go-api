@@ -71,7 +71,10 @@ export default (sequelize: Sequelize) => {
     }, {
         sequelize,
         tableName: "DireccionesEntrega",
-        timestamps: false
+        timestamps: false,
+        defaultScope: {
+            attributes: { exclude: ["idCliente"] }
+        }
     });
 
     return Address;
