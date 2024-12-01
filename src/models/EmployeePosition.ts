@@ -1,6 +1,6 @@
 import { Association, CreationOptional, HasManyAddAssociationMixin, HasManyAddAssociationsMixin, HasManyCountAssociationsMixin, HasManyCreateAssociationMixin, HasManyGetAssociationsMixin, HasManyHasAssociationMixin, HasManyHasAssociationsMixin, HasManyRemoveAssociationMixin, HasManyRemoveAssociationsMixin, HasManySetAssociationsMixin, InferAttributes, InferCreationAttributes, Model, NonAttribute } from "sequelize";
 import Employee from "./Employee";
-import { IDB } from "types/interfaces/db";
+import { IDB } from "../types/interfaces/db";
 
 export default class EmployeePosition extends Model<InferAttributes<EmployeePosition>, InferCreationAttributes<EmployeePosition>> {
     declare id: CreationOptional<number>;

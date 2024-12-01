@@ -1,0 +1,29 @@
+import { DataTypes, Sequelize } from "sequelize";
+import Incident from "../Incident";
+
+export default (sequelize: Sequelize) => {
+    Incident.init({
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+            field: "idIncidencia"
+        },
+        creationDate: {
+            type: DataTypes.DATE,
+            field: "contrasena",
+            allowNull: false
+        },
+        reason: {
+            type: DataTypes.STRING(255),
+            field: "motivo",
+            allowNull: false
+        }
+    }, {
+        sequelize,
+        tableName: "Incidencias",
+        timestamps: false
+    });
+
+    return Incident;
+}
