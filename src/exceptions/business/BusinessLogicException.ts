@@ -1,4 +1,4 @@
-import TrustedException from "../trusted_exception";
+import TrustedException from "../TrustedException";
 
 class BusinessLogicException extends TrustedException {
     constructor(message: string) {

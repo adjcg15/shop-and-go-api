@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
-import BusinessLogicException from "../exceptions/business/business_logic_exception";
-import TrustedException from "../exceptions/trusted_exception";
+import BusinessLogicException from "../exceptions/business/BusinessLogicException";
+import TrustedException from "../exceptions/TrustedException";
 import logger from "../lib/logger";
 
 function handleApiErrorMiddleware(error: any, req: Request, res: Response, next: NextFunction) {
