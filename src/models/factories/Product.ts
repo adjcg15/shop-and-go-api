@@ -44,6 +44,10 @@ export default (sequelize: Sequelize) => {
             type: DataTypes.INTEGER,
             field: "cantidadMaxima",
             allowNull: false
+        },
+        idCategory: {
+            type: DataTypes.INTEGER,
+            field: "idCategoria"
         }
     }, {
         sequelize,

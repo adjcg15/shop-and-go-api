@@ -12,7 +12,8 @@ export default (sequelize: Sequelize) => {
         title: {
             type: DataTypes.STRING(50),
             field: "nombre",
-            allowNull: false
+            allowNull: false,
+            unique: true
         }
     }, {
         sequelize,

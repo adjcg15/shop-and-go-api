@@ -18,6 +18,22 @@ export default (sequelize: Sequelize) => {
             type: DataTypes.DATE,
             field: "fechaEntrega",
             allowNull: true
+        },
+        idStatus: {
+            type: DataTypes.INTEGER,
+            field: "idEstadoPedido"
+        },
+        idDeliveryAddress: {
+            type: DataTypes.INTEGER,
+            field: "idDireccionEntrega"
+        },
+        idClient: {
+            type: DataTypes.INTEGER,
+            field: "idCliente"
+        },
+        idPaymentMethod: {
+            type: DataTypes.INTEGER,
+            field: "idMetodoPago"
         }
     }, {
         sequelize,

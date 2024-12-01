@@ -13,6 +13,14 @@ export default (sequelize: Sequelize) => {
             type: DataTypes.INTEGER,
             field: "cantidad",
             allowNull: false
+        },
+        idProduct: {
+            type: DataTypes.INTEGER,
+            field: "idProducto"
+        },
+        idStore: {
+            type: DataTypes.INTEGER,
+            field: "idSucursal"
         }
     }, {
         sequelize,

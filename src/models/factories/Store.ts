@@ -12,7 +12,8 @@ export default (sequelize: Sequelize) => {
         name: {
             type: DataTypes.STRING(255),
             field: "nombreComercial",
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
         completeAddress: {
             type: DataTypes.STRING(255),

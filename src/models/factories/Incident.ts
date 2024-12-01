@@ -18,6 +18,10 @@ export default (sequelize: Sequelize) => {
             type: DataTypes.STRING(255),
             field: "motivo",
             allowNull: false
+        },
+        idOrder: {
+            type: DataTypes.INTEGER,
+            field: "idPedido"
         }
     }, {
         sequelize,

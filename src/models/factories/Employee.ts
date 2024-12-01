@@ -38,6 +38,14 @@ export default (sequelize: Sequelize) => {
             type: DataTypes.BOOLEAN,
             field: "esActivo",
             allowNull: false
+        },
+        idStore: {
+            type: DataTypes.INTEGER,
+            field: "idSucursal"
+        },
+        idPosition: {
+            type: DataTypes.INTEGER,
+            field: "idCargoTrabajador"
         }
     }, {
         sequelize,

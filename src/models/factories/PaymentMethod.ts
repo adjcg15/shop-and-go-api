@@ -38,6 +38,14 @@ export default (sequelize: Sequelize) => {
             type: DataTypes.BOOLEAN,
             field: "esActivo",
             allowNull: false
+        },
+        idIssuer: {
+            type: DataTypes.INTEGER,
+            field: "idEmisor"
+        },
+        idClient: {
+            type: DataTypes.INTEGER,
+            field: "idCliente"
         }
     }, {
         sequelize,

@@ -1,5 +1,5 @@
 import Address from "../Address";
-import { DataTypes, Sequelize } from "sequelize";
+import { DataTypes, INTEGER, Sequelize } from "sequelize";
 
 export default (sequelize: Sequelize) => {
     Address.init({
@@ -63,6 +63,10 @@ export default (sequelize: Sequelize) => {
             type: DataTypes.BOOLEAN,
             field: "esActivo",
             allowNull: false
+        },
+        idClient: {
+            type: DataTypes.INTEGER,
+            field: "idCliente"
         }
     }, {
         sequelize,
