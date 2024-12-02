@@ -1,10 +1,10 @@
-import { InferAttributes, Op } from "sequelize";
+import { Op } from "sequelize";
 import db from "../models";
-import Product from "../models/Product";
 import SQLException from "../exceptions/services/SQLException";
+import { IProductWithStock } from "../types/interfaces/response_bodies";
 
 async function getProductsInStore(idStore: number, pagination: { offset: number, limit: number, query: string, categoryFilter?: number }) {
-    const productsList: (InferAttributes<Product> & { stock: number })[] = [];
+    const productsList: IProductWithStock[] = [];
 
     try {
         const { offset, limit, query, categoryFilter } = pagination;

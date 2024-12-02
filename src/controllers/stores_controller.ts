@@ -3,11 +3,16 @@ import { HttpStatusCodes } from "../types/enums/http";
 import { getProductsInStore } from "../services/products_service";
 import { IProductsListPaginationQuery } from "../types/interfaces/request_queries";
 import { IStoreByIdParams } from "../types/interfaces/request_parameters";
+import { IProductWithStock } from "../types/interfaces/response_bodies";
 
-async function getProductsInStoreController(req: Request, res: Response, next: NextFunction) {
+async function getProductsInStoreController(
+    req: Request<IStoreByIdParams, {}, {}, IProductsListPaginationQuery>, 
+    res: Response<IProductWithStock[]>, 
+    next: NextFunction
+) {
     try {
-        const { limit, offset, query, categoryFilter } = req.query as IProductsListPaginationQuery;
-        const { idStore } = req.params as IStoreByIdParams;
+        const { limit, offset, query, categoryFilter } = req.query;
+        const { idStore } = req.params;
 
         const products = await getProductsInStore(
             idStore!,
