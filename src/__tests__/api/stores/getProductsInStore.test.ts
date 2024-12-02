@@ -1,9 +1,9 @@
 import request from "supertest";
-import createApp from "../../lib/app";
+import createApp from "../../../lib/app";
 import { Express } from "express";
-import { HttpStatusCodes } from "../../types/enums/http";
-import db from "../../models";
-import { insertE2EGetProductsByStoreTestData } from "../../test_data/e2e/stores_test_data";
+import { HttpStatusCodes } from "../../../types/enums/http";
+import db from "../../../models";
+import { insertE2EGetProductsByStoreTestData } from "../../../test_data/e2e/stores_test_data";
 
 describe("/api/stores/:idStore/products", () => {
     let app: Express;
@@ -18,7 +18,7 @@ describe("/api/stores/:idStore/products", () => {
         idStore = testDataResult.idStore;
     });
 
-    it("Should return an array with all registered products", async () => {
+    it("Should return an array of 3 products registered in database", async () => {
         const response = await request(app).get(`/api/stores/${idStore}/products`);
         const products = response.body;
 
@@ -39,5 +39,9 @@ describe("/api/stores/:idStore/products", () => {
             });
             expect(product.image === null || Buffer.isBuffer(product.image)).toBe(true);
         });
+    });
+
+    afterAll(async () => {
+        await db.sequelize.sync({ force: true });
     });
 });
