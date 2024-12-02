@@ -15,7 +15,7 @@ export default (sequelize: Sequelize) => {
             allowNull: false,
             unique: true
         },
-        completeAddress: {
+        address: {
             type: DataTypes.STRING(255),
             field: "direccionCompleta",
             allowNull: false

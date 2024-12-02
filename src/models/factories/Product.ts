@@ -26,7 +26,7 @@ export default (sequelize: Sequelize) => {
             allowNull: false
         },
         image: {
-            type: DataTypes.BLOB("long"),
+            type: "VARBINARY(MAX)",
             field: "imagen",
             allowNull: true
         },

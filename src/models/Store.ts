@@ -6,7 +6,7 @@ import { IDB } from "../types/interfaces/db";
 export default class Store extends Model<InferAttributes<Store>, InferCreationAttributes<Store>> {
     declare id: CreationOptional<number>;
     declare name: string;
-    declare completeAddress: string;
+    declare address: string;
     declare openingTime: string;
     declare closingTime: string;
     declare latitude: number;

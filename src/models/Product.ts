@@ -10,7 +10,7 @@ export default class Product extends Model<InferAttributes<Product>, InferCreati
     declare name: string;
     declare description: CreationOptional<string | null>;
     declare image: CreationOptional<Buffer | null>;
-    declare expirationDate: Date;
+    declare expirationDate: string;
     declare salePrice: number;
     declare maximumAmount: number;
 
