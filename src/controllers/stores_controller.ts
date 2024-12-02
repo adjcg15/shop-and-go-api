@@ -20,7 +20,6 @@ async function getProductsInStoreController(
         );
         res.status(HttpStatusCodes.OK).json(products);
     } catch (error) {
-        console.log(error);
         next(error);
     }
 }
