@@ -6,6 +6,7 @@ import { IDB } from "../types/interfaces/db";
 export default class Inventory extends Model<InferAttributes<Inventory>, InferCreationAttributes<Inventory>> {
     declare id: CreationOptional<number>;
     declare stock: number;
+    declare expirationDate: string;
 
     declare idProduct: ForeignKey<Product["id"]>;
     declare idStore: ForeignKey<Product["id"]>;

@@ -19,11 +19,6 @@ export default (sequelize: Sequelize) => {
             field: "mesVencimiento",
             allowNull: false
         },
-        cvcCode: {
-            type: DataTypes.CHAR(3),
-            field: "codigoSeguridad",
-            allowNull: false
-        },
         cardNumber: {
             type: DataTypes.CHAR(16),
             field: "numeroTarjeta",

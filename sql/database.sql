@@ -10,7 +10,6 @@ CREATE TABLE MetodosPago (
     idMetodoPago INT PRIMARY KEY IDENTITY(1,1),
     anioVencimiento INT NOT NULL,
     mesVencimiento INT NOT NULL,
-    codigoSeguridad NCHAR(3) NOT NULL,
     idEmisor INT NOT NULL,
     numeroTarjeta NCHAR(16) NOT NULL,
     nombreTitular NVARCHAR(64) NOT NULL,
@@ -107,7 +106,6 @@ CREATE TABLE Productos (
     nombre NVARCHAR(255) NOT NULL,
     descripcion NVARCHAR(MAX) NULL,
     imagen VARBINARY(MAX) NULL,
-    fechaCaducidad DATE NOT NULL,
     precioVenta MONEY NOT NULL,
     cantidadMaxima INT NOT NULL,
     idCategoria INT NOT NULL,
@@ -132,6 +130,7 @@ CREATE TABLE PedidosProductos (
 CREATE TABLE Inventarios ( 
     idInventario INT PRIMARY KEY IDENTITY(1,1),
     cantidad INT NOT NULL,
+    fechaCaducidad DATE NOT NULL,
     idProducto INT NOT NULL,
     idSucursal INT NOT NULL
 );
