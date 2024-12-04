@@ -5,6 +5,12 @@ interface IProductWithStock extends InferAttributes<Product> {
     stock: number 
 };
 
+interface IErrorMessageWithCode {
+    details: string;
+    errorCode?: string;
+}
+
 export {
-    IProductWithStock
+    IProductWithStock,
+    IErrorMessageWithCode
 };
