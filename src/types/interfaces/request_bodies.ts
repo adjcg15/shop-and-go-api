@@ -1,10 +1,10 @@
 interface IPaymentMethodBody {
-    cardHolder?: string;
-    expirationMonth?: string;
-    expirationYear?: string;
-    idEmisor?: number;
+    cardholderName?: string;
+    expirationMonth?: number;
+    expirationYear?: number;
+    idIssuer?: number;
     encryptedCardNumber?: string;
-    initializationVector?: string;
+    initialVector?: string;
     authenticationTag?: string;
 }
 

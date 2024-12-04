@@ -9,7 +9,7 @@ const addPaymentMethodToClientSchema: Schema = {
         },
         toInt: true
     },
-    cardHolder: {
+    cardholderName: {
         in: ["body"],
         isString: {
             errorMessage: "Cardholder name must be a string"
@@ -20,6 +20,9 @@ const addPaymentMethodToClientSchema: Schema = {
     },
     expirationMonth: {
         in: ["body"],
+        isInt: {
+            errorMessage: "Expiration month must be a int"
+        },
         isLength: {
             options: { min: 2, max: 2 },
             errorMessage: "Expiration month must be exactly 2 digits"
@@ -33,6 +36,9 @@ const addPaymentMethodToClientSchema: Schema = {
     },
     expirationYear: {
         in: ["body"],
+        isInt: {
+            errorMessage: "Expiration year must be a int"
+        },
         isLength: {
             options: { min: 2, max: 2 },
             errorMessage: "Expiration year must be exactly 2 digits"
@@ -47,7 +53,7 @@ const addPaymentMethodToClientSchema: Schema = {
             errorMessage: "Expiration year must be a valid future year (in format YY)"
         }
     },
-    idEmisor: {
+    idIssuer: {
         in: ["body"],
         isInt: {
             options: { min: 1 },
@@ -69,7 +75,7 @@ const addPaymentMethodToClientSchema: Schema = {
             errorMessage: "Card number must contain only alphanumeric characters"
         }
     },
-    initializationVector: {
+    initialVector: {
         in: ["body"],
         isLength: {
             options: { min: 12, max: 12 },

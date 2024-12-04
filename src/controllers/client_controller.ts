@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
 import { IPaymentMethodBody } from "../types/interfaces/request_bodies";
 import { IClientByIdParams } from "../types/interfaces/request_parameters";
+import { addPaymentMethodToClient } from "../services/client_service";
 
 async function addPaymentMethodToClientController(
     req: Request<IClientByIdParams, {}, IPaymentMethodBody, {}>,
@@ -10,16 +11,25 @@ async function addPaymentMethodToClientController(
 ) {
     try {
         const { 
-            cardHolder, 
+            cardholderName, 
             expirationMonth, 
             expirationYear, 
-            idEmisor, 
+            idIssuer, 
             encryptedCardNumber, 
-            initializationVector, 
+            initialVector, 
             authenticationTag } = req.body;
         const { idClient } = req.params;
 
-        //TODO recuperar lista de tarjetas para comparar el cifrado y ver que no esté registrado ya el método de pago
+        await addPaymentMethodToClient(
+            idClient!,
+            { cardholderName: cardholderName!, 
+            expirationMonth: expirationMonth!, 
+            expirationYear: expirationYear!, 
+            idIssuer: idIssuer!, 
+            encryptedCardNumber: encryptedCardNumber!, 
+            initialVector: initialVector!, 
+            authenticationTag: authenticationTag! }
+        );
 
         res.status(HttpStatusCodes.CREATED).json();
     } catch (error) {
