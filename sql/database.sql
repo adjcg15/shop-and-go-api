@@ -11,7 +11,9 @@ CREATE TABLE MetodosPago (
     anioVencimiento INT NOT NULL,
     mesVencimiento INT NOT NULL,
     idEmisor INT NOT NULL,
-    numeroTarjeta NCHAR(16) NOT NULL,
+    numeroTarjeta NCHAR(22) NOT NULL,
+    vectorInicializacion NCHAR(16) NOT NULL,
+    etiquetaAutenticacion NCHAR(22) NOT NULL,
     nombreTitular NVARCHAR(64) NOT NULL,
     esActivo TINYINT NOT NULL,
     idCliente INT NOT NULL

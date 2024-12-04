@@ -20,8 +20,18 @@ export default (sequelize: Sequelize) => {
             allowNull: false
         },
         cardNumber: {
-            type: DataTypes.CHAR(16),
+            type: DataTypes.CHAR(22),
             field: "numeroTarjeta",
+            allowNull: false
+        },
+        initialVector: {
+            type: DataTypes.CHAR(16),
+            field: "vectorInicializacion",
+            allowNull: false
+        },
+        authenticationTag: {
+            type: DataTypes.CHAR(22),
+            field: "etiquetaAutenticacion",
             allowNull: false
         },
         cardholderName: {
