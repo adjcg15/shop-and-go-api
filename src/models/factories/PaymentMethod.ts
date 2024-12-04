@@ -19,14 +19,19 @@ export default (sequelize: Sequelize) => {
             field: "mesVencimiento",
             allowNull: false
         },
-        cvcCode: {
-            type: DataTypes.CHAR(3),
-            field: "codigoSeguridad",
+        cardNumber: {
+            type: DataTypes.CHAR(22),
+            field: "numeroTarjeta",
             allowNull: false
         },
-        cardNumber: {
+        initialVector: {
             type: DataTypes.CHAR(16),
-            field: "numeroTarjeta",
+            field: "vectorInicializacion",
+            allowNull: false
+        },
+        authenticationTag: {
+            type: DataTypes.CHAR(22),
+            field: "etiquetaAutenticacion",
             allowNull: false
         },
         cardholderName: {

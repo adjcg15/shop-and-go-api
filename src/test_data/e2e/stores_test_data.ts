@@ -8,24 +8,21 @@ async function insertE2EGetProductsByStoreTestData() {
         name: "Leche Lala entera 1.5L",
         description: "Además de ser deliciosa y cremosa, la leche Lala Entera está adicionada con vitaminas A y D, proteínas y calcio que complementarán tu alimentación y la de tu familia. Rinde 6 vasos de 250 ml vs. 4 vasos de 250 ml en 1 L.",
         salePrice: 46,
-        maximumAmount: 10,
-        expirationDate: "2024-12-24",
+        maximumAmount: 10
     });
     const cheese = await dairyCategory.createProduct({ 
         barCode: "0987654321", 
         name: "Queso Panela Fud 400 gr",
         description: "Es fresco, blanco, suave y tiende a ser duradero. Su textura podría describirse mejor como una ricota firme. No tiende a derretirse por lo que puedes asarlo o colocarlo en la parrilla para comerlo directamente.",
         salePrice: 43.33,
-        maximumAmount: 20,
-        expirationDate: "2024-12-12",
+        maximumAmount: 20
     });
     const pineapleCan = await cannedCategory.createProduct({ 
         barCode: "7778889991", 
         name: "Clemente Jacques - Piña en almíbar en rebanadas",
         description: "Es un producto mexicano, que puede disfrutar como postre, guarnición o colación, listo para comer.",
         salePrice: 55.5,
-        maximumAmount: 15,
-        expirationDate: "2026-08-05",
+        maximumAmount: 15
     });
     const store = await db.Store.create({ 
         name: "El zorro Xalapa centro",
@@ -36,9 +33,9 @@ async function insertE2EGetProductsByStoreTestData() {
         longitude: -96.922326
     });
     await db.Inventory.bulkCreate([
-        { idProduct: cheese.id, stock: 24, idStore: store.id },
-        { idProduct: milk.id, stock: 60, idStore: store.id },
-        { idProduct: pineapleCan.id, stock: 31, idStore: store.id },
+        { idProduct: cheese.id, stock: 24, idStore: store.id, expirationDate: "2024-12-24" },
+        { idProduct: milk.id, stock: 60, idStore: store.id, expirationDate: "2024-12-12" },
+        { idProduct: pineapleCan.id, stock: 31, idStore: store.id, expirationDate: "2026-08-05" },
     ]);
 
     return {

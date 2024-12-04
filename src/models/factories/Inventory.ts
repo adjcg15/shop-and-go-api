@@ -14,6 +14,11 @@ export default (sequelize: Sequelize) => {
             field: "cantidad",
             allowNull: false
         },
+        expirationDate: {
+            type: DataTypes.DATEONLY,
+            field: "fechaCaducidad",
+            allowNull: false
+        },
         idProduct: {
             type: DataTypes.INTEGER,
             field: "idProducto"

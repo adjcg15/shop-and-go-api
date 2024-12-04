@@ -8,8 +8,9 @@ export default class PaymentMethod extends Model<InferAttributes<PaymentMethod>,
     declare id: CreationOptional<number>;
     declare expirationYear: number;
     declare expirationMonth: number;
-    declare cvcCode: string;
     declare cardNumber: string;
+    declare initialVector: string;
+    declare authenticationTag: string;
     declare cardholderName: string;
     declare isActive: boolean;
 

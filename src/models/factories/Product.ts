@@ -30,11 +30,6 @@ export default (sequelize: Sequelize) => {
             field: "imagen",
             allowNull: true
         },
-        expirationDate: {
-            type: DataTypes.DATEONLY,
-            field: "fechaCaducidad",
-            allowNull: false
-        },
         salePrice: {
             type: DataTypes.DECIMAL(19, 4),
             field: "precioVenta",
