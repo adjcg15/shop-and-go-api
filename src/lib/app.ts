@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import storesRouter from "../routes/stores_router";
+import clientRouter from "../routes/client_router";
 import handleApiErrorMiddleware from "../middlewares/error_handler";
 
 export default function createApp() {
@@ -14,6 +15,7 @@ export default function createApp() {
     app.use(express.json());
 
     app.use("/api/stores", storesRouter);
+    app.use("/api/client", clientRouter);
 
     app.use(handleApiErrorMiddleware);
 

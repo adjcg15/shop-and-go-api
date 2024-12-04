@@ -19,7 +19,7 @@ export default (sequelize: Sequelize) => {
             field: "mesVencimiento",
             allowNull: false
         },
-        cardNumber: {
+        encryptedCardNumber: {
             type: DataTypes.CHAR(22),
             field: "numeroTarjeta",
             allowNull: false
