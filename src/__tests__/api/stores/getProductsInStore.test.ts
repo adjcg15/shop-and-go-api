@@ -41,6 +41,6 @@ describe("/api/stores/:idStore/products", () => {
     });
 
     afterAll(async () => {
-        await db.sequelize.sync({ force: true });
+        await db.sequelize.close();
     });
 });

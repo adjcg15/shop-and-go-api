@@ -4,6 +4,7 @@ interface IPaymentMethodBody {
     expirationYear?: number;
     idIssuer?: number;
     encryptedCardNumber?: string;
+    hashedCardNumber?: string;
     initialVector?: string;
     authenticationTag?: string;
 }
