@@ -21,36 +21,39 @@ const addPaymentMethodToClientSchema: Schema = {
     expirationMonth: {
         in: ["body"],
         isInt: {
-            errorMessage: "Expiration month must be a int"
+            errorMessage: "Expiration month must be an integer"
+        },
+        custom: {
+            options: (value: any) => {
+                const month = typeof value === 'number' ? value.toString() : value;
+                return /^0[1-9]|1[0-2]$/.test(month);
+            },
+            errorMessage: "Expiration month must be in the format MM (01-12)"
         },
         isLength: {
             options: { min: 2, max: 2 },
             errorMessage: "Expiration month must be exactly 2 digits"
-        },
-        custom: {
-            options: (value) => {
-                return /^0[1-9]|1[0-2]$/.test(value);
-            },
-            errorMessage: "Expiration month must be in the format MM (01-12)"
         }
     },
     expirationYear: {
         in: ["body"],
         isInt: {
-            errorMessage: "Expiration year must be a int"
+            errorMessage: "Expiration year must be an integer"
+        },
+        custom: {
+            options: (value: any) => {
+                const year = typeof value === 'number' ? value.toString() : value;
+                const currentYear = new Date().getFullYear();
+                const currentYearTwoDigits = currentYear % 100;
+                const yearParsed = parseInt(year, 10);
+                
+                return yearParsed >= currentYearTwoDigits && yearParsed <= 99;
+            },
+            errorMessage: "Expiration year must be a valid future year (in format YY)"
         },
         isLength: {
             options: { min: 2, max: 2 },
             errorMessage: "Expiration year must be exactly 2 digits"
-        },
-        custom: {
-            options: (value) => {
-                const currentYear = new Date().getFullYear();
-                const currentYearTwoDigits = currentYear % 100;
-                const year = parseInt(value, 10);
-                return year >= currentYearTwoDigits;
-            },
-            errorMessage: "Expiration year must be a valid future year (in format YY)"
         }
     },
     idIssuer: {

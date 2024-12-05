@@ -3,6 +3,7 @@ import SQLException from "../exceptions/services/SQLException";
 import Issuer from "../models/Issuer";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { CreatePaymentMethodCodes } from "../types/enums/error_codes";
+import { CreatePaymentMethodMessages } from "../types/enums/error_messages";
 import Client from "../models/Client";
 import PaymentMethod from "../models/PaymentMethod";
 
@@ -34,7 +35,7 @@ async function addPaymentMethodToClient(
 
         if (client === null) {
             throw new BusinessLogicException(
-                "The client with the specified id is not registered", 
+                CreatePaymentMethodMessages.CLIENT_NOT_FOUND, 
                 CreatePaymentMethodCodes.CLIENT_NOT_FOUND);
         }
 
@@ -42,17 +43,17 @@ async function addPaymentMethodToClient(
 
         if (issuer === null) {
             throw new BusinessLogicException(
-                "The issuer with the specified id is not registered", 
+                CreatePaymentMethodMessages.ISSUER_NOT_FOUND, 
                 CreatePaymentMethodCodes.ISSUER_NOT_FOUND);
         }
 
         const existingPaymentMethod = await PaymentMethod.findOne({
-            where: { hashedCardNumber }
+            where: { hashedCardNumber, idClient }
         });
         
         if (existingPaymentMethod !== null) {
             throw new BusinessLogicException(
-                "The payment method already exists, verify card number", 
+                CreatePaymentMethodMessages.PAYMENT_METHOD_ALREADY_EXISTS, 
                 CreatePaymentMethodCodes.PAYMENT_METHOD_ALREADY_EXISTS);
         }
 
