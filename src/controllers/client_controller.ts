@@ -15,7 +15,8 @@ async function addPaymentMethodToClientController(
             expirationMonth, 
             expirationYear, 
             idIssuer, 
-            encryptedCardNumber, 
+            encryptedCardNumber,
+            hashedCardNumber, 
             initialVector, 
             authenticationTag } = req.body;
         const { idClient } = req.params;
@@ -27,6 +28,7 @@ async function addPaymentMethodToClientController(
             expirationYear: expirationYear!, 
             idIssuer: idIssuer!, 
             encryptedCardNumber: encryptedCardNumber!, 
+            hashedCardNumber: hashedCardNumber!,
             initialVector: initialVector!, 
             authenticationTag: authenticationTag! }
         );

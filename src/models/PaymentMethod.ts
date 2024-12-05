@@ -9,6 +9,7 @@ export default class PaymentMethod extends Model<InferAttributes<PaymentMethod>,
     declare expirationYear: number;
     declare expirationMonth: number;
     declare encryptedCardNumber: string;
+    declare hashedCardNumber: string;
     declare initialVector: string;
     declare authenticationTag: string;
     declare cardholderName: string;

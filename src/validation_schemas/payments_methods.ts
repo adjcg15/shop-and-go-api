@@ -75,6 +75,20 @@ const addPaymentMethodToClientSchema: Schema = {
             errorMessage: "Card number must contain only alphanumeric characters"
         }
     },
+    hashedCardNumber: {
+        in: ["body"],
+        isLength: {
+            options: { min: 64, max: 64 },
+            errorMessage: "Hashed card number must be exactly 64 characters long"
+        },
+        isString: {
+            errorMessage: "Hashed card number must be a string"
+        },
+        matches: {
+            options: /^[a-fA-F0-9]*$/,
+            errorMessage: "Hashed card number must contain only hexadecimal characters"
+        }
+    },
     initialVector: {
         in: ["body"],
         isLength: {

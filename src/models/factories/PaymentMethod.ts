@@ -24,6 +24,11 @@ export default (sequelize: Sequelize) => {
             field: "numeroTarjeta",
             allowNull: false
         },
+        hashedCardNumber: {
+            type: DataTypes.CHAR(64),
+            field: "numeroTarjeta",
+            allowNull: false
+        },
         initialVector: {
             type: DataTypes.CHAR(16),
             field: "vectorInicializacion",
