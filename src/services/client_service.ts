@@ -7,6 +7,7 @@ import { PaymentMethodErrorMessages } from "../types/enums/error_messages";
 import Client from "../models/Client";
 import PaymentMethod from "../models/PaymentMethod";
 import { InferAttributes } from "sequelize";
+import { IPaymentMethodWithIssuer } from "../types/interfaces/response_bodies";
 
 async function addPaymentMethodToClient(
     idClient: number, 
@@ -112,7 +113,7 @@ async function deletePaymentMethodFromClient(idClient: number, idPaymentMethod: 
 }
 
 async function getPaymentMethodsFromClient(idClient: number) {
-    const paymentMethodsList: InferAttributes<PaymentMethod>[] = [];
+    const paymentMethodsList: IPaymentMethodWithIssuer[] = [];
     try {
         const client = await Client.findByPk(idClient);
         if (client === null) {
@@ -122,15 +123,19 @@ async function getPaymentMethodsFromClient(idClient: number) {
         }
 
         const paymentMethods = await PaymentMethod.findAll({
-            where: { idClient, isActive: true }
+            where: { idClient, isActive: true },
+            include: [{
+                association: db.PaymentMethod.associations.issuer
+            }]
         });
-
+        
         paymentMethods.forEach(paymentMethod => {
             const paymentMethodInfo = {
-                ...paymentMethod.toJSON()
-            }
+                ...paymentMethod!.toJSON(),
+                issuer: paymentMethod.issuer!.name
+            };
             paymentMethodsList.push(paymentMethodInfo);
-        });
+        });           
     } catch (error: any) {
         if(error.isTrusted) {
             throw error;

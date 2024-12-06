@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
 import { IPaymentMethodBody } from "../types/interfaces/request_bodies";
+import { IPaymentMethodWithIssuer } from "../types/interfaces/response_bodies";
 import { IClientByIdParams, IPaymentMethodByIdParams } from "../types/interfaces/request_parameters";
 import { addPaymentMethodToClient, deletePaymentMethodFromClient, getPaymentMethodsFromClient } from "../services/client_service";
-import { InferAttributes } from "sequelize";
-import PaymentMethod from "../models/PaymentMethod";
 
 async function addPaymentMethodToClientController(
     req: Request<IClientByIdParams, {}, IPaymentMethodBody, {}>,
@@ -59,7 +58,7 @@ async function deletePaymentMethodFromClientController(
 
 async function getPaymentMethodsFromClientController(
     req: Request<IClientByIdParams, {}, {}, {}>,
-    res: Response<InferAttributes<PaymentMethod>[]>,
+    res: Response<IPaymentMethodWithIssuer[]>,
     next: NextFunction
 ) {
     try {
