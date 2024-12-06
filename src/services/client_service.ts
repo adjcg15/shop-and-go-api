@@ -85,7 +85,7 @@ async function deletePaymentMethodFromClient(idClient: number, idPaymentMethod: 
 
         if (client === null) {
             throw new BusinessLogicException(
-                DeletePaymentMethodCodes.CLIENT_NOT_FOUND, 
+                DeletePaymentMethodMessages.CLIENT_NOT_FOUND, 
                 DeletePaymentMethodCodes.CLIENT_NOT_FOUND);
         }
 
@@ -93,7 +93,7 @@ async function deletePaymentMethodFromClient(idClient: number, idPaymentMethod: 
 
         if (paymentMethod === null) {
             throw new BusinessLogicException(
-                DeletePaymentMethodCodes.PAYMENT_METHOD_NOT_FOUND, 
+                DeletePaymentMethodMessages.PAYMENT_METHOD_NOT_FOUND, 
                 DeletePaymentMethodCodes.PAYMENT_METHOD_NOT_FOUND);
         }
 

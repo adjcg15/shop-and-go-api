@@ -19,7 +19,7 @@ router.post(
 );
 
 router.delete(
-    ":idClient/payment-methods/:idPaymentMethod",
+    "/:idClient/payment-methods/:idPaymentMethod",
     //checkTokenValidity,
     //allowRoles(UserRoles.CLIENT),
     checkSchema(deletePaymentMethodFromClientSchema),
