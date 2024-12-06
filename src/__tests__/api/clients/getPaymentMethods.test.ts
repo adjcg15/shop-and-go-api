@@ -38,7 +38,8 @@ describe("/api/client/:idClient/payment-methods", () => {
                 initialVector: expect.any(String),
                 authenticationTag: expect.any(String),
                 cardholderName: expect.any(String),
-                isActive: expect.any(Boolean)
+                isActive: expect.any(Boolean),
+                issuer: expect.any(String)
             });
         });
     });
