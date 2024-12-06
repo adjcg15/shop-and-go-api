@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
 import { IPaymentMethodBody } from "../types/interfaces/request_bodies";
-import { IClientByIdParams } from "../types/interfaces/request_parameters";
-import { addPaymentMethodToClient } from "../services/client_service";
+import { IClientByIdParams, IPaymentMethodByIdParams } from "../types/interfaces/request_parameters";
+import { addPaymentMethodToClient, deletePaymentMethodFromClient } from "../services/client_service";
 
 async function addPaymentMethodToClientController(
     req: Request<IClientByIdParams, {}, IPaymentMethodBody, {}>,
@@ -39,4 +39,23 @@ async function addPaymentMethodToClientController(
     }
 }
 
-export { addPaymentMethodToClientController };
+async function deletePaymentMethodFromClientController(
+    req: Request<IClientByIdParams & IPaymentMethodByIdParams, {}, {}, {}>,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const { idClient, idPaymentMethod } = req.params;
+
+        await deletePaymentMethodFromClient(idClient!, idPaymentMethod!);
+
+        res.status(HttpStatusCodes.NO_CONTENT).json();
+    } catch (error) {
+        next(error);
+    }
+}
+
+export { 
+    addPaymentMethodToClientController,
+    deletePaymentMethodFromClientController
+};

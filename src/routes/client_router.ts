@@ -2,9 +2,9 @@ import { Router } from "express";
 import { checkTokenValidity } from "../middlewares/access_control";
 import { allowRoles } from "../middlewares/access_control";
 import { checkSchema } from "express-validator";
-import { addPaymentMethodToClientController } from "../controllers/client_controller";
+import { addPaymentMethodToClientController, deletePaymentMethodFromClientController } from "../controllers/client_controller";
 import validateRequestSchemaMiddleware from "../middlewares/schema_validator";
-import { addPaymentMethodToClientSchema } from "../validation_schemas/payments_methods";
+import { addPaymentMethodToClientSchema, deletePaymentMethodFromClientSchema } from "../validation_schemas/payments_methods";
 import UserRoles from "../types/enums/user_roles";
 
 const router = Router();
@@ -16,6 +16,15 @@ router.post(
     checkSchema(addPaymentMethodToClientSchema),
     validateRequestSchemaMiddleware,
     addPaymentMethodToClientController
+);
+
+router.delete(
+    ":idClient/payment-methods/:idPaymentMethod",
+    //checkTokenValidity,
+    //allowRoles(UserRoles.CLIENT),
+    checkSchema(deletePaymentMethodFromClientSchema),
+    validateRequestSchemaMiddleware,
+    deletePaymentMethodFromClientController
 );
 
 export default router;

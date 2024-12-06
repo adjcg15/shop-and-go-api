@@ -6,7 +6,12 @@ interface IClientByIdParams {
     idClient?: number;
 }
 
+interface IPaymentMethodByIdParams {
+    idPaymentMethod?: number
+}
+
 export {
     IStoreByIdParams,
-    IClientByIdParams
+    IClientByIdParams,
+    IPaymentMethodByIdParams
 };
