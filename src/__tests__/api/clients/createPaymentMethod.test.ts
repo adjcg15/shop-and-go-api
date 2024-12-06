@@ -50,6 +50,7 @@ describe("/api/client/:idClient/payment-methods", () => {
             idIssuer: idIssuer
         };
         const response = await request(app).post(`/api/client/${idClient+1}/payment-methods`).send(paymentMethodData);
+
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
         expect(response.body.details).toBe(CreatePaymentMethodMessages.CLIENT_NOT_FOUND);
         expect(response.body.errorCode).toBe(CreatePaymentMethodCodes.CLIENT_NOT_FOUND);
@@ -67,6 +68,7 @@ describe("/api/client/:idClient/payment-methods", () => {
             idIssuer: idIssuer+1
         };
         const response = await request(app).post(`/api/client/${idClient}/payment-methods`).send(paymentMethodData);
+
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
         expect(response.body.details).toBe(CreatePaymentMethodMessages.ISSUER_NOT_FOUND);
         expect(response.body.errorCode).toBe(CreatePaymentMethodCodes.ISSUER_NOT_FOUND);
@@ -84,6 +86,7 @@ describe("/api/client/:idClient/payment-methods", () => {
             idIssuer: idIssuer
         };
         const response = await request(app).post(`/api/client/${idClient}/payment-methods`).send(paymentMethodData);
+
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
         expect(response.body.details).toBe(CreatePaymentMethodMessages.PAYMENT_METHOD_ALREADY_EXISTS);
         expect(response.body.errorCode).toBe(CreatePaymentMethodCodes.PAYMENT_METHOD_ALREADY_EXISTS);
@@ -96,6 +99,7 @@ describe("/api/client/:idClient/payment-methods", () => {
             port: 9999,
             dialect: 'mssql',
         });
+
         const paymentMethodData = {
             cardholderName: "Alice Johnson",
             expirationMonth: "08",
@@ -107,6 +111,7 @@ describe("/api/client/:idClient/payment-methods", () => {
             idIssuer: idIssuer
         };
         const response = await request(app).post(`/api/client/${idClient}/payment-methods`).send(paymentMethodData);
+        
         expect(response.status).toBe(HttpStatusCodes.INTERNAL_SERVER_ERROR);
     });
 

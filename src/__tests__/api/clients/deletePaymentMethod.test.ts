@@ -30,6 +30,7 @@ describe("/api/client/:idClient/payment-methods/:idPaymentMethod", () => {
 
     it("Should display an error message indicating that the client does not exist", async () => {
         const response = await request(app).delete(`/api/client/${idClient+1}/payment-methods/${idPaymentMethod}`);
+
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
         expect(response.body.details).toBe(DeletePaymentMethodMessages.CLIENT_NOT_FOUND);
         expect(response.body.errorCode).toBe(DeletePaymentMethodCodes.CLIENT_NOT_FOUND);
@@ -37,6 +38,7 @@ describe("/api/client/:idClient/payment-methods/:idPaymentMethod", () => {
 
     it("Should display an error message indicating that the payment method does not exist", async () => {
         const response = await request(app).delete(`/api/client/${idClient}/payment-methods/${idPaymentMethod+1}`);
+
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
         expect(response.body.details).toBe(DeletePaymentMethodMessages.PAYMENT_METHOD_NOT_FOUND);
         expect(response.body.errorCode).toBe(DeletePaymentMethodCodes.PAYMENT_METHOD_NOT_FOUND);
@@ -49,7 +51,9 @@ describe("/api/client/:idClient/payment-methods/:idPaymentMethod", () => {
             port: 9999,
             dialect: 'mssql',
         });
+        
         const response = await request(app).delete(`/api/client/${idClient}/payment-methods/${idPaymentMethod}`);
+
         expect(response.status).toBe(HttpStatusCodes.INTERNAL_SERVER_ERROR);
     });
 

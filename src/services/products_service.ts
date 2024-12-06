@@ -1,7 +1,8 @@
 import { Op } from "sequelize";
 import db from "../models";
 import SQLException from "../exceptions/services/SQLException";
-import { IProductWithStock } from "../types/interfaces/response_bodies";
+import { IProductWithStock, IProductCategory } from "../types/interfaces/response_bodies";
+import ProductCategory from "../models/ProductCategory";
 
 async function getProductsInStore(idStore: number, pagination: { offset: number, limit: number, query: string, categoryFilter?: number }) {
     const productsList: IProductWithStock[] = [];
@@ -51,6 +52,33 @@ async function getProductsInStore(idStore: number, pagination: { offset: number,
     return productsList;
 }
 
+async function getProductCategories() {
+    const productCategoriesList: IProductCategory[] = [];
+    try {
+        const productCategories = await ProductCategory.findAll({
+            where: {
+                isActive: true
+            }
+        });
+
+        productCategories.forEach(productCategory => {
+            const productCategoryInfo = {
+                ...productCategory!.toJSON()
+            }
+            productCategoriesList.push(productCategoryInfo);
+        });
+    } catch (error: any) {
+        if(error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+
+    return productCategoriesList;
+}
+
 export {
-    getProductsInStore
+    getProductsInStore,
+    getProductCategories
 }

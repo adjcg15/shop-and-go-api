@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
-import { getProductsInStore } from "../services/products_service";
+import { getProductsInStore, getProductCategories } from "../services/products_service";
 import { IProductsListPaginationQuery } from "../types/interfaces/request_queries";
 import { IStoreByIdParams } from "../types/interfaces/request_parameters";
-import { IProductWithStock } from "../types/interfaces/response_bodies";
+import { IProductWithStock, IProductCategory } from "../types/interfaces/response_bodies";
 
 async function getProductsInStoreController(
     req: Request<IStoreByIdParams, {}, {}, IProductsListPaginationQuery>, 
@@ -24,6 +24,16 @@ async function getProductsInStoreController(
     }
 }
 
+async function getProductCategoriesController(req: Request, res: Response<IProductCategory[]>, next: NextFunction) {
+    try {
+        const productCategories = await getProductCategories();
+        res.status(HttpStatusCodes.OK).json(productCategories);
+    } catch (error) {
+        next(error);
+    }
+}
+
 export {
-    getProductsInStoreController
+    getProductsInStoreController,
+    getProductCategoriesController
 };

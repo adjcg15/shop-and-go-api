@@ -43,6 +43,13 @@ async function insertE2EGetProductsByStoreTestData() {
     };
 }
 
+async function insertE2EGetProductCategoeriesTestData() {
+    await db.ProductCategory.create({ name: "Lacteos", isActive: true });
+    await db.ProductCategory.create({ name: "Enlatados", isActive: true });
+    await db.ProductCategory.create({ name: "Juguetes", isActive: true });
+}
+
 export {
-    insertE2EGetProductsByStoreTestData
+    insertE2EGetProductsByStoreTestData,
+    insertE2EGetProductCategoeriesTestData
 };
