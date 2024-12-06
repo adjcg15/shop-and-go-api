@@ -49,7 +49,14 @@ async function insertE2EGetProductCategoeriesTestData() {
     await db.ProductCategory.create({ name: "Juguetes", isActive: true });
 }
 
+async function insertE2EGetIssuingBanksTestData() {
+    await db.Issuer.create({ name: "Banamex" });
+    await db.Issuer.create({ name: "Santander" });
+    await db.Issuer.create({ name: "Inbursa" });
+}
+
 export {
     insertE2EGetProductsByStoreTestData,
-    insertE2EGetProductCategoeriesTestData
+    insertE2EGetProductCategoeriesTestData,
+    insertE2EGetIssuingBanksTestData
 };
