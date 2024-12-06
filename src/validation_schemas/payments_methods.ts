@@ -122,4 +122,26 @@ const addPaymentMethodToClientSchema: Schema = {
     }
 };
 
-export { addPaymentMethodToClientSchema };
+const deletePaymentMethodFromClientSchema: Schema = {
+    idClient: {
+        in: ["params"],
+        isInt: {
+            options: { min: 1 },
+            errorMessage: "Parameter idClient must be a positive integer",
+        },
+        toInt: true
+    },
+    idPaymentMethod: {
+        in: ["params"],
+        isInt: {
+            options: { min: 1 },
+            errorMessage: "Parameter idClient must be a positive integer",
+        },
+        toInt: true
+    }
+}
+
+export { 
+    addPaymentMethodToClientSchema,
+    deletePaymentMethodFromClientSchema 
+};

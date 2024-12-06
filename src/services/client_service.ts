@@ -2,8 +2,8 @@ import db from "../models";
 import SQLException from "../exceptions/services/SQLException";
 import Issuer from "../models/Issuer";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
-import { CreatePaymentMethodCodes } from "../types/enums/error_codes";
-import { CreatePaymentMethodMessages } from "../types/enums/error_messages";
+import { CreatePaymentMethodCodes, DeletePaymentMethodCodes } from "../types/enums/error_codes";
+import { CreatePaymentMethodMessages, DeletePaymentMethodMessages } from "../types/enums/error_messages";
 import Client from "../models/Client";
 import PaymentMethod from "../models/PaymentMethod";
 
@@ -79,4 +79,38 @@ async function addPaymentMethodToClient(
     } 
 }
 
-export { addPaymentMethodToClient }
+async function deletePaymentMethodFromClient(idClient: number, idPaymentMethod: number) {
+    try {
+        const client = await Client.findByPk(idClient);
+
+        if (client === null) {
+            throw new BusinessLogicException(
+                DeletePaymentMethodMessages.CLIENT_NOT_FOUND, 
+                DeletePaymentMethodCodes.CLIENT_NOT_FOUND);
+        }
+
+        const paymentMethod = await PaymentMethod.findByPk(idPaymentMethod);
+
+        if (paymentMethod === null) {
+            throw new BusinessLogicException(
+                DeletePaymentMethodMessages.PAYMENT_METHOD_NOT_FOUND, 
+                DeletePaymentMethodCodes.PAYMENT_METHOD_NOT_FOUND);
+        }
+
+        await PaymentMethod.destroy({
+            where: {idClient, id: idPaymentMethod}
+        });
+        
+    } catch (error: any) {
+        if(error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    } 
+}
+
+export { 
+    addPaymentMethodToClient,
+    deletePaymentMethodFromClient
+}
