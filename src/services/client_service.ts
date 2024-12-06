@@ -122,7 +122,7 @@ async function getPaymentMethodsFromClient(idClient: number) {
         }
 
         const paymentMethods = await PaymentMethod.findAll({
-            where: { id: idClient }
+            where: { idClient, isActive: true }
         });
 
         paymentMethods.forEach(paymentMethod => {

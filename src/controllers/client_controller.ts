@@ -75,5 +75,6 @@ async function getPaymentMethodsFromClientController(
 
 export { 
     addPaymentMethodToClientController,
-    deletePaymentMethodFromClientController
+    deletePaymentMethodFromClientController,
+    getPaymentMethodsFromClientController
 };

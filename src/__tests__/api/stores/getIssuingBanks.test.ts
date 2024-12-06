@@ -24,8 +24,8 @@ describe("/api/stores/issuing-banks", () => {
         expect(response.status).toBe(HttpStatusCodes.OK);
         expect(Array.isArray(issuingBanks)).toBe(true);
         expect(issuingBanks.length).toBe(3);
-        issuingBanks.forEach((productCategory:any) => {
-            expect(productCategory).toMatchObject({
+        issuingBanks.forEach((issuingBank:any) => {
+            expect(issuingBank).toMatchObject({
                 id: expect.any(Number),
                 name: expect.any(String)
             });

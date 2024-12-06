@@ -17,7 +17,7 @@ describe("/api/stores/product-categories", () => {
         await insertE2EGetProductCategoeriesTestData();
     });
 
-    it("Should return an array of 4 product categories registered in database", async () => {
+    it("Should return an array of 3 product categories registered in database", async () => {
         const response = await request(app).get(`/api/stores/product-categories`);
         const productCategories = response.body;
 

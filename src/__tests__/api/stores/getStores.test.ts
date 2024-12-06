@@ -24,8 +24,8 @@ describe("/api/stores", () => {
         expect(response.status).toBe(HttpStatusCodes.OK);
         expect(Array.isArray(stores)).toBe(true);
         expect(stores.length).toBe(3);
-        stores.forEach((productCategory:any) => {
-            expect(productCategory).toMatchObject({
+        stores.forEach((store:any) => {
+            expect(store).toMatchObject({
                 id: expect.any(Number),
                 name: expect.any(String),
                 address: expect.any(String),

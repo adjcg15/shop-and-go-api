@@ -2,7 +2,7 @@ import { Router } from "express";
 import { checkTokenValidity } from "../middlewares/access_control";
 import { allowRoles } from "../middlewares/access_control";
 import { checkSchema } from "express-validator";
-import { addPaymentMethodToClientController, deletePaymentMethodFromClientController } from "../controllers/client_controller";
+import { addPaymentMethodToClientController, deletePaymentMethodFromClientController, getPaymentMethodsFromClientController } from "../controllers/client_controller";
 import validateRequestSchemaMiddleware from "../middlewares/schema_validator";
 import { addPaymentMethodToClientSchema, deletePaymentMethodFromClientSchema, getPaymentMethodsFromClientSchema } from "../validation_schemas/payments_methods";
 import UserRoles from "../types/enums/user_roles";
@@ -33,7 +33,7 @@ router.get(
     //allowRoles(UserRoles.CLIENT),
     checkSchema(getPaymentMethodsFromClientSchema),
     validateRequestSchemaMiddleware,
-    
+    getPaymentMethodsFromClientController
 );
 
 export default router;
