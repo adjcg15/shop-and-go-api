@@ -4,6 +4,7 @@ import SQLException from "../exceptions/services/SQLException";
 import { IProductWithStock} from "../types/interfaces/response_bodies";
 import ProductCategory from "../models/ProductCategory";
 import Issuer from "../models/Issuer";
+import Store from "../models/Store";
 
 async function getProductsInStore(idStore: number, pagination: { offset: number, limit: number, query: string, categoryFilter?: number }) {
     const productsList: IProductWithStock[] = [];
@@ -101,8 +102,31 @@ async function getIssuingBanks() {
     return issuingBanksList;
 }
 
+async function getStores() {
+    const storesList: InferAttributes<Store>[] = [];
+    try {
+        const stores = await Store.findAll();
+
+        stores.forEach(stores => {
+            const storesInfo = {
+                ...stores!.toJSON()
+            }
+            storesList.push(storesInfo);
+        });
+    } catch (error: any) {
+        if(error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+
+    return storesList;
+}
+
 export {
     getProductsInStore,
     getProductCategories,
-    getIssuingBanks
+    getIssuingBanks,
+    getStores
 }
