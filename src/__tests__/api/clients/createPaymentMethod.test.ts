@@ -4,8 +4,8 @@ import { Express } from "express";
 import { HttpStatusCodes } from "../../../types/enums/http";
 import db from "../../../models";
 import { insertE2ECreatePaymentMethodTestData } from "../../../test_data/e2e/clients_test_data";
-import { CreatePaymentMethodCodes } from "../../../types/enums/error_codes";
-import { CreatePaymentMethodMessages } from "../../../types/enums/error_messages";
+import { PaymentMethodErrorCodes } from "../../../types/enums/error_codes";
+import { PaymentMethodErrorMessages } from "../../../types/enums/error_messages";
 import { Sequelize } from "sequelize";
 
 describe("/api/client/:idClient/payment-methods", () => {
@@ -52,8 +52,8 @@ describe("/api/client/:idClient/payment-methods", () => {
         const response = await request(app).post(`/api/client/${idClient+1}/payment-methods`).send(paymentMethodData);
 
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
-        expect(response.body.details).toBe(CreatePaymentMethodMessages.CLIENT_NOT_FOUND);
-        expect(response.body.errorCode).toBe(CreatePaymentMethodCodes.CLIENT_NOT_FOUND);
+        expect(response.body.details).toBe(PaymentMethodErrorMessages.CLIENT_NOT_FOUND);
+        expect(response.body.errorCode).toBe(PaymentMethodErrorCodes.CLIENT_NOT_FOUND);
     });
 
     it("Should display an error message indicating that the issuer does not exist", async () => {
@@ -70,8 +70,8 @@ describe("/api/client/:idClient/payment-methods", () => {
         const response = await request(app).post(`/api/client/${idClient}/payment-methods`).send(paymentMethodData);
 
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
-        expect(response.body.details).toBe(CreatePaymentMethodMessages.ISSUER_NOT_FOUND);
-        expect(response.body.errorCode).toBe(CreatePaymentMethodCodes.ISSUER_NOT_FOUND);
+        expect(response.body.details).toBe(PaymentMethodErrorMessages.ISSUER_NOT_FOUND);
+        expect(response.body.errorCode).toBe(PaymentMethodErrorCodes.ISSUER_NOT_FOUND);
     });
 
     it("Should display an error message indicating that the payment method already exists", async () => {
@@ -88,8 +88,8 @@ describe("/api/client/:idClient/payment-methods", () => {
         const response = await request(app).post(`/api/client/${idClient}/payment-methods`).send(paymentMethodData);
 
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
-        expect(response.body.details).toBe(CreatePaymentMethodMessages.PAYMENT_METHOD_ALREADY_EXISTS);
-        expect(response.body.errorCode).toBe(CreatePaymentMethodCodes.PAYMENT_METHOD_ALREADY_EXISTS);
+        expect(response.body.details).toBe(PaymentMethodErrorMessages.PAYMENT_METHOD_ALREADY_EXISTS);
+        expect(response.body.errorCode).toBe(PaymentMethodErrorCodes.PAYMENT_METHOD_ALREADY_EXISTS);
     });
 
     it("should display an error message indicating that the database server connection failed", async () => {

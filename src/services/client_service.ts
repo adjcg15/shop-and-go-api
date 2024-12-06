@@ -2,10 +2,11 @@ import db from "../models";
 import SQLException from "../exceptions/services/SQLException";
 import Issuer from "../models/Issuer";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
-import { CreatePaymentMethodCodes, DeletePaymentMethodCodes } from "../types/enums/error_codes";
-import { CreatePaymentMethodMessages, DeletePaymentMethodMessages } from "../types/enums/error_messages";
+import { PaymentMethodErrorCodes } from "../types/enums/error_codes";
+import { PaymentMethodErrorMessages } from "../types/enums/error_messages";
 import Client from "../models/Client";
 import PaymentMethod from "../models/PaymentMethod";
+import { InferAttributes } from "sequelize";
 
 async function addPaymentMethodToClient(
     idClient: number, 
@@ -35,16 +36,16 @@ async function addPaymentMethodToClient(
 
         if (client === null) {
             throw new BusinessLogicException(
-                CreatePaymentMethodMessages.CLIENT_NOT_FOUND, 
-                CreatePaymentMethodCodes.CLIENT_NOT_FOUND);
+                PaymentMethodErrorMessages.CLIENT_NOT_FOUND, 
+                PaymentMethodErrorCodes.CLIENT_NOT_FOUND);
         }
 
         const issuer = await Issuer.findByPk(idIssuer);
 
         if (issuer === null) {
             throw new BusinessLogicException(
-                CreatePaymentMethodMessages.ISSUER_NOT_FOUND, 
-                CreatePaymentMethodCodes.ISSUER_NOT_FOUND);
+                PaymentMethodErrorMessages.ISSUER_NOT_FOUND, 
+                PaymentMethodErrorCodes.ISSUER_NOT_FOUND);
         }
 
         const existingPaymentMethod = await PaymentMethod.findOne({
@@ -53,8 +54,8 @@ async function addPaymentMethodToClient(
         
         if (existingPaymentMethod !== null) {
             throw new BusinessLogicException(
-                CreatePaymentMethodMessages.PAYMENT_METHOD_ALREADY_EXISTS, 
-                CreatePaymentMethodCodes.PAYMENT_METHOD_ALREADY_EXISTS);
+                PaymentMethodErrorMessages.PAYMENT_METHOD_ALREADY_EXISTS, 
+                PaymentMethodErrorCodes.PAYMENT_METHOD_ALREADY_EXISTS);
         }
 
         await db.PaymentMethod.create({
@@ -85,16 +86,16 @@ async function deletePaymentMethodFromClient(idClient: number, idPaymentMethod: 
 
         if (client === null) {
             throw new BusinessLogicException(
-                DeletePaymentMethodMessages.CLIENT_NOT_FOUND, 
-                DeletePaymentMethodCodes.CLIENT_NOT_FOUND);
+                PaymentMethodErrorMessages.CLIENT_NOT_FOUND, 
+                PaymentMethodErrorCodes.CLIENT_NOT_FOUND);
         }
 
         const paymentMethod = await PaymentMethod.findByPk(idPaymentMethod);
 
         if (paymentMethod === null) {
             throw new BusinessLogicException(
-                DeletePaymentMethodMessages.PAYMENT_METHOD_NOT_FOUND, 
-                DeletePaymentMethodCodes.PAYMENT_METHOD_NOT_FOUND);
+                PaymentMethodErrorMessages.PAYMENT_METHOD_NOT_FOUND, 
+                PaymentMethodErrorCodes.PAYMENT_METHOD_NOT_FOUND);
         }
 
         await PaymentMethod.destroy({
@@ -110,7 +111,39 @@ async function deletePaymentMethodFromClient(idClient: number, idPaymentMethod: 
     } 
 }
 
+async function getPaymentMethodsFromClient(idClient: number) {
+    const paymentMethodsList: InferAttributes<PaymentMethod>[] = [];
+    try {
+        const client = await Client.findByPk(idClient);
+        if (client === null) {
+            throw new BusinessLogicException(
+                PaymentMethodErrorMessages.CLIENT_NOT_FOUND, 
+                PaymentMethodErrorCodes.CLIENT_NOT_FOUND);
+        }
+
+        const paymentMethods = await PaymentMethod.findAll({
+            where: { id: idClient }
+        });
+
+        paymentMethods.forEach(paymentMethod => {
+            const paymentMethodInfo = {
+                ...paymentMethod.toJSON()
+            }
+            paymentMethodsList.push(paymentMethodInfo);
+        });
+    } catch (error: any) {
+        if(error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    } 
+
+    return paymentMethodsList;
+}
+
 export { 
     addPaymentMethodToClient,
-    deletePaymentMethodFromClient
+    deletePaymentMethodFromClient,
+    getPaymentMethodsFromClient
 }

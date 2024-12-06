@@ -141,7 +141,19 @@ const deletePaymentMethodFromClientSchema: Schema = {
     }
 }
 
+const getPaymentMethodsFromClientSchema: Schema = {
+    idClient: {
+        in: ["params"],
+        isInt: {
+            options: { min: 1 },
+            errorMessage: "Parameter idClient must be a positive integer",
+        },
+        toInt: true
+    }
+}
+
 export { 
     addPaymentMethodToClientSchema,
-    deletePaymentMethodFromClientSchema 
+    deletePaymentMethodFromClientSchema,
+    getPaymentMethodsFromClientSchema 
 };

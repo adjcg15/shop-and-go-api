@@ -5,7 +5,7 @@ import { HttpStatusCodes } from "../../../types/enums/http";
 import db from "../../../models";
 import { insertE2EDeletePaymentMethodTestData } from "../../../test_data/e2e/clients_test_data";
 import { DeletePaymentMethodCodes } from "../../../types/enums/error_codes";
-import { DeletePaymentMethodMessages } from "../../../types/enums/error_messages";
+import { PaymentMethodErrorMessages } from "../../../types/enums/error_messages";
 import { Sequelize } from "sequelize";
 
 describe("/api/client/:idClient/payment-methods/:idPaymentMethod", () => {
@@ -32,7 +32,7 @@ describe("/api/client/:idClient/payment-methods/:idPaymentMethod", () => {
         const response = await request(app).delete(`/api/client/${idClient+1}/payment-methods/${idPaymentMethod}`);
 
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
-        expect(response.body.details).toBe(DeletePaymentMethodMessages.CLIENT_NOT_FOUND);
+        expect(response.body.details).toBe(PaymentMethodErrorMessages.CLIENT_NOT_FOUND);
         expect(response.body.errorCode).toBe(DeletePaymentMethodCodes.CLIENT_NOT_FOUND);
     });
 
@@ -40,7 +40,7 @@ describe("/api/client/:idClient/payment-methods/:idPaymentMethod", () => {
         const response = await request(app).delete(`/api/client/${idClient}/payment-methods/${idPaymentMethod+1}`);
 
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
-        expect(response.body.details).toBe(DeletePaymentMethodMessages.PAYMENT_METHOD_NOT_FOUND);
+        expect(response.body.details).toBe(PaymentMethodErrorMessages.PAYMENT_METHOD_NOT_FOUND);
         expect(response.body.errorCode).toBe(DeletePaymentMethodCodes.PAYMENT_METHOD_NOT_FOUND);
     });
 
