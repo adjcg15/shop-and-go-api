@@ -49,7 +49,21 @@ async function insertE2EGetProductCategoeriesTestData() {
     await db.ProductCategory.create({ name: "Juguetes", isActive: true });
 }
 
+async function insertE2EGetIssuingBanksTestData() {
+    await db.Issuer.create({ name: "Banamex" });
+    await db.Issuer.create({ name: "Santander" });
+    await db.Issuer.create({ name: "Inbursa" });
+}
+
+async function insertE2EGetStoresTestData() {
+    await db.Store.create({ name: "Plaza Crystal", address: "Avenida Lázaro Cárdenas", openingTime: "08:00:00.00", closingTime: "19:00:00.00", latitude: 19.432608, longitude: -99.133209 });
+    await db.Store.create({ name: "Plaza Américas", address: "Avenida Xalapa", openingTime: "08:00:00.00", closingTime: "19:00:00.00", latitude: 19.432603, longitude: -99.133209 });
+    await db.Store.create({ name: "Plaza Ánimas", address: "Avenida Principal", openingTime: "08:00:00.00", closingTime: "19:00:00.00", latitude: 19.432603, longitude: -99.133209 });
+}
+
 export {
     insertE2EGetProductsByStoreTestData,
-    insertE2EGetProductCategoeriesTestData
+    insertE2EGetProductCategoeriesTestData,
+    insertE2EGetIssuingBanksTestData,
+    insertE2EGetStoresTestData
 };

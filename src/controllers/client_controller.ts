@@ -2,7 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
 import { IPaymentMethodBody } from "../types/interfaces/request_bodies";
 import { IClientByIdParams, IPaymentMethodByIdParams } from "../types/interfaces/request_parameters";
-import { addPaymentMethodToClient, deletePaymentMethodFromClient } from "../services/client_service";
+import { addPaymentMethodToClient, deletePaymentMethodFromClient, getPaymentMethodsFromClient } from "../services/client_service";
+import { InferAttributes } from "sequelize";
+import PaymentMethod from "../models/PaymentMethod";
 
 async function addPaymentMethodToClientController(
     req: Request<IClientByIdParams, {}, IPaymentMethodBody, {}>,
@@ -55,7 +57,24 @@ async function deletePaymentMethodFromClientController(
     }
 }
 
+async function getPaymentMethodsFromClientController(
+    req: Request<IClientByIdParams, {}, {}, {}>,
+    res: Response<InferAttributes<PaymentMethod>[]>,
+    next: NextFunction
+) {
+    try {
+        const { idClient } = req.params;
+
+        const paymentMethods = await getPaymentMethodsFromClient(idClient!);
+
+        res.status(HttpStatusCodes.OK).send(paymentMethods);
+    } catch (error) {
+        next(error);
+    }
+}
+
 export { 
     addPaymentMethodToClientController,
-    deletePaymentMethodFromClientController
+    deletePaymentMethodFromClientController,
+    getPaymentMethodsFromClientController
 };
