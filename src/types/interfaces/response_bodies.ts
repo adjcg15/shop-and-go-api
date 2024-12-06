@@ -10,7 +10,14 @@ interface IErrorMessageWithCode {
     errorCode?: string;
 }
 
+interface IProductCategory {
+    id?: number;
+    name?: string;
+    isActive?: boolean;
+}
+
 export {
     IProductWithStock,
-    IErrorMessageWithCode
+    IErrorMessageWithCode,
+    IProductCategory
 };
