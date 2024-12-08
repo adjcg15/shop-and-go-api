@@ -7,6 +7,9 @@ const addPaymentMethodToClientSchema: Schema = {
             options: { min: 1 },
             errorMessage: "Parameter idClient must be a positive integer",
         },
+        notEmpty: {
+            errorMessage: "idClient is required"
+        },
         toInt: true
     },
     cardholderName: {
@@ -22,6 +25,9 @@ const addPaymentMethodToClientSchema: Schema = {
         in: ["body"],
         isInt: {
             errorMessage: "Expiration month must be an integer"
+        },
+        notEmpty: {
+            errorMessage: "Expiration month is required"
         },
         custom: {
             options: (value: any) => {
@@ -39,6 +45,9 @@ const addPaymentMethodToClientSchema: Schema = {
         in: ["body"],
         isInt: {
             errorMessage: "Expiration year must be an integer"
+        },
+        notEmpty: {
+            errorMessage: "Expiration year is required"
         },
         custom: {
             options: (value: any) => {
@@ -62,6 +71,9 @@ const addPaymentMethodToClientSchema: Schema = {
             options: { min: 1 },
             errorMessage: "idEmisor must be a positive integer"
         },
+        notEmpty: {
+            errorMessage: "idIssuer is required"
+        },
         toInt: true
     },
     encryptedCardNumber: {
@@ -72,6 +84,9 @@ const addPaymentMethodToClientSchema: Schema = {
         },
         isString: {
             errorMessage: "Card number must be a string"
+        },
+        notEmpty: {
+            errorMessage: "Card number is required"
         },
         matches: {
             options: /^[a-zA-Z0-9]*$/,
@@ -84,6 +99,10 @@ const addPaymentMethodToClientSchema: Schema = {
             options: { min: 64, max: 64 },
             errorMessage: "Hashed card number must be exactly 64 characters long"
         },
+        notEmpty: {
+            errorMessage: "Hashed card number is required"
+        }
+        ,
         isString: {
             errorMessage: "Hashed card number must be a string"
         },
@@ -98,6 +117,10 @@ const addPaymentMethodToClientSchema: Schema = {
             options: { min: 12, max: 12 },
             errorMessage: "Initialization Vector must be exactly 12 characters long"
         },
+        notEmpty: {
+            errorMessage: "Initialization Vector is required"
+        }
+        ,
         isString: {
             errorMessage: "Initialization Vector must be a string"
         },
@@ -112,6 +135,10 @@ const addPaymentMethodToClientSchema: Schema = {
             options: { min: 12, max: 12 },
             errorMessage: "Initialization Vector must be exactly 12 characters long"
         },
+        notEmpty: {
+            errorMessage: "Authentication Tag is required"
+        }
+        ,
         isString: {
             errorMessage: "Initialization Vector must be a string"
         },
@@ -129,6 +156,9 @@ const deletePaymentMethodFromClientSchema: Schema = {
             options: { min: 1 },
             errorMessage: "Parameter idClient must be a positive integer",
         },
+        notEmpty: {
+            errorMessage: "idClient is required"
+        },
         toInt: true
     },
     idPaymentMethod: {
@@ -136,6 +166,9 @@ const deletePaymentMethodFromClientSchema: Schema = {
         isInt: {
             options: { min: 1 },
             errorMessage: "Parameter idClient must be a positive integer",
+        },
+        notEmpty: {
+            errorMessage: "idPaymentMethod is required"
         },
         toInt: true
     }
@@ -147,6 +180,9 @@ const getPaymentMethodsFromClientSchema: Schema = {
         isInt: {
             options: { min: 1 },
             errorMessage: "Parameter idClient must be a positive integer",
+        },
+        notEmpty: {
+            errorMessage: "idClient is required"
         },
         toInt: true
     }
