@@ -5,7 +5,7 @@ import { HttpStatusCodes } from "../../../types/enums/http";
 import db from "../../../models";
 import { insertE2EGetPaymentMethodsTestData } from "../../../test_data/e2e/clients_test_data";
 import { PaymentMethodErrorCodes } from "../../../types/enums/error_codes";
-import { PaymentMethodErrorMessages } from "../../../types/enums/error_messages";
+import { ErrorMessages } from "../../../types/enums/error_messages";
 import { Sequelize } from "sequelize";
 
 describe("/api/client/:idClient/payment-methods", () => {
@@ -48,7 +48,7 @@ describe("/api/client/:idClient/payment-methods", () => {
         const response = await request(app).get(`/api/client/${idClient+1}/payment-methods`);
 
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
-        expect(response.body.details).toBe(PaymentMethodErrorMessages.CLIENT_NOT_FOUND);
+        expect(response.body.details).toBe(ErrorMessages.CLIENT_NOT_FOUND);
         expect(response.body.errorCode).toBe(PaymentMethodErrorCodes.CLIENT_NOT_FOUND);
     });
 

@@ -3,7 +3,7 @@ import SQLException from "../exceptions/services/SQLException";
 import Issuer from "../models/Issuer";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { PaymentMethodErrorCodes } from "../types/enums/error_codes";
-import { PaymentMethodErrorMessages } from "../types/enums/error_messages";
+import { ErrorMessages } from "../types/enums/error_messages";
 import Client from "../models/Client";
 import PaymentMethod from "../models/PaymentMethod";
 import { InferAttributes } from "sequelize";
@@ -37,7 +37,7 @@ async function addPaymentMethodToClient(
 
         if (client === null) {
             throw new BusinessLogicException(
-                PaymentMethodErrorMessages.CLIENT_NOT_FOUND, 
+                ErrorMessages.CLIENT_NOT_FOUND, 
                 PaymentMethodErrorCodes.CLIENT_NOT_FOUND);
         }
 
@@ -45,7 +45,7 @@ async function addPaymentMethodToClient(
 
         if (issuer === null) {
             throw new BusinessLogicException(
-                PaymentMethodErrorMessages.ISSUER_NOT_FOUND, 
+                ErrorMessages.ISSUER_NOT_FOUND, 
                 PaymentMethodErrorCodes.ISSUER_NOT_FOUND);
         }
 
@@ -55,7 +55,7 @@ async function addPaymentMethodToClient(
         
         if (existingPaymentMethod !== null) {
             throw new BusinessLogicException(
-                PaymentMethodErrorMessages.PAYMENT_METHOD_ALREADY_EXISTS, 
+                ErrorMessages.PAYMENT_METHOD_ALREADY_EXISTS, 
                 PaymentMethodErrorCodes.PAYMENT_METHOD_ALREADY_EXISTS);
         }
 
@@ -87,7 +87,7 @@ async function deletePaymentMethodFromClient(idClient: number, idPaymentMethod: 
 
         if (client === null) {
             throw new BusinessLogicException(
-                PaymentMethodErrorMessages.CLIENT_NOT_FOUND, 
+                ErrorMessages.CLIENT_NOT_FOUND, 
                 PaymentMethodErrorCodes.CLIENT_NOT_FOUND);
         }
 
@@ -95,7 +95,7 @@ async function deletePaymentMethodFromClient(idClient: number, idPaymentMethod: 
 
         if (paymentMethod === null) {
             throw new BusinessLogicException(
-                PaymentMethodErrorMessages.PAYMENT_METHOD_NOT_FOUND, 
+                ErrorMessages.PAYMENT_METHOD_NOT_FOUND, 
                 PaymentMethodErrorCodes.PAYMENT_METHOD_NOT_FOUND);
         }
 
@@ -118,7 +118,7 @@ async function getPaymentMethodsFromClient(idClient: number) {
         const client = await Client.findByPk(idClient);
         if (client === null) {
             throw new BusinessLogicException(
-                PaymentMethodErrorMessages.CLIENT_NOT_FOUND, 
+                ErrorMessages.CLIENT_NOT_FOUND, 
                 PaymentMethodErrorCodes.CLIENT_NOT_FOUND);
         }
 

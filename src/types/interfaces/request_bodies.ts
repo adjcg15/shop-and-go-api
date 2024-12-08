@@ -9,6 +9,13 @@ interface IPaymentMethodBody {
     authenticationTag?: string;
 }
 
+interface ILoginBody {
+    phoneNumber?: string;
+    username?: string;
+    password?: string;
+}
+
 export {
-    IPaymentMethodBody
+    IPaymentMethodBody,
+    ILoginBody
 }
