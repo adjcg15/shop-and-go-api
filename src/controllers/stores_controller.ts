@@ -1,15 +1,16 @@
 import { InferAttributes } from "sequelize";
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
-import { getProductsInStore, getStores } from "../services/products_service";
+import { getProductsInStore } from "../services/products_service";
+import { getStores } from "../services/stores_service";
 import { IProductsListPaginationQuery } from "../types/interfaces/request_queries";
 import { IStoreByIdParams } from "../types/interfaces/request_parameters";
-import { IProductWithStock} from "../types/interfaces/response_bodies";
+import { IProductWithInventory} from "../types/interfaces/response_bodies";
 import Store from "../models/Store";
 
 async function getProductsInStoreController(
     req: Request<IStoreByIdParams, {}, {}, IProductsListPaginationQuery>, 
-    res: Response<IProductWithStock[]>, 
+    res: Response<IProductWithInventory[]>, 
     next: NextFunction
 ) {
     try {

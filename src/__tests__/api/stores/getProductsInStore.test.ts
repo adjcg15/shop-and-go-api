@@ -33,10 +33,17 @@ describe("/api/stores/:idStore/products", () => {
                 description: expect.any(String),
                 salePrice: expect.any(Number),
                 maximumAmount: expect.any(Number),
-                idCategory: expect.any(Number),
-                stock: expect.any(Number)
+                idCategory: expect.any(Number)
             });
             expect(product.image === null || Buffer.isBuffer(product.image)).toBe(true);
+
+            expect(product.inventory).toMatchObject({
+                id: expect.any(Number),
+                stock: expect.any(Number),
+                expirationDate: expect.any(String),
+                idProduct: expect.any(Number),
+                idStore: expect.any(Number)
+            });
         });
     });
 

@@ -1,11 +1,10 @@
 import { Op, InferAttributes } from "sequelize";
 import db from "../models";
 import SQLException from "../exceptions/services/SQLException";
-import { IProductWithStock} from "../types/interfaces/response_bodies";
-import Store from "../models/Store";
+import { IProductWithInventory} from "../types/interfaces/response_bodies";
 
 async function getProductsInStore(idStore: number, pagination: { offset: number, limit: number, query: string, categoryFilter?: number }) {
-    const productsList: IProductWithStock[] = [];
+    const productsList: IProductWithInventory[] = [];
 
     try {
         const { offset, limit, query, categoryFilter } = pagination;
@@ -34,10 +33,10 @@ async function getProductsInStore(idStore: number, pagination: { offset: number,
             subQuery: true
         });
 
-        inventories.forEach(({stock, product}) => {
+        inventories.forEach(inventory => {
             const productInfo = { 
-                ...product!.toJSON(), 
-                stock 
+                ...inventory.product!.toJSON(), 
+                inventory 
             };
             productsList.push(productInfo);
         });
@@ -52,29 +51,6 @@ async function getProductsInStore(idStore: number, pagination: { offset: number,
     return productsList;
 }
 
-async function getStores() {
-    const storesList: InferAttributes<Store>[] = [];
-    try {
-        const stores = await Store.findAll();
-
-        stores.forEach(stores => {
-            const storesInfo = {
-                ...stores!.toJSON()
-            }
-            storesList.push(storesInfo);
-        });
-    } catch (error: any) {
-        if(error.isTrusted) {
-            throw error;
-        } else {
-            throw new SQLException(error);
-        }
-    }
-
-    return storesList;
-}
-
 export {
-    getProductsInStore,
-    getStores
+    getProductsInStore
 }
