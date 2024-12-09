@@ -1,12 +1,10 @@
 import { InferAttributes } from "sequelize";
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
-import { getProductsInStore, getProductCategories, getIssuingBanks, getStores } from "../services/products_service";
+import { getProductsInStore, getStores } from "../services/products_service";
 import { IProductsListPaginationQuery } from "../types/interfaces/request_queries";
 import { IStoreByIdParams } from "../types/interfaces/request_parameters";
 import { IProductWithStock} from "../types/interfaces/response_bodies";
-import ProductCategory from "../models/ProductCategory";
-import Issuer from "../models/Issuer";
 import Store from "../models/Store";
 
 async function getProductsInStoreController(
@@ -28,24 +26,6 @@ async function getProductsInStoreController(
     }
 }
 
-async function getProductCategoriesController(req: Request, res: Response<InferAttributes<ProductCategory>[]>, next: NextFunction) {
-    try {
-        const productCategories = await getProductCategories();
-        res.status(HttpStatusCodes.OK).json(productCategories);
-    } catch (error) {
-        next(error);
-    }
-}
-
-async function getIssuingBanksController(req: Request, res: Response<InferAttributes<Issuer>[]>, next: NextFunction) {
-    try {
-        const issuingBanks = await getIssuingBanks();
-        res.status(HttpStatusCodes.OK).json(issuingBanks);
-    } catch (error) {
-        next(error);
-    }
-}
-
 async function getStoresController(req: Request, res: Response<InferAttributes<Store>[]>, next: NextFunction) {
     try {
         const stores = await getStores();
@@ -57,7 +37,5 @@ async function getStoresController(req: Request, res: Response<InferAttributes<S
 
 export {
     getProductsInStoreController,
-    getProductCategoriesController,
-    getIssuingBanksController,
     getStoresController
 };

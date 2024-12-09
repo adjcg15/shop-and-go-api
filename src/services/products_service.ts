@@ -2,8 +2,6 @@ import { Op, InferAttributes } from "sequelize";
 import db from "../models";
 import SQLException from "../exceptions/services/SQLException";
 import { IProductWithStock} from "../types/interfaces/response_bodies";
-import ProductCategory from "../models/ProductCategory";
-import Issuer from "../models/Issuer";
 import Store from "../models/Store";
 
 async function getProductsInStore(idStore: number, pagination: { offset: number, limit: number, query: string, categoryFilter?: number }) {
@@ -54,54 +52,6 @@ async function getProductsInStore(idStore: number, pagination: { offset: number,
     return productsList;
 }
 
-async function getProductCategories() {
-    const productCategoriesList: InferAttributes<ProductCategory>[] = [];
-    try {
-        const productCategories = await ProductCategory.findAll({
-            where: {
-                isActive: true
-            }
-        });
-
-        productCategories.forEach(productCategory => {
-            const productCategoryInfo = {
-                ...productCategory!.toJSON()
-            }
-            productCategoriesList.push(productCategoryInfo);
-        });
-    } catch (error: any) {
-        if(error.isTrusted) {
-            throw error;
-        } else {
-            throw new SQLException(error);
-        }
-    }
-
-    return productCategoriesList;
-}
-
-async function getIssuingBanks() {
-    const issuingBanksList: InferAttributes<Issuer>[] = [];
-    try {
-        const issuingBanks = await Issuer.findAll();
-
-        issuingBanks.forEach(issuingBanks => {
-            const issuingBanksInfo = {
-                ...issuingBanks!.toJSON()
-            }
-            issuingBanksList.push(issuingBanksInfo);
-        });
-    } catch (error: any) {
-        if(error.isTrusted) {
-            throw error;
-        } else {
-            throw new SQLException(error);
-        }
-    }
-
-    return issuingBanksList;
-}
-
 async function getStores() {
     const storesList: InferAttributes<Store>[] = [];
     try {
@@ -126,7 +76,5 @@ async function getStores() {
 
 export {
     getProductsInStore,
-    getProductCategories,
-    getIssuingBanks,
     getStores
 }

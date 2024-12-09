@@ -3,10 +3,10 @@ import createApp from "../../../lib/app";
 import { Express } from "express";
 import { HttpStatusCodes } from "../../../types/enums/http";
 import db from "../../../models";
-import { insertE2EGetIssuingBanksTestData } from "../../../test_data/e2e/stores_test_data";
+import { insertE2EGetProductCategoeriesTestData } from "../../../test_data/e2e/stores_test_data";
 import { Sequelize } from "sequelize";
 
-describe("/api/stores/issuing-banks", () => {
+describe("/api/product-categories", () => {
     let app: Express;
 
     beforeAll(async () => {
@@ -14,20 +14,21 @@ describe("/api/stores/issuing-banks", () => {
 
         await db.sequelize.sync({ force: true });
 
-        await insertE2EGetIssuingBanksTestData();
+        await insertE2EGetProductCategoeriesTestData();
     });
 
-    it("Should return an array of 3 issuing banks registered in database", async () => {
-        const response = await request(app).get(`/api/stores/issuing-banks`);
-        const issuingBanks = response.body;
+    it("Should return an array of 3 product categories registered in database", async () => {
+        const response = await request(app).get(`/api/product-categories`);
+        const productCategories = response.body;
 
         expect(response.status).toBe(HttpStatusCodes.OK);
-        expect(Array.isArray(issuingBanks)).toBe(true);
-        expect(issuingBanks.length).toBe(3);
-        issuingBanks.forEach((issuingBank:any) => {
-            expect(issuingBank).toMatchObject({
+        expect(Array.isArray(productCategories)).toBe(true);
+        expect(productCategories.length).toBe(3);
+        productCategories.forEach((productCategory:any) => {
+            expect(productCategory).toMatchObject({
                 id: expect.any(Number),
-                name: expect.any(String)
+                name: expect.any(String),
+                isActive: expect.any(Boolean)
             });
         });
     });
@@ -40,7 +41,7 @@ describe("/api/stores/issuing-banks", () => {
             dialect: 'mssql',
         });
         
-        const response = await request(app).get(`/api/stores/issuing-banks`);
+        const response = await request(app).get(`/api/product-categories`);
 
         expect(response.status).toBe(HttpStatusCodes.INTERNAL_SERVER_ERROR);
     });
