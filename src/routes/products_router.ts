@@ -14,7 +14,7 @@ router.get(
 );
 
 router.get(
-    "/:idProduct/inventory",
+    "/:idProduct/inventories",
     checkSchema(getProductInventoriesValidationSchema),
     getProductInventoriesByIdProductController
 );
