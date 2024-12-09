@@ -4,7 +4,7 @@ import { allowRoles } from "../middlewares/access_control";
 import { checkSchema } from "express-validator";
 import { addPaymentMethodToClientController, deletePaymentMethodFromClientController, getPaymentMethodsFromClientController } from "../controllers/client_controller";
 import validateRequestSchemaMiddleware from "../middlewares/schema_validator";
-import { addPaymentMethodToClientSchema, deletePaymentMethodFromClientSchema, getPaymentMethodsFromClientSchema } from "../validation_schemas/payments_methods";
+import { addPaymentMethodToClientValidationSchema, deletePaymentMethodFromClientValidationSchema, getPaymentMethodsFromClientValidationSchema } from "../validation_schemas/payments_methods";
 import UserRoles from "../types/enums/user_roles";
 
 const router = Router();
@@ -13,7 +13,7 @@ router.post(
     "/:idClient/payment-methods",
     //checkTokenValidity,
     //allowRoles([UserRoles.CLIENT]),
-    checkSchema(addPaymentMethodToClientSchema),
+    checkSchema(addPaymentMethodToClientValidationSchema),
     validateRequestSchemaMiddleware,
     addPaymentMethodToClientController
 );
@@ -22,7 +22,7 @@ router.delete(
     "/:idClient/payment-methods/:idPaymentMethod",
     //checkTokenValidity,
     //allowRoles([UserRoles.CLIENT]),
-    checkSchema(deletePaymentMethodFromClientSchema),
+    checkSchema(deletePaymentMethodFromClientValidationSchema),
     validateRequestSchemaMiddleware,
     deletePaymentMethodFromClientController
 );
@@ -31,7 +31,7 @@ router.get(
     "/:idClient/payment-methods",
     //checkTokenValidity,
     //allowRoles([UserRoles.CLIENT]),
-    checkSchema(getPaymentMethodsFromClientSchema),
+    checkSchema(getPaymentMethodsFromClientValidationSchema),
     validateRequestSchemaMiddleware,
     getPaymentMethodsFromClientController
 );

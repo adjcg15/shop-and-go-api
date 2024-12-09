@@ -1,6 +1,6 @@
 import { Schema } from "express-validator";
 
-const addPaymentMethodToClientSchema: Schema = {
+const addPaymentMethodToClientValidationSchema: Schema = {
     idClient: {
         in: ["params"],
         isInt: {
@@ -149,7 +149,7 @@ const addPaymentMethodToClientSchema: Schema = {
     }
 };
 
-const deletePaymentMethodFromClientSchema: Schema = {
+const deletePaymentMethodFromClientValidationSchema: Schema = {
     idClient: {
         in: ["params"],
         isInt: {
@@ -174,7 +174,7 @@ const deletePaymentMethodFromClientSchema: Schema = {
     }
 }
 
-const getPaymentMethodsFromClientSchema: Schema = {
+const getPaymentMethodsFromClientValidationSchema: Schema = {
     idClient: {
         in: ["params"],
         isInt: {
@@ -189,7 +189,7 @@ const getPaymentMethodsFromClientSchema: Schema = {
 }
 
 export { 
-    addPaymentMethodToClientSchema,
-    deletePaymentMethodFromClientSchema,
-    getPaymentMethodsFromClientSchema 
+    addPaymentMethodToClientValidationSchema,
+    deletePaymentMethodFromClientValidationSchema,
+    getPaymentMethodsFromClientValidationSchema 
 };

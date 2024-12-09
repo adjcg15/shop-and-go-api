@@ -9,5 +9,6 @@ interface IProductsListPaginationQuery extends IPaginationQuery {
 };
 
 export {
+    IPaginationQuery,
     IProductsListPaginationQuery
 };

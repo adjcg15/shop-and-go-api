@@ -2,6 +2,7 @@ import { Op, InferAttributes } from "sequelize";
 import db from "../models";
 import SQLException from "../exceptions/services/SQLException";
 import { IProductWithInventory} from "../types/interfaces/response_bodies";
+import Product from "../models/Product";
 
 async function getProductsInStore(idStore: number, pagination: { offset: number, limit: number, query: string, categoryFilter?: number }) {
     const productsList: IProductWithInventory[] = [];
@@ -51,6 +52,34 @@ async function getProductsInStore(idStore: number, pagination: { offset: number,
     return productsList;
 }
 
+async function getAllProducts(pagination: { offset: number, limit: number }) {
+    const productsList: InferAttributes<Product>[] = [];
+
+    try {
+        const { offset, limit } = pagination;
+
+        const products = await db.Product.findAll({
+            limit,
+            offset
+        });
+
+        products.forEach(product => {
+            productsList.push({
+                ...product.toJSON()
+            });
+        });
+    } catch (error: any) {
+        if(error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+
+    return productsList;
+}
+
 export {
-    getProductsInStore
+    getProductsInStore,
+    getAllProducts
 }
