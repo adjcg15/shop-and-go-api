@@ -31,11 +31,11 @@ function checkTokenValidity(req: Request, res: Response, next: NextFunction): vo
     next();
 }
 
-function allowRoles(allowedRoles: UserRoles) {
+function allowRoles(allowedRoles: UserRoles[]) {
     return function(req: Request, res: Response, next: NextFunction) {
-        const { userRole } = req.user;
+        const { userRoles } = req.user;
 
-        if(allowedRoles.includes(userRole)) {
+        if(Array.isArray(userRoles) && userRoles.some(role => allowedRoles.includes(role))) {
             next();
         } else {
             res.status(HttpStatusCodes.FORBIDDEN).send();

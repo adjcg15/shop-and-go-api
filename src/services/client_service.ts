@@ -132,7 +132,7 @@ async function getPaymentMethodsFromClient(idClient: number) {
         paymentMethods.forEach(paymentMethod => {
             const paymentMethodInfo = {
                 ...paymentMethod!.toJSON(),
-                issuer: paymentMethod.issuer!.name
+                issuer: paymentMethod.issuer!
             };
             paymentMethodsList.push(paymentMethodInfo);
         });           
