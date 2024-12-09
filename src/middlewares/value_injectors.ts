@@ -20,6 +20,22 @@ function injectDefaultGetProductsInStoreQueryMiddleware(req: Request, res: Respo
     next();
 }
 
+function injectDefaultGetProductsQueryMiddleware(req: Request, res: Response, next: NextFunction) {
+    const MAX_PRODUCTS_BATCH_SIZE = 12;
+    const query = req.query as IProductsListPaginationQuery;
+
+    if(!query.limit) {
+        query.limit = MAX_PRODUCTS_BATCH_SIZE;
+    }
+
+    if(!query.offset) {
+        query.offset = 0;
+    }
+
+    next();
+}
+
 export {
-    injectDefaultGetProductsInStoreQueryMiddleware
+    injectDefaultGetProductsInStoreQueryMiddleware,
+    injectDefaultGetProductsQueryMiddleware
 };
