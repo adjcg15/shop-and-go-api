@@ -8,7 +8,7 @@ import { PaymentMethodErrorCodes } from "../../../types/enums/error_codes";
 import { ErrorMessages } from "../../../types/enums/error_messages";
 import { Sequelize } from "sequelize";
 
-describe("/api/client/:idClient/payment-methods", () => {
+describe("/api/clients/:idClient/payment-methods", () => {
     let app: Express;
     let idClient: number = 1;
 
@@ -22,7 +22,7 @@ describe("/api/client/:idClient/payment-methods", () => {
     });
 
     it("Should return an array of 3 payment methods registered in database", async () => {
-        const response = await request(app).get(`/api/client/${idClient}/payment-methods`);
+        const response = await request(app).get(`/api/clients/${idClient}/payment-methods`);
         const paymentMethods = response.body;
         
         paymentMethods.forEach((paymentMethod: any) => {
@@ -46,7 +46,7 @@ describe("/api/client/:idClient/payment-methods", () => {
     });
 
     it("Should display an error message indicating that the client does not exist", async () => {
-        const response = await request(app).get(`/api/client/${idClient+1}/payment-methods`);
+        const response = await request(app).get(`/api/clients/${idClient+1}/payment-methods`);
 
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
         expect(response.body.details).toBe(ErrorMessages.CLIENT_NOT_FOUND);
@@ -61,7 +61,7 @@ describe("/api/client/:idClient/payment-methods", () => {
             dialect: 'mssql',
         });
         
-        const response = await request(app).get(`/api/client/${idClient}/payment-methods`);
+        const response = await request(app).get(`/api/clients/${idClient}/payment-methods`);
 
         expect(response.status).toBe(HttpStatusCodes.INTERNAL_SERVER_ERROR);
     });

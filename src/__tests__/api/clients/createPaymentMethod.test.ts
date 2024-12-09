@@ -8,7 +8,7 @@ import { PaymentMethodErrorCodes } from "../../../types/enums/error_codes";
 import { ErrorMessages } from "../../../types/enums/error_messages";
 import { Sequelize } from "sequelize";
 
-describe("/api/client/:idClient/payment-methods", () => {
+describe("/api/clients/:idClient/payment-methods", () => {
     let app: Express;
     let idClient: number = 1;
     let idIssuer: number = 1;
@@ -34,7 +34,7 @@ describe("/api/client/:idClient/payment-methods", () => {
             authenticationTag: "uvw654xyz789",
             idIssuer: idIssuer
         };
-        const response = await request(app).post(`/api/client/${idClient}/payment-methods`).send(paymentMethodData);
+        const response = await request(app).post(`/api/clients/${idClient}/payment-methods`).send(paymentMethodData);
         expect(response.status).toBe(HttpStatusCodes.CREATED);
     });
 
@@ -49,7 +49,7 @@ describe("/api/client/:idClient/payment-methods", () => {
             authenticationTag: "ghi789klm456",
             idIssuer: idIssuer
         };
-        const response = await request(app).post(`/api/client/${idClient+1}/payment-methods`).send(paymentMethodData);
+        const response = await request(app).post(`/api/clients/${idClient+1}/payment-methods`).send(paymentMethodData);
 
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
         expect(response.body.details).toBe(ErrorMessages.CLIENT_NOT_FOUND);
@@ -67,7 +67,7 @@ describe("/api/client/:idClient/payment-methods", () => {
             authenticationTag: "ghi789klm456",
             idIssuer: idIssuer+1
         };
-        const response = await request(app).post(`/api/client/${idClient}/payment-methods`).send(paymentMethodData);
+        const response = await request(app).post(`/api/clients/${idClient}/payment-methods`).send(paymentMethodData);
 
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
         expect(response.body.details).toBe(ErrorMessages.ISSUER_NOT_FOUND);
@@ -85,7 +85,7 @@ describe("/api/client/:idClient/payment-methods", () => {
             authenticationTag: "ghi789klm456",
             idIssuer: idIssuer
         };
-        const response = await request(app).post(`/api/client/${idClient}/payment-methods`).send(paymentMethodData);
+        const response = await request(app).post(`/api/clients/${idClient}/payment-methods`).send(paymentMethodData);
 
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
         expect(response.body.details).toBe(ErrorMessages.PAYMENT_METHOD_ALREADY_EXISTS);
@@ -110,7 +110,7 @@ describe("/api/client/:idClient/payment-methods", () => {
             authenticationTag: "ghi789klm456",
             idIssuer: idIssuer
         };
-        const response = await request(app).post(`/api/client/${idClient}/payment-methods`).send(paymentMethodData);
+        const response = await request(app).post(`/api/clients/${idClient}/payment-methods`).send(paymentMethodData);
         
         expect(response.status).toBe(HttpStatusCodes.INTERNAL_SERVER_ERROR);
     });

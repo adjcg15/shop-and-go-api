@@ -1,7 +1,8 @@
-import { Op, InferAttributes } from "sequelize";
+import { Op } from "sequelize";
 import db from "../models";
 import SQLException from "../exceptions/services/SQLException";
 import { IProductWithInventory} from "../types/interfaces/response_bodies";
+import { IProductWithCategory } from "../types/interfaces/response_bodies";
 import Product from "../models/Product";
 
 async function getProductsInStore(idStore: number, pagination: { offset: number, limit: number, query: string, categoryFilter?: number }) {
@@ -53,20 +54,25 @@ async function getProductsInStore(idStore: number, pagination: { offset: number,
 }
 
 async function getAllProducts(pagination: { offset: number, limit: number }) {
-    const productsList: InferAttributes<Product>[] = [];
+    const productsList: IProductWithCategory[] = [];
 
     try {
         const { offset, limit } = pagination;
 
         const products = await db.Product.findAll({
+            include: [ {
+                association: db.Product.associations.category
+            }],
             limit,
             offset
         });
 
         products.forEach(product => {
-            productsList.push({
-                ...product.toJSON()
-            });
+            const productInfo = {
+                ...product.toJSON(),
+                category: product.category!
+            }
+            productsList.push(productInfo);
         });
     } catch (error: any) {
         if(error.isTrusted) {

@@ -6,10 +6,15 @@ import Client from "../../models/Client";
 import UserRoles from "../enums/user_roles";
 import Issuer from "../../models/Issuer";
 import Inventory from "../../models/Inventory";
+import ProductCategory from "../../models/ProductCategory";
 
 interface IProductWithInventory extends InferAttributes<Product> { 
     inventory: Inventory 
 };
+
+interface IProductWithCategory extends InferAttributes<Product> {
+    category: ProductCategory
+}
 
 interface IPaymentMethodWithIssuer extends InferAttributes<PaymentMethod> {
     issuer: Issuer
@@ -37,6 +42,7 @@ interface IErrorMessageWithCode {
 
 export {
     IProductWithInventory,
+    IProductWithCategory,
     IErrorMessageWithCode,
     IPaymentMethodWithIssuer,
     IEmployeeWithPosition,

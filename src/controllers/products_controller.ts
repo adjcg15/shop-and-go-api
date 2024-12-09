@@ -1,13 +1,12 @@
-import { InferAttributes } from "sequelize";
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
 import { IPaginationQuery } from "../types/interfaces/request_queries";
 import { getAllProducts } from "../services/products_service";
-import Product from "../models/Product";
+import { IProductWithCategory } from "../types/interfaces/response_bodies";
 
 async function getAllProductsController(
     req: Request<{}, {}, {}, IPaginationQuery>, 
-    res: Response<InferAttributes<Product>[]>, 
+    res: Response<IProductWithCategory[]>, 
     next: NextFunction
 ) {
     try {
