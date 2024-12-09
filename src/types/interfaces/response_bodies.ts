@@ -4,13 +4,15 @@ import PaymentMethod from "../../models/PaymentMethod";
 import Employee from "../../models/Employee";
 import Client from "../../models/Client";
 import UserRoles from "../enums/user_roles";
+import Issuer from "../../models/Issuer";
+import Inventory from "../../models/Inventory";
 
-interface IProductWithStock extends InferAttributes<Product> { 
-    stock: number 
+interface IProductWithInventory extends InferAttributes<Product> { 
+    inventory: Inventory 
 };
 
 interface IPaymentMethodWithIssuer extends InferAttributes<PaymentMethod> {
-    issuer: string
+    issuer: Issuer
 }
 
 interface IClientWithOptionalPassword extends Omit<InferAttributes<Client>, 'passwordHash'> {
@@ -34,7 +36,7 @@ interface IErrorMessageWithCode {
 }
 
 export {
-    IProductWithStock,
+    IProductWithInventory,
     IErrorMessageWithCode,
     IPaymentMethodWithIssuer,
     IEmployeeWithPosition,

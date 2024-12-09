@@ -12,7 +12,7 @@ const router = Router();
 router.post(
     "/:idClient/payment-methods",
     //checkTokenValidity,
-    //allowRoles(UserRoles.CLIENT),
+    //allowRoles([UserRoles.CLIENT]),
     checkSchema(addPaymentMethodToClientSchema),
     validateRequestSchemaMiddleware,
     addPaymentMethodToClientController
@@ -21,7 +21,7 @@ router.post(
 router.delete(
     "/:idClient/payment-methods/:idPaymentMethod",
     //checkTokenValidity,
-    //allowRoles(UserRoles.CLIENT),
+    //allowRoles([UserRoles.CLIENT]),
     checkSchema(deletePaymentMethodFromClientSchema),
     validateRequestSchemaMiddleware,
     deletePaymentMethodFromClientController
@@ -30,7 +30,7 @@ router.delete(
 router.get(
     "/:idClient/payment-methods",
     //checkTokenValidity,
-    //allowRoles(UserRoles.CLIENT),
+    //allowRoles([UserRoles.CLIENT]),
     checkSchema(getPaymentMethodsFromClientSchema),
     validateRequestSchemaMiddleware,
     getPaymentMethodsFromClientController

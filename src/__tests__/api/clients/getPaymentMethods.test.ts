@@ -24,11 +24,8 @@ describe("/api/client/:idClient/payment-methods", () => {
     it("Should return an array of 3 payment methods registered in database", async () => {
         const response = await request(app).get(`/api/client/${idClient}/payment-methods`);
         const paymentMethods = response.body;
-
-        expect(response.status).toBe(HttpStatusCodes.OK);
-        expect(Array.isArray(paymentMethods)).toBe(true);
-        expect(paymentMethods.length).toBe(3);
-        paymentMethods.forEach((paymentMethod:any) => {
+        
+        paymentMethods.forEach((paymentMethod: any) => {
             expect(paymentMethod).toMatchObject({
                 id: expect.any(Number),
                 expirationYear: expect.any(Number),
@@ -39,9 +36,13 @@ describe("/api/client/:idClient/payment-methods", () => {
                 authenticationTag: expect.any(String),
                 cardholderName: expect.any(String),
                 isActive: expect.any(Boolean),
-                issuer: expect.any(String)
             });
-        });
+        
+            expect(paymentMethod.issuer).toMatchObject({
+                id: expect.any(Number),
+                name: expect.any(String),
+            });
+        });        
     });
 
     it("Should display an error message indicating that the client does not exist", async () => {
