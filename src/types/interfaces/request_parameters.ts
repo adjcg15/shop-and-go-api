@@ -6,6 +6,10 @@ interface IClientByIdParams {
     idClient?: number;
 }
 
+interface IProductByIdParams {
+    idProduct?: number;
+}
+
 interface IPaymentMethodByIdParams {
     idPaymentMethod?: number
 }
@@ -13,5 +17,6 @@ interface IPaymentMethodByIdParams {
 export {
     IStoreByIdParams,
     IClientByIdParams,
+    IProductByIdParams,
     IPaymentMethodByIdParams
 };

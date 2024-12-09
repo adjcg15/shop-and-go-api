@@ -64,7 +64,19 @@ const getAllProductsValidationSchema: Schema = {
     }
 }
 
+const getProductInventoriesValidationSchema: Schema = {
+    idProduct: {
+        in: ["params"],
+        isInt: {
+            options: { min: 1 },
+            errorMessage: "Parameter idProduct must be a positive integer",
+        },
+        toInt: true
+    }
+}
+
 export {
     getProductsInStoreValidationSchema,
-    getAllProductsValidationSchema
+    getAllProductsValidationSchema,
+    getProductInventoriesValidationSchema
 };

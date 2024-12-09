@@ -7,6 +7,11 @@ enum PaymentMethodErrorCodes {
     PAYMENT_METHOD_ALREADY_EXISTS = EndpointContexts.CREATE_PAYMENT_METHOD + "-400004"
 }
 
+enum ProductErrorCodes {
+    PRODUCT_NOT_FOUND = EndpointContexts.GET_ALL_PRODUCTS + "-400001"
+}
+
 export { 
-    PaymentMethodErrorCodes
+    PaymentMethodErrorCodes,
+    ProductErrorCodes
 };
