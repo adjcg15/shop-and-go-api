@@ -1,6 +1,6 @@
 import { Schema } from "express-validator";
 
-const addPaymentMethodToClientValidationSchema: Schema = {
+const createPaymentMethodToClientValidationSchema: Schema = {
     idClient: {
         in: ["params"],
         isInt: {
@@ -14,6 +14,10 @@ const addPaymentMethodToClientValidationSchema: Schema = {
     },
     cardholderName: {
         in: ["body"],
+        isLength: {
+            options: { max: 64 },
+            errorMessage: "Cardholder name cannot exceed 255 characters."
+        },
         isString: {
             errorMessage: "Cardholder name must be a string"
         },
@@ -189,7 +193,7 @@ const getPaymentMethodsFromClientValidationSchema: Schema = {
 }
 
 export { 
-    addPaymentMethodToClientValidationSchema,
+    createPaymentMethodToClientValidationSchema,
     deletePaymentMethodFromClientValidationSchema,
     getPaymentMethodsFromClientValidationSchema 
 };

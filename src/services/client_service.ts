@@ -9,7 +9,7 @@ import PaymentMethod from "../models/PaymentMethod";
 import { InferAttributes } from "sequelize";
 import { IPaymentMethodWithIssuer } from "../types/interfaces/response_bodies";
 
-async function addPaymentMethodToClient(
+async function createPaymentMethodToClient(
     idClient: number, 
     paymentMethod: { 
         cardholderName: string, 
@@ -148,7 +148,7 @@ async function getPaymentMethodsFromClient(idClient: number) {
 }
 
 export { 
-    addPaymentMethodToClient,
+    createPaymentMethodToClient,
     deletePaymentMethodFromClient,
     getPaymentMethodsFromClient
 }
