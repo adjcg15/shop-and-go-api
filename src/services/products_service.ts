@@ -1,4 +1,4 @@
-import { Op, InferAttributes } from "sequelize";
+import { Op, InferAttributes, Sequelize } from "sequelize";
 import db from "../models";
 import SQLException from "../exceptions/services/SQLException";
 import { IProductWithInventory} from "../types/interfaces/response_bodies";
@@ -6,7 +6,8 @@ import { IProductWithCategory } from "../types/interfaces/response_bodies";
 import Inventory from "../models/Inventory";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { ErrorMessages } from "../types/enums/error_messages";
-import { ProductErrorCodes } from "../types/enums/error_codes";
+import { CreateProductErrorCodes } from "../types/enums/error_codes";
+import { IInventoryWithOptionalProductId } from "../types/interfaces/request_bodies";
 
 async function getProductsInStore(idStore: number, pagination: { offset: number, limit: number, query: string, categoryFilter?: number }) {
     const productsList: IProductWithInventory[] = [];
@@ -95,10 +96,7 @@ async function getProductInventoriesByIdProduct(idProduct: number) {
         const product = await db.Product.findByPk(idProduct);
 
         if (product === null) {
-            throw new BusinessLogicException(
-                ErrorMessages.PRODUCT_NOT_FOUND, 
-                ProductErrorCodes.PRODUCT_NOT_FOUND
-            );
+            throw new BusinessLogicException(ErrorMessages.PRODUCT_NOT_FOUND);
         }
 
         const inventories = await db.Inventory.findAll({
@@ -123,8 +121,95 @@ async function getProductInventoriesByIdProduct(idProduct: number) {
     return inventoriesList;
 }
 
+async function createProductWithInventories(
+    product: { 
+        barCode: string, 
+        name: string, 
+        description: string,
+        salePrice: number,
+        imageUrl: string,
+        maximumAmount: number,
+        idCategory: number
+        inventories?: IInventoryWithOptionalProductId[]}
+    ) {
+
+    const sequelize = db.sequelize;
+    const transaction = await sequelize.transaction();
+    
+    try {
+        const {
+            barCode,
+            name,
+            description,
+            salePrice,
+            imageUrl,
+            maximumAmount,
+            idCategory,
+            inventories
+        } = product;
+
+        const productWithSameBarCode = await db.Product.findOne({
+            where: {
+                barCode
+            }
+        });
+
+        if (productWithSameBarCode !== null) {
+            throw new BusinessLogicException(
+                ErrorMessages.BAR_CODE_ALREADY_EXISTS, 
+                CreateProductErrorCodes.BAR_CODE_ALREADY_EXISTS
+            );
+        }
+
+        const productCategory = await db.ProductCategory.findByPk(idCategory);
+
+        if (productCategory === null) {
+            throw new BusinessLogicException(
+                ErrorMessages.PRODUCT_CATEGORY_NOT_FOUND, 
+                CreateProductErrorCodes.PRODUCT_CATEGORY_NOT_FOUND
+            );
+        }
+        const productInDB = await db.Product.create({
+            barCode,
+            name,
+            description,
+            salePrice,
+            maximumAmount,
+            imageUrl,
+            idCategory
+        },
+        {
+            transaction
+        });
+
+        if (inventories) {
+            for (const inventory of inventories) {
+                await db.Inventory.create({
+                    idProduct: productInDB.id,
+                    idStore: inventory.idStore,
+                    expirationDate: inventory.expirationDate,
+                    stock: inventory.stock,
+                },
+                {
+                    transaction
+                });
+            }
+        }        
+
+        await transaction.commit();
+    } catch (error: any) {
+        await transaction.rollback();
+        if(error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+}
+
 export {
     getProductsInStore,
     getAllProducts,
-    getProductInventoriesByIdProduct
+    getProductInventoriesByIdProduct,
+    createProductWithInventories
 }

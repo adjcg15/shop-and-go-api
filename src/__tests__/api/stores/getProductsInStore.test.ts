@@ -31,11 +31,11 @@ describe("/api/stores/:idStore/products", () => {
                 barCode: expect.any(String),
                 name: expect.any(String),
                 description: expect.any(String),
+                imageUrl: expect.any(String),
                 salePrice: expect.any(Number),
                 maximumAmount: expect.any(Number),
                 idCategory: expect.any(Number)
             });
-            expect(product.image === null || Buffer.isBuffer(product.image)).toBe(true);
 
             expect(product.inventory).toMatchObject({
                 id: expect.any(Number),

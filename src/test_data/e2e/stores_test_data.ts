@@ -7,6 +7,7 @@ async function insertE2EGetProductsByStoreTestData() {
         barCode: "1234567890", 
         name: "Leche Lala entera 1.5L",
         description: "Además de ser deliciosa y cremosa, la leche Lala Entera está adicionada con vitaminas A y D, proteínas y calcio que complementarán tu alimentación y la de tu familia. Rinde 6 vasos de 250 ml vs. 4 vasos de 250 ml en 1 L.",
+        imageUrl: "https://r-charts.com/es/miscelanea/procesamiento-imagenes-magick_files/figure-html/importar-imagen-r.png",
         salePrice: 46,
         maximumAmount: 10
     });
@@ -14,6 +15,7 @@ async function insertE2EGetProductsByStoreTestData() {
         barCode: "0987654321", 
         name: "Queso Panela Fud 400 gr",
         description: "Es fresco, blanco, suave y tiende a ser duradero. Su textura podría describirse mejor como una ricota firme. No tiende a derretirse por lo que puedes asarlo o colocarlo en la parrilla para comerlo directamente.",
+        imageUrl: "https://r-charts.com/es/miscelanea/procesamiento-imagenes-magick_files/figure-html/importar-imagen-r.png",
         salePrice: 43.33,
         maximumAmount: 20
     });
@@ -21,6 +23,7 @@ async function insertE2EGetProductsByStoreTestData() {
         barCode: "7778889991", 
         name: "Clemente Jacques - Piña en almíbar en rebanadas",
         description: "Es un producto mexicano, que puede disfrutar como postre, guarnición o colación, listo para comer.",
+        imageUrl: "https://r-charts.com/es/miscelanea/procesamiento-imagenes-magick_files/figure-html/importar-imagen-r.png",
         salePrice: 55.5,
         maximumAmount: 15
     });

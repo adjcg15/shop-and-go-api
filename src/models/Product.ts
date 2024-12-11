@@ -8,8 +8,8 @@ export default class Product extends Model<InferAttributes<Product>, InferCreati
     declare id: CreationOptional<number>;
     declare barCode: string;
     declare name: string;
-    declare description: CreationOptional<string | null>;
-    declare image: CreationOptional<Buffer | null>;
+    declare description: string;
+    declare imageUrl: string;
     declare salePrice: number;
     declare maximumAmount: number;
 

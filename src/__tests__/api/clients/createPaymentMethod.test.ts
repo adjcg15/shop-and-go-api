@@ -4,7 +4,7 @@ import { Express } from "express";
 import { HttpStatusCodes } from "../../../types/enums/http";
 import db from "../../../models";
 import { insertE2ECreatePaymentMethodTestData } from "../../../test_data/e2e/clients_test_data";
-import { PaymentMethodErrorCodes } from "../../../types/enums/error_codes";
+import { CreatePaymentMethodErrorCodes } from "../../../types/enums/error_codes";
 import { ErrorMessages } from "../../../types/enums/error_messages";
 import { Sequelize } from "sequelize";
 
@@ -53,7 +53,7 @@ describe("/api/clients/:idClient/payment-methods", () => {
 
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
         expect(response.body.details).toBe(ErrorMessages.CLIENT_NOT_FOUND);
-        expect(response.body.errorCode).toBe(PaymentMethodErrorCodes.CLIENT_NOT_FOUND);
+        expect(response.body.errorCode).toBe(CreatePaymentMethodErrorCodes.CLIENT_NOT_FOUND);
     });
 
     it("Should display an error message indicating that the issuer does not exist", async () => {
@@ -71,7 +71,7 @@ describe("/api/clients/:idClient/payment-methods", () => {
 
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
         expect(response.body.details).toBe(ErrorMessages.ISSUER_NOT_FOUND);
-        expect(response.body.errorCode).toBe(PaymentMethodErrorCodes.ISSUER_NOT_FOUND);
+        expect(response.body.errorCode).toBe(CreatePaymentMethodErrorCodes.ISSUER_NOT_FOUND);
     });
 
     it("Should display an error message indicating that the payment method already exists", async () => {
@@ -89,7 +89,7 @@ describe("/api/clients/:idClient/payment-methods", () => {
 
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
         expect(response.body.details).toBe(ErrorMessages.PAYMENT_METHOD_ALREADY_EXISTS);
-        expect(response.body.errorCode).toBe(PaymentMethodErrorCodes.PAYMENT_METHOD_ALREADY_EXISTS);
+        expect(response.body.errorCode).toBe(CreatePaymentMethodErrorCodes.PAYMENT_METHOD_ALREADY_EXISTS);
     });
 
     it("should display an error message indicating that the database server connection failed", async () => {

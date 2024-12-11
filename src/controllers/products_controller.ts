@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
 import { IPaginationQuery } from "../types/interfaces/request_queries";
-import { getAllProducts, getProductInventoriesByIdProduct } from "../services/products_service";
+import { createProductWithInventories, getAllProducts, getProductInventoriesByIdProduct } from "../services/products_service";
 import { IProductWithCategory } from "../types/interfaces/response_bodies";
 import { IProductByIdParams } from "../types/interfaces/request_parameters";
 import { InferAttributes } from "sequelize";
 import Inventory from "../models/Inventory";
+import { IProductWithInventoriesBody } from "../types/interfaces/request_bodies";
 
 async function getAllProductsController(
     req: Request<{}, {}, {}, IPaginationQuery>, 
@@ -37,7 +38,35 @@ async function getProductInventoriesByIdProductController(
     }
 }
 
+async function createProductWithInventoriesController(
+    req: Request<{}, {}, IProductWithInventoriesBody, {}>,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const { barCode, name, description, salePrice, imageUrl, maximumAmount, idCategory, inventories } = req.body;
+
+        await createProductWithInventories(
+            { 
+                barCode, 
+                name, 
+                description, 
+                salePrice, 
+                imageUrl, 
+                maximumAmount, 
+                idCategory, 
+                inventories
+            }
+        );
+
+        res.status(HttpStatusCodes.CREATED).json();
+    } catch (error) {
+        next(error);
+    }
+}
+
 export{
     getAllProductsController,
-    getProductInventoriesByIdProductController
+    getProductInventoriesByIdProductController,
+    createProductWithInventoriesController
 }

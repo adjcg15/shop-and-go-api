@@ -25,10 +25,10 @@ export default (sequelize: Sequelize) => {
             field: "descripcion",
             allowNull: false
         },
-        image: {
-            type: "VARBINARY(MAX)",
-            field: "imagen",
-            allowNull: true
+        imageUrl: {
+            type: DataTypes.TEXT,
+            field: "urlImagen",
+            allowNull: false
         },
         salePrice: {
             type: DataTypes.DECIMAL(19, 4),
