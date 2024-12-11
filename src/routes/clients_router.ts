@@ -11,8 +11,8 @@ const router = Router();
 
 router.post(
     "/:idClient/payment-methods",
-    //checkTokenValidity,
-    //allowRoles([UserRoles.CLIENT]),
+    checkTokenValidity,
+    allowRoles([UserRoles.CLIENT]),
     checkSchema(createPaymentMethodToClientValidationSchema),
     validateRequestSchemaMiddleware,
     createPaymentMethodToClientController

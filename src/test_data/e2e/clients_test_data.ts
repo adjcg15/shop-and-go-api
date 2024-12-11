@@ -2,7 +2,7 @@ import db from "../../models";
 
 async function insertE2ECreatePaymentMethodTestData() {
     const client = await db.Client.create({
-        passwordHash: "$2a$10$K.Zod1ZT4A5rzseZo6muBOgDeHdmOMyF3M8o5V6UnKm1VdeQk8l5y1234",
+        passwordHash: "e28e706c22b1cbefdf3972ff26db7af92181267e45735b00dbdf805080e61f3e",
         birthdate: "1990-05-15",
         fullName: "John Doe",
         phoneNumber: "1234567890"
