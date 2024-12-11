@@ -40,6 +40,10 @@ export default (sequelize: Sequelize) => {
             field: "cantidadMaxima",
             allowNull: false
         },
+        isActive: {
+            type: DataTypes.BOOLEAN,
+            field: "esActivo"
+        },
         idCategory: {
             type: DataTypes.INTEGER,
             field: "idCategoria"

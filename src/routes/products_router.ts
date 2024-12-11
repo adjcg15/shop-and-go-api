@@ -5,7 +5,7 @@ import { injectDefaultGetProductsQueryMiddleware } from "../middlewares/value_in
 import { createProductWithInventoriesController, getAllProductsController, getProductInventoriesByIdProductController } from "../controllers/products_controller";
 import { checkSchema } from "express-validator";
 import validateRequestSchemaMiddleware from "../middlewares/schema_validator";
-import { createProductWithInventoriesValidationsSchema, getAllProductsValidationSchema, getProductInventoriesValidationSchema } from "../validation_schemas/products";
+import { createProductWithInventoriesValidationsSchema, getAllProductsValidationSchema, getProductInventoriesValidationSchema, updateProductWithInventoriesValidationsSchema } from "../validation_schemas/products";
 import UserRoles from "../types/enums/user_roles";
 
 const router = Router();
@@ -22,6 +22,15 @@ router.post(
     //checkTokenValidity,
     //allowRoles([UserRoles.ADMINISTRATOR]),
     checkSchema(createProductWithInventoriesValidationsSchema),
+    validateRequestSchemaMiddleware,
+    createProductWithInventoriesController
+);
+
+router.put(
+    "/",
+    //checkTokenValidity,
+    //allowRoles([UserRoles.ADMINISTRATOR, UserRoles.SALES_EXECUTIVE]),
+    checkSchema(updateProductWithInventoriesValidationsSchema),
     validateRequestSchemaMiddleware,
     createProductWithInventoriesController
 );

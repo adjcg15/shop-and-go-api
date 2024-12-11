@@ -176,6 +176,7 @@ async function createProductWithInventories(
             salePrice,
             maximumAmount,
             imageUrl,
+            isActive: true,
             idCategory
         },
         {
