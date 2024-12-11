@@ -27,7 +27,7 @@ router.post(
 );
 
 router.put(
-    "/",
+    "/:idProduct",
     //checkTokenValidity,
     //allowRoles([UserRoles.ADMINISTRATOR, UserRoles.SALES_EXECUTIVE]),
     checkSchema(updateProductWithInventoriesValidationsSchema),

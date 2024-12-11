@@ -239,7 +239,7 @@ async function updateProductWithInventories(
 
         const existingProduct = await db.Product.findByPk(idProduct);
 
-        if (existingProduct !== null) {
+        if (existingProduct === null) {
             throw new BusinessLogicException(
                 ErrorMessages.PRODUCT_NOT_FOUND, 
                 UpdateProductErrorCodes.PRODUCT_NOT_FOUND
@@ -292,6 +292,7 @@ async function updateProductWithInventories(
 
         await transaction.commit();
     } catch (error: any) {
+        console.log(error);
         await transaction.rollback();
         if(error.isTrusted) {
             throw error;

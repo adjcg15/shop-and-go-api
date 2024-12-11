@@ -66,16 +66,17 @@ async function createProductWithInventoriesController(
 }
 
 async function updateProductWithInventoriesController(
-    req: Request<{}, {}, IProductWithInventoriesBody, {}>,
+    req: Request<IProductByIdParams, {}, IProductWithInventoriesBody, {}>,
     res: Response,
     next: NextFunction
 ) {
     try {
-        const { id, name, description, salePrice, imageUrl, maximumAmount, isActive, idCategory, inventories } = req.body;
+        const { name, description, salePrice, imageUrl, maximumAmount, isActive, idCategory, inventories } = req.body;
+        const { idProduct } = req.params;
 
         await updateProductWithInventories(
             { 
-                idProduct: id,
+                idProduct: idProduct!,
                 name, 
                 description, 
                 salePrice, 
