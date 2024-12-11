@@ -1,12 +1,13 @@
-interface IPaymentMethodBody {
-    cardholderName?: string;
-    expirationMonth?: number;
-    expirationYear?: number;
-    idIssuer?: number;
-    encryptedCardNumber?: string;
-    hashedCardNumber?: string;
-    initialVector?: string;
-    authenticationTag?: string;
+import { InferAttributes } from "sequelize";
+import Product from "../../models/Product";
+import Inventory from "../../models/Inventory";
+
+interface IInventoryWithOptionalProductId extends Omit<InferAttributes<Inventory>, 'idProduct'> {
+    idProduct?: number
+}
+
+interface IProductWithInventoriesBody extends InferAttributes<Product> {
+    inventories?: IInventoryWithOptionalProductId[];
 }
 
 interface ILoginBody {
@@ -16,6 +17,7 @@ interface ILoginBody {
 }
 
 export {
-    IPaymentMethodBody,
+    IInventoryWithOptionalProductId,
+    IProductWithInventoriesBody,
     ILoginBody
 }

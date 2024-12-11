@@ -75,7 +75,7 @@ const getProductInventoriesValidationSchema: Schema = {
     }
 }
 
-const createProductWithInventoriesValidationsSchema = {
+const createProductWithInventoriesValidationsSchema: Schema = {
     barCode: {
         in: ["body"],
         isString: {
@@ -111,7 +111,7 @@ const createProductWithInventoriesValidationsSchema = {
             errorMessage: "Description cannot be empty."
         }
     },
-    urlImage: {
+    imageUrl: {
         in: ["body"],
         isString: {
             errorMessage: "URL must be a string."
@@ -137,7 +137,7 @@ const createProductWithInventoriesValidationsSchema = {
             errorMessage: "SalePrice cannot be empty."
         }
     },
-    maximunAmount: {
+    maximumAmount: {
         in: ["body"],
         isInt: {
             options: { min: 0 },

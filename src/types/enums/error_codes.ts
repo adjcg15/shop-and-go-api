@@ -8,7 +8,9 @@ enum PaymentMethodErrorCodes {
 }
 
 enum ProductErrorCodes {
-    PRODUCT_NOT_FOUND = EndpointContexts.GET_ALL_PRODUCTS + "-400001"
+    PRODUCT_NOT_FOUND = EndpointContexts.GET_ALL_PRODUCTS + "-400001",
+    BAR_CODE_ALREADY_EXISTS = EndpointContexts.CREATE_PRODUCT + "-400002",
+    PRODUCT_CATEGORY_NOT_FOUND = EndpointContexts.CREATE_PRODUCT + "-400003"
 }
 
 export { 

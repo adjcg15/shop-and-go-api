@@ -87,7 +87,34 @@ async function insertE2EGetProductInventoriesTestData() {
     }
 }
 
+async function insertE2ECreateProductTestData() {
+    const dairyCategory = await db.ProductCategory.create({ name: "Lacteos", isActive: true });
+    const storeXalapa = await db.Store.create({ 
+        name: "El zorro Xalapa centro",
+        address: "Dr. Rafael Lucio 28, Zona Centro, Centro, 91000 Xalapa-Enríquez, Ver.",
+        openingTime: "07:00:00.00",
+        closingTime: "22:00:00.00",
+        latitude: 19.528771,
+        longitude: -96.922336
+    });
+    const storeCarranza = await db.Store.create({ 
+        name: "El zorro carranza centro",
+        address: "Dr. Rafael Lucio 28, Zona Centro, Centro, 91000 Carranza, Ver.",
+        openingTime: "07:00:00.00",
+        closingTime: "22:00:00.00",
+        latitude: 19.528761,
+        longitude: -96.922356
+    });
+
+    return {
+        idCategory: dairyCategory.id,
+        idStoreXalapa: storeXalapa.id,
+        idStoreCarranza: storeCarranza.id
+    }
+}
+
 export {
     insertE2EGetAllProductsTestData,
-    insertE2EGetProductInventoriesTestData
+    insertE2EGetProductInventoriesTestData,
+    insertE2ECreateProductTestData
 }
