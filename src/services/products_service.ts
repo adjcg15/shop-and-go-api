@@ -6,7 +6,7 @@ import { IProductWithCategory } from "../types/interfaces/response_bodies";
 import Inventory from "../models/Inventory";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { ErrorMessages } from "../types/enums/error_messages";
-import { ProductErrorCodes } from "../types/enums/error_codes";
+import { CreateProductErrorCodes } from "../types/enums/error_codes";
 import { IInventoryWithOptionalProductId } from "../types/interfaces/request_bodies";
 
 async function getProductsInStore(idStore: number, pagination: { offset: number, limit: number, query: string, categoryFilter?: number }) {
@@ -96,10 +96,7 @@ async function getProductInventoriesByIdProduct(idProduct: number) {
         const product = await db.Product.findByPk(idProduct);
 
         if (product === null) {
-            throw new BusinessLogicException(
-                ErrorMessages.PRODUCT_NOT_FOUND, 
-                ProductErrorCodes.PRODUCT_NOT_FOUND
-            );
+            throw new BusinessLogicException(ErrorMessages.PRODUCT_NOT_FOUND);
         }
 
         const inventories = await db.Inventory.findAll({
@@ -160,7 +157,7 @@ async function createProductWithInventories(
         if (productWithSameBarCode !== null) {
             throw new BusinessLogicException(
                 ErrorMessages.BAR_CODE_ALREADY_EXISTS, 
-                ProductErrorCodes.BAR_CODE_ALREADY_EXISTS
+                CreateProductErrorCodes.BAR_CODE_ALREADY_EXISTS
             );
         }
 
@@ -169,7 +166,7 @@ async function createProductWithInventories(
         if (productCategory === null) {
             throw new BusinessLogicException(
                 ErrorMessages.PRODUCT_CATEGORY_NOT_FOUND, 
-                ProductErrorCodes.PRODUCT_CATEGORY_NOT_FOUND
+                CreateProductErrorCodes.PRODUCT_CATEGORY_NOT_FOUND
             );
         }
         const productInDB = await db.Product.create({

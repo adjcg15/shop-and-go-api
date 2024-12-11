@@ -2,7 +2,7 @@ import db from "../models";
 import SQLException from "../exceptions/services/SQLException";
 import Issuer from "../models/Issuer";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
-import { PaymentMethodErrorCodes } from "../types/enums/error_codes";
+import { CreatePaymentMethodErrorCodes, DeletePaymentMethodErrorCodes } from "../types/enums/error_codes";
 import { ErrorMessages } from "../types/enums/error_messages";
 import Client from "../models/Client";
 import PaymentMethod from "../models/PaymentMethod";
@@ -38,7 +38,7 @@ async function createPaymentMethodToClient(
         if (client === null) {
             throw new BusinessLogicException(
                 ErrorMessages.CLIENT_NOT_FOUND, 
-                PaymentMethodErrorCodes.CLIENT_NOT_FOUND);
+                CreatePaymentMethodErrorCodes.CLIENT_NOT_FOUND);
         }
 
         const issuer = await Issuer.findByPk(idIssuer);
@@ -46,7 +46,7 @@ async function createPaymentMethodToClient(
         if (issuer === null) {
             throw new BusinessLogicException(
                 ErrorMessages.ISSUER_NOT_FOUND, 
-                PaymentMethodErrorCodes.ISSUER_NOT_FOUND);
+                CreatePaymentMethodErrorCodes.ISSUER_NOT_FOUND);
         }
 
         const existingPaymentMethod = await PaymentMethod.findOne({
@@ -56,7 +56,7 @@ async function createPaymentMethodToClient(
         if (existingPaymentMethod !== null) {
             throw new BusinessLogicException(
                 ErrorMessages.PAYMENT_METHOD_ALREADY_EXISTS, 
-                PaymentMethodErrorCodes.PAYMENT_METHOD_ALREADY_EXISTS);
+                CreatePaymentMethodErrorCodes.PAYMENT_METHOD_ALREADY_EXISTS);
         }
 
         await db.PaymentMethod.create({
@@ -88,7 +88,7 @@ async function deletePaymentMethodFromClient(idClient: number, idPaymentMethod: 
         if (client === null) {
             throw new BusinessLogicException(
                 ErrorMessages.CLIENT_NOT_FOUND, 
-                PaymentMethodErrorCodes.CLIENT_NOT_FOUND);
+                DeletePaymentMethodErrorCodes.CLIENT_NOT_FOUND);
         }
 
         const paymentMethod = await PaymentMethod.findByPk(idPaymentMethod);
@@ -96,7 +96,7 @@ async function deletePaymentMethodFromClient(idClient: number, idPaymentMethod: 
         if (paymentMethod === null) {
             throw new BusinessLogicException(
                 ErrorMessages.PAYMENT_METHOD_NOT_FOUND, 
-                PaymentMethodErrorCodes.PAYMENT_METHOD_NOT_FOUND);
+                DeletePaymentMethodErrorCodes.PAYMENT_METHOD_NOT_FOUND);
         }
 
         await PaymentMethod.destroy({
@@ -117,9 +117,7 @@ async function getPaymentMethodsFromClient(idClient: number) {
     try {
         const client = await Client.findByPk(idClient);
         if (client === null) {
-            throw new BusinessLogicException(
-                ErrorMessages.CLIENT_NOT_FOUND, 
-                PaymentMethodErrorCodes.CLIENT_NOT_FOUND);
+            throw new BusinessLogicException(ErrorMessages.CLIENT_NOT_FOUND);
         }
 
         const paymentMethods = await PaymentMethod.findAll({

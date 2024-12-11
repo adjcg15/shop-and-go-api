@@ -4,7 +4,7 @@ import { Express } from "express";
 import { HttpStatusCodes } from "../../../types/enums/http";
 import db from "../../../models";
 import { insertE2ECreateProductTestData } from "../../../test_data/e2e/products_test_data";
-import { ProductErrorCodes } from "../../../types/enums/error_codes";
+import { CreateProductErrorCodes } from "../../../types/enums/error_codes";
 import { ErrorMessages } from "../../../types/enums/error_messages";
 import { Sequelize } from "sequelize";
 
