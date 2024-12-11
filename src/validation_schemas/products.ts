@@ -285,6 +285,7 @@ const updateProductWithInventoriesValidationsSchema: Schema = {
                 if (!Array.isArray(value)) return false;
                 return value.every(item => {
                     if (
+                        typeof item.id !== 'number' || item.id <= 0 ||
                         typeof item.idProduct !== 'number' || item.idProduct <= 0 ||
                         typeof item.idStore !== 'number' || item.idStore <= 0 ||
                         typeof item.stock !== 'number' || item.stock < 1 ||

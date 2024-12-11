@@ -6,7 +6,9 @@ interface IInventoryWithOptionalProductId extends Omit<InferAttributes<Inventory
     idProduct?: number
 }
 
-interface IProductWithInventoriesBody extends InferAttributes<Product> {
+interface IProductWithInventoriesBody extends Omit<InferAttributes<Product>, "isActive" | "barCode"> {
+    barCode?: string;
+    isActive?: boolean;
     inventories?: IInventoryWithOptionalProductId[];
 }
 

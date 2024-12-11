@@ -12,13 +12,19 @@ enum DeletePaymentMethodErrorCodes {
 }
 
 enum CreateProductErrorCodes {
-    PRODUCT_NOT_FOUND = EndpointContexts.GET_ALL_PRODUCTS + "-400001",
+    PRODUCT_NOT_FOUND = EndpointContexts.CREATE_PRODUCT + "-400001",
     BAR_CODE_ALREADY_EXISTS = EndpointContexts.CREATE_PRODUCT + "-400002",
     PRODUCT_CATEGORY_NOT_FOUND = EndpointContexts.CREATE_PRODUCT + "-400003"
+}
+
+enum UpdateProductErrorCodes {
+    PRODUCT_NOT_FOUND = EndpointContexts.UPDATE_PRODUCT + "-400001",
+    PRODUCT_CATEGORY_NOT_FOUND = EndpointContexts.UPDATE_PRODUCT + "-400002"
 }
 
 export { 
     CreatePaymentMethodErrorCodes,
     DeletePaymentMethodErrorCodes,
-    CreateProductErrorCodes
+    CreateProductErrorCodes,
+    UpdateProductErrorCodes
 };

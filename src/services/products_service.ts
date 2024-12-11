@@ -6,7 +6,7 @@ import { IProductWithCategory } from "../types/interfaces/response_bodies";
 import Inventory from "../models/Inventory";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { ErrorMessages } from "../types/enums/error_messages";
-import { CreateProductErrorCodes } from "../types/enums/error_codes";
+import { CreateProductErrorCodes, UpdateProductErrorCodes } from "../types/enums/error_codes";
 import { IInventoryWithOptionalProductId } from "../types/interfaces/request_bodies";
 
 async function getProductsInStore(idStore: number, pagination: { offset: number, limit: number, query: string, categoryFilter?: number }) {
@@ -208,9 +208,103 @@ async function createProductWithInventories(
     }
 }
 
+async function updateProductWithInventories(
+    product: { 
+        idProduct: number,
+        name: string, 
+        description: string,
+        salePrice: number,
+        imageUrl: string,
+        maximumAmount: number,
+        isActive: boolean,
+        idCategory: number
+        inventories?: IInventoryWithOptionalProductId[]}
+    ) {
+
+    const sequelize = db.sequelize;
+    const transaction = await sequelize.transaction();
+    
+    try {
+        const {
+            idProduct,
+            name,
+            description,
+            salePrice,
+            imageUrl,
+            maximumAmount,
+            isActive,
+            idCategory,
+            inventories
+        } = product;
+
+        const existingProduct = await db.Product.findByPk(idProduct);
+
+        if (existingProduct !== null) {
+            throw new BusinessLogicException(
+                ErrorMessages.PRODUCT_NOT_FOUND, 
+                UpdateProductErrorCodes.PRODUCT_NOT_FOUND
+            );
+        }
+
+        const productCategory = await db.ProductCategory.findByPk(idCategory);
+
+        if (productCategory === null) {
+            throw new BusinessLogicException(
+                ErrorMessages.PRODUCT_CATEGORY_NOT_FOUND, 
+                UpdateProductErrorCodes.PRODUCT_CATEGORY_NOT_FOUND
+            );
+        }
+
+        await db.Product.update(
+            {
+                name,
+                description,
+                salePrice,
+                maximumAmount,
+                imageUrl,
+                isActive,
+                idCategory
+            },
+            {
+                where: {
+                    id: idProduct
+                },
+                transaction
+            }
+        );
+
+        if (inventories) {
+            for (const inventory of inventories) {
+                await db.Inventory.update({
+                    idProduct: inventory.idProduct,
+                    idStore: inventory.idStore,
+                    expirationDate: inventory.expirationDate,
+                    stock: inventory.stock,
+                },
+                {
+                    where: {
+                        id: inventory.id
+                    },
+                    transaction
+                });
+            }
+        }        
+
+        await transaction.commit();
+    } catch (error: any) {
+        await transaction.rollback();
+        if(error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+}
+
 export {
     getProductsInStore,
     getAllProducts,
     getProductInventoriesByIdProduct,
-    createProductWithInventories
+    createProductWithInventories,
+    updateProductWithInventories
 }
