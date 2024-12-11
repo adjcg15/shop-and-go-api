@@ -144,6 +144,14 @@ async function insertE2EUpdateProductTestData() {
         latitude: 19.528761,
         longitude: -96.922356
     });
+    const storeMartinez = await db.Store.create({ 
+        name: "El zorro Martínez centro",
+        address: "Dr. Rafael Lucio 28, Zona Centro, Centro, 91000 Martínez de la Torre, Ver.",
+        openingTime: "07:00:00.00",
+        closingTime: "22:00:00.00",
+        latitude: 19.528781,
+        longitude: -96.922346
+    });
     const inventoryXalapa = await db.Inventory.create({ idProduct: cheese.id, stock: 24, idStore: storeXalapa.id, expirationDate: "2024-12-24" });
     const inventoryCarranza = await db.Inventory.create({ idProduct: cheese.id, stock: 31, idStore: storeCarranza.id, expirationDate: "2026-08-05" });
 
@@ -153,7 +161,8 @@ async function insertE2EUpdateProductTestData() {
         idStoreXalapa: storeXalapa.id,
         idStoreCarranza: storeCarranza.id,
         idInventoryXalapa: inventoryXalapa.id,
-        idInventoryCarranza: inventoryCarranza.id
+        idInventoryCarranza: inventoryCarranza.id,
+        idStoreMartinez: storeMartinez.id
     }
 }
 

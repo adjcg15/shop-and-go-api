@@ -13,6 +13,7 @@ describe("/api/products/:idProduct", () => {
     let idProduct: number = 1;
     let idStoreXalapa: number = 1;
     let idStoreCarranza: number = 2;
+    let idStoreMartinez: number = 3;
     let idCategory: number = 1;
     let idInventoryXalapa: number = 1;
     let idInventoryCarranza: number = 1;
@@ -26,6 +27,7 @@ describe("/api/products/:idProduct", () => {
         idProduct = testDataResult.idProduct;
         idStoreXalapa = testDataResult.idStoreXalapa;
         idStoreCarranza = testDataResult.idStoreCarranza;
+        idStoreMartinez = testDataResult.idStoreMartinez;
         idCategory = testDataResult.idCategory;
         idInventoryXalapa = testDataResult.idInventoryXalapa;
         idInventoryCarranza = testDataResult.idInventoryCarranza;
@@ -43,16 +45,17 @@ describe("/api/products/:idProduct", () => {
             inventories: [
                 {
                     id: idInventoryXalapa,
-                    idProduct,
                     stock: 24, 
-                    idStore: idStoreXalapa, 
                     expirationDate: "2024-12-24"
                 },
                 {
                     id: idInventoryCarranza,
-                    idProduct,
                     stock: 2, 
-                    idStore: idStoreCarranza, 
+                    expirationDate: "2028-12-24"
+                },
+                {
+                    stock: 2, 
+                    idStore: idStoreMartinez, 
                     expirationDate: "2028-12-24"
                 }
             ]

@@ -284,15 +284,20 @@ const updateProductWithInventoriesValidationsSchema: Schema = {
             options: (value: any) => {
                 if (!Array.isArray(value)) return false;
                 return value.every(item => {
+                    const idIsValid = item.id ? (typeof item.id === 'number' && item.id > 0) : true;
+                    const idStoreIsValid = item.id 
+                        ? true 
+                        : (typeof item.idStore === 'number' && item.idStore > 0);
+    
                     if (
-                        typeof item.id !== 'number' || item.id <= 0 ||
-                        typeof item.idProduct !== 'number' || item.idProduct <= 0 ||
-                        typeof item.idStore !== 'number' || item.idStore <= 0 ||
-                        typeof item.stock !== 'number' || item.stock < 1 ||
+                        !idIsValid || 
+                        !idStoreIsValid || 
+                        typeof item.stock !== 'number' || item.stock < 1 || 
                         typeof item.expirationDate !== 'string' || !/\d{4}-\d{2}-\d{2}/.test(item.expirationDate)
                     ) {
                         return false;
                     }
+    
                     const [year, month, day] = item.expirationDate.split('-').map(Number);
                     const date = new Date(year, month - 1, day);
                     return (
@@ -302,9 +307,9 @@ const updateProductWithInventoriesValidationsSchema: Schema = {
                     );
                 });
             },
-            errorMessage: "Each inventory must have a valid idProduct (integer > 0), idStore (integer > 0), stock (integer >= 1), and a valid expirationDate (SQL Server date format)."
+            errorMessage: "Each inventory must have a valid idStore (integer > 0), stock (integer >= 1), and a valid expirationDate (SQL Server date format)."
         }
-    }
+    }    
 };
 
 export {

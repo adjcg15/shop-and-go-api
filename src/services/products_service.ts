@@ -275,18 +275,28 @@ async function updateProductWithInventories(
 
         if (inventories) {
             for (const inventory of inventories) {
-                await db.Inventory.update({
-                    idProduct: inventory.idProduct,
-                    idStore: inventory.idStore,
-                    expirationDate: inventory.expirationDate,
-                    stock: inventory.stock,
-                },
-                {
-                    where: {
-                        id: inventory.id
+                if (inventory.id) {
+                    await db.Inventory.update({
+                        expirationDate: inventory.expirationDate,
+                        stock: inventory.stock,
                     },
-                    transaction
-                });
+                    {
+                        where: {
+                            id: inventory.id
+                        },
+                        transaction
+                    });
+                } else {
+                    await db.Inventory.create({
+                        idProduct: idProduct,
+                        idStore: inventory.idStore,
+                        expirationDate: inventory.expirationDate,
+                        stock: inventory.stock,
+                    },
+                    {
+                        transaction
+                    });
+                }
             }
         }        
 
