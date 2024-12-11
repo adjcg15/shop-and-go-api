@@ -12,6 +12,7 @@ export default class Product extends Model<InferAttributes<Product>, InferCreati
     declare imageUrl: string;
     declare salePrice: number;
     declare maximumAmount: number;
+    declare isActive: boolean;
 
     declare idCategory: ForeignKey<ProductCategory["id"]>;
     declare category?: NonAttribute<ProductCategory>;

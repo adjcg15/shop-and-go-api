@@ -2,11 +2,15 @@ import { InferAttributes } from "sequelize";
 import Product from "../../models/Product";
 import Inventory from "../../models/Inventory";
 
-interface IInventoryWithOptionalProductId extends Omit<InferAttributes<Inventory>, 'idProduct'> {
-    idProduct?: number
+interface IInventoryWithOptionalProductId extends Omit<InferAttributes<Inventory>, "id" | 'idProduct' | "idStore"> {
+    id?: number;
+    idProduct?: number;
+    idStore?: number;
 }
 
-interface IProductWithInventoriesBody extends InferAttributes<Product> {
+interface IProductWithInventoriesBody extends Omit<InferAttributes<Product>, "isActive" | "barCode"> {
+    barCode?: string;
+    isActive?: boolean;
     inventories?: IInventoryWithOptionalProductId[];
 }
 

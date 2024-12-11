@@ -9,7 +9,8 @@ async function insertE2EGetProductsByStoreTestData() {
         description: "Además de ser deliciosa y cremosa, la leche Lala Entera está adicionada con vitaminas A y D, proteínas y calcio que complementarán tu alimentación y la de tu familia. Rinde 6 vasos de 250 ml vs. 4 vasos de 250 ml en 1 L.",
         imageUrl: "https://r-charts.com/es/miscelanea/procesamiento-imagenes-magick_files/figure-html/importar-imagen-r.png",
         salePrice: 46,
-        maximumAmount: 10
+        maximumAmount: 10,
+        isActive: true
     });
     const cheese = await dairyCategory.createProduct({ 
         barCode: "0987654321", 
@@ -17,7 +18,8 @@ async function insertE2EGetProductsByStoreTestData() {
         description: "Es fresco, blanco, suave y tiende a ser duradero. Su textura podría describirse mejor como una ricota firme. No tiende a derretirse por lo que puedes asarlo o colocarlo en la parrilla para comerlo directamente.",
         imageUrl: "https://r-charts.com/es/miscelanea/procesamiento-imagenes-magick_files/figure-html/importar-imagen-r.png",
         salePrice: 43.33,
-        maximumAmount: 20
+        maximumAmount: 20,
+        isActive: true
     });
     const pineapleCan = await cannedCategory.createProduct({ 
         barCode: "7778889991", 
@@ -25,7 +27,8 @@ async function insertE2EGetProductsByStoreTestData() {
         description: "Es un producto mexicano, que puede disfrutar como postre, guarnición o colación, listo para comer.",
         imageUrl: "https://r-charts.com/es/miscelanea/procesamiento-imagenes-magick_files/figure-html/importar-imagen-r.png",
         salePrice: 55.5,
-        maximumAmount: 15
+        maximumAmount: 15,
+        isActive: true
     });
     const store = await db.Store.create({ 
         name: "El zorro Xalapa centro",

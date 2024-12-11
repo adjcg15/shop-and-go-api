@@ -111,7 +111,8 @@ CREATE TABLE Productos (
     urlImagen TEXT NOT NULL,
     precioVenta MONEY NOT NULL,
     cantidadMaxima INT NOT NULL,
-    idCategoria INT NOT NULL,
+    esActivo TINYINT NOT NULL,
+    idCategoria INT NOT NULL
 );
 
 

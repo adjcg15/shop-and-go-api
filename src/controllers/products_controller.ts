@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
 import { IPaginationQuery } from "../types/interfaces/request_queries";
-import { createProductWithInventories, getAllProducts, getProductInventoriesByIdProduct } from "../services/products_service";
+import { createProductWithInventories, getAllProducts, getProductInventoriesByIdProduct, updateProductWithInventories } from "../services/products_service";
 import { IProductWithCategory } from "../types/interfaces/response_bodies";
 import { IProductByIdParams } from "../types/interfaces/request_parameters";
 import { InferAttributes } from "sequelize";
@@ -48,7 +48,7 @@ async function createProductWithInventoriesController(
 
         await createProductWithInventories(
             { 
-                barCode, 
+                barCode: barCode!, 
                 name, 
                 description, 
                 salePrice, 
@@ -65,8 +65,38 @@ async function createProductWithInventoriesController(
     }
 }
 
+async function updateProductWithInventoriesController(
+    req: Request<IProductByIdParams, {}, IProductWithInventoriesBody, {}>,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const { name, description, salePrice, imageUrl, maximumAmount, isActive, idCategory, inventories } = req.body;
+        const { idProduct } = req.params;
+
+        await updateProductWithInventories(
+            { 
+                idProduct: idProduct!,
+                name, 
+                description, 
+                salePrice, 
+                imageUrl, 
+                maximumAmount,
+                isActive: isActive!, 
+                idCategory, 
+                inventories
+            }
+        );
+
+        res.status(HttpStatusCodes.CREATED).json();
+    } catch (error) {
+        next(error);
+    }
+}
+
 export{
     getAllProductsController,
     getProductInventoriesByIdProductController,
-    createProductWithInventoriesController
+    createProductWithInventoriesController,
+    updateProductWithInventoriesController
 }
