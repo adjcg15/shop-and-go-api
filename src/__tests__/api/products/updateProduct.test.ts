@@ -17,6 +17,7 @@ describe("/api/products/:idProduct", () => {
     let idCategory: number = 1;
     let idInventoryXalapa: number = 1;
     let idInventoryCarranza: number = 1;
+    let token: string = "";
 
     beforeAll(async () => {
         app = createApp();
@@ -31,6 +32,11 @@ describe("/api/products/:idProduct", () => {
         idCategory = testDataResult.idCategory;
         idInventoryXalapa = testDataResult.idInventoryXalapa;
         idInventoryCarranza = testDataResult.idInventoryCarranza;
+
+        const sessionBody = {username: "mlopez1234", password: "password12345"};
+        const response = await request(app).post(`/api/sessions`).send(sessionBody);
+        const administrator = response.body;
+        token = administrator.token;
     });
 
     it("Should register the product with inventories in database", async () => {
@@ -60,7 +66,7 @@ describe("/api/products/:idProduct", () => {
                 }
             ]
         };
-        const response = await request(app).put(`/api/products/${idProduct}`).send(productData);
+        const response = await request(app).put(`/api/products/${idProduct}`).set("Authorization", `Bearer ${token}`).send(productData);
         expect(response.status).toBe(HttpStatusCodes.CREATED);
     });
 
@@ -74,7 +80,7 @@ describe("/api/products/:idProduct", () => {
             isActive: true,
             idCategory
         };
-        const response = await request(app).put(`/api/products/${idProduct}`).send(productData);
+        const response = await request(app).put(`/api/products/${idProduct}`).set("Authorization", `Bearer ${token}`).send(productData);
         expect(response.status).toBe(HttpStatusCodes.CREATED);
     });
 
