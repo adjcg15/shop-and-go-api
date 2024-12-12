@@ -19,8 +19,8 @@ router.get(
 
 router.post(
     "/",
-    //checkTokenValidity,
-    //allowRoles([UserRoles.ADMINISTRATOR]),
+    checkTokenValidity,
+    allowRoles([UserRoles.ADMINISTRATOR]),
     checkSchema(createProductWithInventoriesValidationsSchema),
     validateRequestSchemaMiddleware,
     createProductWithInventoriesController
@@ -28,8 +28,8 @@ router.post(
 
 router.put(
     "/:idProduct",
-    //checkTokenValidity,
-    //allowRoles([UserRoles.ADMINISTRATOR, UserRoles.SALES_EXECUTIVE]),
+    checkTokenValidity,
+    allowRoles([UserRoles.ADMINISTRATOR, UserRoles.SALES_EXECUTIVE]),
     checkSchema(updateProductWithInventoriesValidationsSchema),
     validateRequestSchemaMiddleware,
     updateProductWithInventoriesController

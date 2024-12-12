@@ -19,10 +19,10 @@ describe("/api/sessions", () => {
     });
 
     it("Should return an token and client data registered in database", async () => {
-        const body = {phoneNumber: "1234567890", password: "e28e706c22b1cbefdf3972ff26db7af92181267e45735b00dbdf805080e61f3e"};
+        const body = {phoneNumber: "1234567890", password: "password12345"};
         const response = await request(app).post(`/api/sessions`).send(body);
         const client = response.body;
-
+        
         expect(response.status).toBe(HttpStatusCodes.CREATED);
         expect(client.token).toEqual(expect.any(String));
         expect(client.id).toEqual(expect.any(Number));
@@ -32,7 +32,7 @@ describe("/api/sessions", () => {
     });
 
     it("Should return an token and employee data registered in database", async () => {
-        const body = {username: "jamon12345", password: "e7cf3ef4f17c3999a94f2c6f612e8a888e5b1026878e4e19398b23bd38ec221a"};
+        const body = {username: "jamon12345", password: "password12345"};
         const response = await request(app).post(`/api/sessions`).send(body);
         const employee = response.body;
         
@@ -47,7 +47,7 @@ describe("/api/sessions", () => {
     });
 
     it("should display an error message indicating that the credentials are invalid", async () => {
-        const body = {phoneNumber: "1234567891", password: "e28e706c22b1cbefdf3972ff26db7af92181267e45735b00dbdf805080e61f3e"};
+        const body = {phoneNumber: "1234567891", password: "password12345"};
         const response = await request(app).post(`/api/sessions`).send(body);
         
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
@@ -55,7 +55,7 @@ describe("/api/sessions", () => {
     });
 
     it("should display an error message indicating that the credentials are invalid", async () => {
-        const body = {username: "jamin3284f2d41", password: "e28e706c22b1cbefdf3972ff26db7af92181267e45735b00dbdf805080e61f3e"};
+        const body = {username: "jamin3284f2d41", password: "password12345"};
         const response = await request(app).post(`/api/sessions`).send(body);
         
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);

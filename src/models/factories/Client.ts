@@ -10,7 +10,7 @@ export default (sequelize: Sequelize) => {
             field: "idCliente"
         },
         passwordHash: {
-            type: DataTypes.CHAR(64),
+            type: DataTypes.CHAR(60),
             field: "contrasena",
             allowNull: false
         },

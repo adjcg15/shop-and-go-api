@@ -12,6 +12,7 @@ describe("/api/clients/:idClient/payment-methods/:idPaymentMethod", () => {
     let app: Express;
     let idClient: number = 1;
     let idPaymentMethod: number = 1;
+    let token: string = "";
 
     beforeAll(async () => {
         app = createApp();
@@ -21,23 +22,22 @@ describe("/api/clients/:idClient/payment-methods/:idPaymentMethod", () => {
         const testDataResult = await insertE2EDeletePaymentMethodTestData();
         idClient = testDataResult.idClient;
         idPaymentMethod = testDataResult.idPaymentMethod;
+
+        const sessionBody = {phoneNumber: "1234567890", password: "password12345"};
+        const response = await request(app).post(`/api/sessions`).send(sessionBody);
+        const client = response.body;
+        token = client.token;
     });
 
     it("Should delete the payment method in database", async () => {
-        const response = await request(app).delete(`/api/clients/${idClient}/payment-methods/${idPaymentMethod}`);
+        const response = await request(app).delete(`/api/clients/${idClient}/payment-methods/${idPaymentMethod}`)
+        .set("Authorization", `Bearer ${token}`);
         expect(response.status).toBe(HttpStatusCodes.NO_CONTENT);
     });
 
-    it("Should display an error message indicating that the client does not exist", async () => {
-        const response = await request(app).delete(`/api/clients/${idClient+1}/payment-methods/${idPaymentMethod}`);
-
-        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
-        expect(response.body.details).toBe(ErrorMessages.CLIENT_NOT_FOUND);
-        expect(response.body.errorCode).toBe(DeletePaymentMethodErrorCodes.CLIENT_NOT_FOUND);
-    });
-
     it("Should display an error message indicating that the payment method does not exist", async () => {
-        const response = await request(app).delete(`/api/clients/${idClient}/payment-methods/${idPaymentMethod+1}`);
+        const response = await request(app).delete(`/api/clients/${idClient}/payment-methods/${idPaymentMethod+1}`)
+            .set("Authorization", `Bearer ${token}`);
 
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
         expect(response.body.details).toBe(ErrorMessages.PAYMENT_METHOD_NOT_FOUND);
@@ -52,7 +52,8 @@ describe("/api/clients/:idClient/payment-methods/:idPaymentMethod", () => {
             dialect: 'mssql',
         });
         
-        const response = await request(app).delete(`/api/clients/${idClient}/payment-methods/${idPaymentMethod}`);
+        const response = await request(app).delete(`/api/clients/${idClient}/payment-methods/${idPaymentMethod}`)
+            .set("Authorization", `Bearer ${token}`);
 
         expect(response.status).toBe(HttpStatusCodes.INTERNAL_SERVER_ERROR);
     });

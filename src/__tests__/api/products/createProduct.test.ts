@@ -13,6 +13,7 @@ describe("/api/products", () => {
     let idStoreXalapa: number = 1;
     let idStoreCarranza: number = 2;
     let idCategory: number = 1;
+    let token: string = "";
 
     beforeAll(async () => {
         app = createApp();
@@ -23,6 +24,11 @@ describe("/api/products", () => {
         idStoreXalapa = testDataResult.idStoreXalapa;
         idStoreCarranza = testDataResult.idStoreCarranza;
         idCategory = testDataResult.idCategory;
+
+        const sessionBody = {username: "mlopez1234", password: "password12345"};
+        const response = await request(app).post(`/api/sessions`).send(sessionBody);
+        const administrator = response.body;
+        token = administrator.token;
     });
 
     it("Should register the product with inventories in database", async () => {
@@ -47,7 +53,8 @@ describe("/api/products", () => {
                 }
             ]
         };
-        const response = await request(app).post(`/api/products`).send(productData);
+        const response = await request(app).post(`/api/products`).set("Authorization", `Bearer ${token}`).send(productData);
+        
         expect(response.status).toBe(HttpStatusCodes.CREATED);
     });
 
@@ -61,7 +68,7 @@ describe("/api/products", () => {
             maximumAmount: 20,
             idCategory
         };
-        const response = await request(app).post(`/api/products`).send(productData);
+        const response = await request(app).post(`/api/products`).set("Authorization", `Bearer ${token}`).send(productData);
         expect(response.status).toBe(HttpStatusCodes.CREATED);
     });
 

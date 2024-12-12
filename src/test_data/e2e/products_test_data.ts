@@ -91,7 +91,7 @@ async function insertE2EGetProductInventoriesTestData() {
     }
 }
 
-async function insertE2ECreateProductTestData() {
+async function insertE2ECreateProductTestData() {       
     const dairyCategory = await db.ProductCategory.create({ name: "Lacteos", isActive: true });
     const storeXalapa = await db.Store.create({ 
         name: "El zorro Xalapa centro",
@@ -109,6 +109,19 @@ async function insertE2ECreateProductTestData() {
         latitude: 19.528761,
         longitude: -96.922356
     });
+    const employeePosition = await db.EmployeePosition.create({
+        title: "Administrador"
+    });
+    await db.Employee.create({
+        fullName: "Maria Lopez Perez",
+        user: "mlopez1234",
+        passwordHash: "$2b$10$MqRHa10Cw5PzHIu2ihG5suOljpAlcw6i1FQKcyj2pRS2pTGa60ycC",
+        registrationDate: "2023-01-15",
+        isAvailableForWork: true,
+        isActive: true,
+        idStore: storeCarranza.id,
+        idPosition: employeePosition.id
+    }); 
 
     return {
         idCategory: dairyCategory.id,
@@ -152,6 +165,19 @@ async function insertE2EUpdateProductTestData() {
         latitude: 19.528781,
         longitude: -96.922346
     });
+    const employeePosition = await db.EmployeePosition.create({
+        title: "Administrador"
+    });
+    await db.Employee.create({
+        fullName: "Maria Lopez Perez",
+        user: "mlopez1234",
+        passwordHash: "$2b$10$MqRHa10Cw5PzHIu2ihG5suOljpAlcw6i1FQKcyj2pRS2pTGa60ycC",
+        registrationDate: "2023-01-15",
+        isAvailableForWork: true,
+        isActive: true,
+        idStore: storeCarranza.id,
+        idPosition: employeePosition.id
+    }); 
     const inventoryXalapa = await db.Inventory.create({ idProduct: cheese.id, stock: 24, idStore: storeXalapa.id, expirationDate: "2024-12-24" });
     const inventoryCarranza = await db.Inventory.create({ idProduct: cheese.id, stock: 31, idStore: storeCarranza.id, expirationDate: "2026-08-05" });
 

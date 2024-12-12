@@ -33,9 +33,9 @@ function checkTokenValidity(req: Request, res: Response, next: NextFunction): vo
 
 function allowRoles(allowedRoles: UserRoles[]) {
     return function(req: Request, res: Response, next: NextFunction) {
-        const { userRoles } = req.user;
+        const { userRole } = req.user;
 
-        if(Array.isArray(userRoles) && userRoles.some(role => allowedRoles.includes(role))) {
+        if(allowedRoles.includes(userRole)) {
             next();
         } else {
             res.status(HttpStatusCodes.FORBIDDEN).send();
@@ -43,4 +43,19 @@ function allowRoles(allowedRoles: UserRoles[]) {
     }
 }
 
-export { checkTokenValidity, allowRoles };
+function validateClientOwnership(req: Request, res: Response, next: NextFunction): void {
+    const idClient = parseInt(req.params.idClient, 10);
+    const userId = req.user?.id;
+
+    if (idClient !== userId) {
+        res.status(HttpStatusCodes.FORBIDDEN).send();
+    } else {
+        next();
+    }
+}
+
+export { 
+    checkTokenValidity, 
+    allowRoles,
+    validateClientOwnership 
+};

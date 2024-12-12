@@ -37,17 +37,6 @@ const loginSchema: Schema = {
         trim: true,
         notEmpty: {
             errorMessage: "Password is required"
-        },
-        isString: {
-            errorMessage: "Password must be a string"
-        },
-        isLength: {
-            options: { min: 64, max: 64 },
-            errorMessage: "Password must be exactly 64 characters"
-        },
-        matches: {
-            options: /^[a-fA-F0-9]+$/,
-            errorMessage: "Password must contain only hexadecimal characters"
         }
     },
     atLeastOne: {
