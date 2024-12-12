@@ -20,8 +20,8 @@ router.post(
 
 router.delete(
     "/:idClient/payment-methods/:idPaymentMethod",
-    //checkTokenValidity,
-    //allowRoles([UserRoles.CLIENT]),
+    checkTokenValidity,
+    allowRoles([UserRoles.CLIENT]),
     checkSchema(deletePaymentMethodFromClientValidationSchema),
     validateRequestSchemaMiddleware,
     deletePaymentMethodFromClientController

@@ -22,8 +22,8 @@ describe("/api/clients/:idClient/payment-methods", () => {
         const testDataResult = await insertE2ECreatePaymentMethodTestData();
         idClient = testDataResult.idClient;
         idIssuer = testDataResult.idIssuer;
-        const body = {phoneNumber: "1234567890", password: "e28e706c22b1cbefdf3972ff26db7af92181267e45735b00dbdf805080e61f3e"};
-        const response = await request(app).post(`/api/sessions`).send(body);
+        const sessionBody = {phoneNumber: "1234567890", password: "e28e706c22b1cbefdf3972ff26db7af92181267e45735b00dbdf805080e61f3e"};
+        const response = await request(app).post(`/api/sessions`).send(sessionBody);
         const client = response.body;
         token = client.token;
     });
