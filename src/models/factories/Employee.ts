@@ -20,7 +20,7 @@ export default (sequelize: Sequelize) => {
             allowNull: false
         },
         passwordHash: {
-            type: DataTypes.CHAR(64),
+            type: DataTypes.CHAR(60),
             field: "contrasena",
             allowNull: false
         },

@@ -23,7 +23,7 @@ CREATE TABLE MetodosPago (
 
 CREATE TABLE Clientes (
     idCliente INT PRIMARY KEY IDENTITY(1,1),
-    contrasena NCHAR(64) NOT NULL,
+    contrasena NCHAR(60) NOT NULL,
     fechaNacimiento DATE NOT NULL,
     nombreCompleto NVARCHAR(64) NOT NULL,
     numeroTelefono NCHAR(10) NOT NULL
@@ -77,7 +77,7 @@ CREATE TABLE Trabajadores (
     idTrabajador INT PRIMARY KEY IDENTITY(1,1),
     nombreCompleto NVARCHAR(255) NOT NULL,
     usuario NVARCHAR(50) NOT NULL,
-    contrasena NCHAR(64) NOT NULL,
+    contrasena NCHAR(60) NOT NULL,
     fechaIngreso DATE NOT NULL,
     disponible TINYINT NOT NULL,
     esActivo TINYINT NOT NULL,

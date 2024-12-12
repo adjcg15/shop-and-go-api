@@ -2,7 +2,7 @@ import db from "../../models";
 
 async function insertE2ECreatePaymentMethodTestData() {
     const client = await db.Client.create({
-        passwordHash: "e28e706c22b1cbefdf3972ff26db7af92181267e45735b00dbdf805080e61f3e",
+        passwordHash: "$2b$10$MqRHa10Cw5PzHIu2ihG5suOljpAlcw6i1FQKcyj2pRS2pTGa60ycC",
         birthdate: "1990-05-15",
         fullName: "John Doe",
         phoneNumber: "1234567890"
@@ -28,7 +28,7 @@ async function insertE2ECreatePaymentMethodTestData() {
 
 async function insertE2EDeletePaymentMethodTestData() {
     const client = await db.Client.create({
-        passwordHash: "$2a$10$K.Zod1ZT4A5rzseZo6muBOgDeHdmOMyF3M8o5V6UnKm1VdeQk8l5y1234",
+        passwordHash: "$2b$10$MqRHa10Cw5PzHIu2ihG5suOljpAlcw6i1FQKcyj2pRS2pTGa60ycC",
         birthdate: "1990-05-15",
         fullName: "John Doe",
         phoneNumber: "1234567890"
@@ -53,13 +53,8 @@ async function insertE2EDeletePaymentMethodTestData() {
 }
 
 async function insertE2EGetPaymentMethodsTestData() {
-    try {
-        
-    } catch (error) {
-        console.log(error);
-    }
     const client = await db.Client.create({
-        passwordHash: "$2a$10$K.Zod1ZT4A5rzseZo6muBOgDeHdmOMyF3M8o5V6UnKm1VdeQk8l5y1234",
+        passwordHash: "$2b$10$MqRHa10Cw5PzHIu2ihG5suOljpAlcw6i1FQKcyj2pRS2pTGa60ycC",
         birthdate: "1990-05-15",
         fullName: "John Doe",
         phoneNumber: "1234567890"

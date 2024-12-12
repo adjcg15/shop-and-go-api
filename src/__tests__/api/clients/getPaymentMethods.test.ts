@@ -4,8 +4,6 @@ import { Express } from "express";
 import { HttpStatusCodes } from "../../../types/enums/http";
 import db from "../../../models";
 import { insertE2EGetPaymentMethodsTestData } from "../../../test_data/e2e/clients_test_data";
-import { CreatePaymentMethodErrorCodes } from "../../../types/enums/error_codes";
-import { ErrorMessages } from "../../../types/enums/error_messages";
 import { Sequelize } from "sequelize";
 
 describe("/api/clients/:idClient/payment-methods", () => {
@@ -21,7 +19,7 @@ describe("/api/clients/:idClient/payment-methods", () => {
         const testDataResult = await insertE2EGetPaymentMethodsTestData();
         idClient = testDataResult.idClient;
 
-        const sessionBody = {phoneNumber: "1234567890", password: "e28e706c22b1cbefdf3972ff26db7af92181267e45735b00dbdf805080e61f3e"};
+        const sessionBody = {phoneNumber: "1234567890", password: "password12345"};
         const response = await request(app).post(`/api/sessions`).send(sessionBody);
         const client = response.body;
         token = client.token;

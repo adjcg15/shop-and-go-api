@@ -13,6 +13,7 @@ describe("/api/products", () => {
     let idStoreXalapa: number = 1;
     let idStoreCarranza: number = 2;
     let idCategory: number = 1;
+    let token: string = "";
 
     beforeAll(async () => {
         app = createApp();

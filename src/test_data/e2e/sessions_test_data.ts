@@ -2,7 +2,7 @@ import db from "../../models";
 
 async function insertE2ELoginTestData(){
     await db.Client.create({
-        passwordHash: "e28e706c22b1cbefdf3972ff26db7af92181267e45735b00dbdf805080e61f3e",
+        passwordHash: "$2b$10$MqRHa10Cw5PzHIu2ihG5suOljpAlcw6i1FQKcyj2pRS2pTGa60ycC",
         birthdate: "1990-05-15",
         fullName: "John Doe",
         phoneNumber: "1234567890"
@@ -11,7 +11,7 @@ async function insertE2ELoginTestData(){
     await position.createEmployee({
         fullName: "Rodrigo Aguilar López",
         user: "jamon12345",
-        passwordHash: "e7cf3ef4f17c3999a94f2c6f612e8a888e5b1026878e4e19398b23bd38ec221a",
+        passwordHash: "$2b$10$MqRHa10Cw5PzHIu2ihG5suOljpAlcw6i1FQKcyj2pRS2pTGa60ycC",
         registrationDate: "2011-07-16",
         isAvailableForWork: true,
         isActive: true
