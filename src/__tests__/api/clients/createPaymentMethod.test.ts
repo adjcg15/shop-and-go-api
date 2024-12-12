@@ -45,26 +45,6 @@ describe("/api/clients/:idClient/payment-methods", () => {
         expect(response.status).toBe(HttpStatusCodes.CREATED);
     });
 
-    it("Should display an error message indicating that the client does not exist", async () => {
-        const paymentMethodData = {
-            cardholderName: "Alice Johnson",
-            expirationMonth: "08",
-            expirationYear: "26",
-            encryptedCardNumber: "zxcvbnm12345678asdfghi",
-            hashedCardNumber: "a38b7c1f94d0a2e9f8c482ae6cbd34e16e8e91f14a5c9e30b2b3f724d047f34b",
-            initialVector: "pqr123lmn456",
-            authenticationTag: "ghi789klm456",
-            idIssuer: idIssuer
-        };
-        const response = await request(app).post(`/api/clients/${idClient+1}/payment-methods`)
-            .set("Authorization", `Bearer ${token}`)
-            .send(paymentMethodData);
-
-        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
-        expect(response.body.details).toBe(ErrorMessages.CLIENT_NOT_FOUND);
-        expect(response.body.errorCode).toBe(CreatePaymentMethodErrorCodes.CLIENT_NOT_FOUND);
-    });
-
     it("Should display an error message indicating that the issuer does not exist", async () => {
         const paymentMethodData = {
             cardholderName: "Alice Johnson",

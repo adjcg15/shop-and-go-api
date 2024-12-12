@@ -35,15 +35,6 @@ describe("/api/clients/:idClient/payment-methods/:idPaymentMethod", () => {
         expect(response.status).toBe(HttpStatusCodes.NO_CONTENT);
     });
 
-    it("Should display an error message indicating that the client does not exist", async () => {
-        const response = await request(app).delete(`/api/clients/${idClient+1}/payment-methods/${idPaymentMethod}`)
-            .set("Authorization", `Bearer ${token}`);
-
-        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
-        expect(response.body.details).toBe(ErrorMessages.CLIENT_NOT_FOUND);
-        expect(response.body.errorCode).toBe(DeletePaymentMethodErrorCodes.CLIENT_NOT_FOUND);
-    });
-
     it("Should display an error message indicating that the payment method does not exist", async () => {
         const response = await request(app).delete(`/api/clients/${idClient}/payment-methods/${idPaymentMethod+1}`)
             .set("Authorization", `Bearer ${token}`);

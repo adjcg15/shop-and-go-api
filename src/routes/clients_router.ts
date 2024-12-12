@@ -30,9 +30,9 @@ router.delete(
 
 router.get(
     "/:idClient/payment-methods",
-    //checkTokenValidity,
+    checkTokenValidity,
     validateClientOwnership,
-    //allowRoles([UserRoles.CLIENT]),
+    allowRoles([UserRoles.CLIENT]),
     checkSchema(getPaymentMethodsFromClientValidationSchema),
     validateRequestSchemaMiddleware,
     getPaymentMethodsFromClientController
