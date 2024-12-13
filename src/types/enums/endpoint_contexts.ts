@@ -3,7 +3,8 @@ enum EndpointContexts {
     DELETE_PAYMENT_METHOD = "DLPM",
     GET_ALL_PRODUCTS = "GEAP",
     CREATE_PRODUCT = "CRPR",
-    UPDATE_PRODUCT = "UPPR"
+    UPDATE_PRODUCT = "UPPR",
+    CREATE_ORDER = "CROR"
 }
 
 export { EndpointContexts };
