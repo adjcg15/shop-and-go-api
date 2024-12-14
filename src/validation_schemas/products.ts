@@ -312,10 +312,32 @@ const updateProductWithInventoriesValidationsSchema: Schema = {
     }    
 };
 
+const getStoreInventoriesValidationSchema: Schema = {
+    products: {
+        in: ["body"],
+        isArray: {
+            options: { min: 1 },
+            errorMessage: "Products must be a non-empty array.",
+        },
+        custom: {
+            options: (value: any) => {
+                if (!Array.isArray(value)) return false;
+                return value.every(item => {
+                    const idProductIsValid = typeof item.idProduct === 'number' && item.idProduct > 0;
+    
+                    return idProductIsValid;
+                });
+            },
+            errorMessage: "Each product must have a valid idProduct (integer > 0)",
+        }
+    }
+}
+
 export {
     getProductsInStoreValidationSchema,
     getAllProductsValidationSchema,
     getProductInventoriesValidationSchema,
     createProductWithInventoriesValidationsSchema,
-    updateProductWithInventoriesValidationsSchema
+    updateProductWithInventoriesValidationsSchema,
+    getStoreInventoriesValidationSchema
 };
