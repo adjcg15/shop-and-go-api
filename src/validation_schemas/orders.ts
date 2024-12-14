@@ -33,14 +33,6 @@ const createOrderValidationsSchema: Schema = {
         },
         toInt: true
     },
-    idStatus: {
-        in: ["body"],
-        isInt: {
-            options: { min: 1 },
-            errorMessage: "idStatus must be a positive integer",
-        },
-        toInt: true
-    },
     products: {
         in: ["body"],
         isArray: {

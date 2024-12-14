@@ -44,10 +44,10 @@ function allowRoles(allowedRoles: UserRoles[]) {
 }
 
 function validateClientOwnership(req: Request, res: Response, next: NextFunction): void {
-    const idClient = parseInt(req.params.idClient, 10);
-    const userId = req.user?.id;
+    const idClient = parseInt(req.params.idClient ? req.params.idClient : req.body.idClient, 10);
+    const idUser = req.user.id;
 
-    if (idClient !== userId) {
+    if (idClient !== idUser) {
         res.status(HttpStatusCodes.FORBIDDEN).send();
     } else {
         next();

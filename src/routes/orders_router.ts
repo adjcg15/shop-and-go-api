@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { checkTokenValidity } from "../middlewares/access_control";
+import { checkTokenValidity, validateClientOwnership } from "../middlewares/access_control";
 import { allowRoles } from "../middlewares/access_control";
 import UserRoles from "../types/enums/user_roles";
 import { checkSchema } from "express-validator";
@@ -12,6 +12,7 @@ const router = Router();
 router.post(
     "/",
     checkTokenValidity,
+    validateClientOwnership,
     allowRoles([UserRoles.CLIENT]),
     checkSchema(createOrderValidationsSchema),
     validateRequestSchemaMiddleware,

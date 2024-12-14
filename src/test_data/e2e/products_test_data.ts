@@ -1,4 +1,5 @@
 import db from "../../models";
+import UserRoles from "../../types/enums/user_roles";
 
 async function insertE2EGetAllProductsTestData() {
     const dairyCategory = await db.ProductCategory.create({ name: "Lacteos", isActive: true });
@@ -110,7 +111,7 @@ async function insertE2ECreateProductTestData() {
         longitude: -96.922356
     });
     const employeePosition = await db.EmployeePosition.create({
-        title: "Administrador"
+        title: UserRoles.ADMINISTRATOR
     });
     await db.Employee.create({
         fullName: "Maria Lopez Perez",
@@ -166,7 +167,7 @@ async function insertE2EUpdateProductTestData() {
         longitude: -96.922346
     });
     const employeePosition = await db.EmployeePosition.create({
-        title: "Administrador"
+        title: UserRoles.ADMINISTRATOR
     });
     await db.Employee.create({
         fullName: "Maria Lopez Perez",

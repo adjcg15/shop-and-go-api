@@ -9,7 +9,7 @@ async function createOrderController(
     next: NextFunction
 ) {
     try {
-        const { idStore, idClient, idDeliveryAddress, idPaymentMethod, idStatus, products } = req.body;
+        const { idStore, idClient, idDeliveryAddress, idPaymentMethod, products } = req.body;
 
         await createOrder(
             { 
@@ -17,7 +17,6 @@ async function createOrderController(
                 idClient, 
                 idDeliveryAddress, 
                 idPaymentMethod, 
-                idStatus, 
                 products: products! 
             }
         );

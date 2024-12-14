@@ -5,14 +5,14 @@ import { IOrderProducts } from "../types/interfaces/request_bodies";
 import { ErrorMessages } from "../types/enums/error_messages";
 import { CreateOrderErrorCodes } from "../types/enums/error_codes";
 import { getCurrentDateTimeSQL } from "../lib/datetime_service";
+import { OrderStatus } from "../types/enums/order_status";
 
 async function createOrder(
     order: { 
         idStore: number, 
         idClient: number, 
         idDeliveryAddress: number, 
-        idPaymentMethod: number, 
-        idStatus: number, 
+        idPaymentMethod: number,
         products: IOrderProducts[] }
     ) {
 
@@ -24,8 +24,7 @@ async function createOrder(
             idStore, 
             idClient, 
             idDeliveryAddress, 
-            idPaymentMethod, 
-            idStatus, 
+            idPaymentMethod,
             products 
         } = order;
 
@@ -65,7 +64,11 @@ async function createOrder(
             );
         }
 
-        const orderStatus = await db.OrderStatus.findByPk(idStatus);
+        const orderStatus = await db.OrderStatus.findOne({
+            where: {
+                title: OrderStatus.CREATED
+            }
+        });
 
         if(orderStatus === null) {
             throw new BusinessLogicException(
@@ -119,7 +122,7 @@ async function createOrder(
             idClient,
             idDeliveryAddress,
             idPaymentMethod,
-            idStatus
+            idStatus: orderStatus.id
         },
         {
             transaction

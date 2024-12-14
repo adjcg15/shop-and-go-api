@@ -27,7 +27,7 @@ interface IOrderProducts extends Omit<InferAttributes<OrderProduct>, "id" | "idO
     idOrder?: number;
 }
 
-interface IOrderWithQuantitiesOfProducts extends Omit<InferAttributes<Order>, "dateOfPurchase"> {
+interface IOrderWithQuantitiesOfProducts extends Omit<InferAttributes<Order>, "dateOfPurchase" | "idStatus"> {
     idStore?: number;
     products?: IOrderProducts[]; 
 }
