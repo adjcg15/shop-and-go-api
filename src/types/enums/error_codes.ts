@@ -38,6 +38,7 @@ enum CreateOrderErrorCodes {
 enum GetStoreInventoriesErrorCodes {
     STORE_NOT_FOUND = EndpointContexts.GET_STORE_INVENTORIES + "-400001",
     PRODUCT_NOT_FOUND = EndpointContexts.GET_STORE_INVENTORIES + "-400002",
+    INVENTORY_DOES_NOT_EXIST = EndpointContexts.GET_STORE_INVENTORIES + "-400003"
 }
 
 export { 

@@ -349,6 +349,13 @@ async function getStoreInventories(idStore: number, productsId: number[]) {
                 }
             });
 
+            if(inventory === null) {
+                throw new BusinessLogicException(
+                    ErrorMessages.INVENTORY_DOES_NOT_EXIST,
+                    GetStoreInventoriesErrorCodes.INVENTORY_DOES_NOT_EXIST
+                );
+            }
+
             const inventoriesInfo = {
                 idProduct,
                 stock: inventory?.stock
