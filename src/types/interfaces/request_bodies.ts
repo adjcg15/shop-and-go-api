@@ -4,7 +4,7 @@ import Inventory from "../../models/Inventory";
 import Order from "../../models/Order";
 import OrderProduct from "../../models/OrderProduct";
 
-interface IInventoryWithOptionalProductId extends Omit<InferAttributes<Inventory>, "id" | 'idProduct' | "idStore"> {
+interface IInventoryWithOptionalProductIdBody extends Omit<InferAttributes<Inventory>, "id" | 'idProduct' | "idStore"> {
     id?: number;
     idProduct?: number;
     idStore?: number;
@@ -13,7 +13,7 @@ interface IInventoryWithOptionalProductId extends Omit<InferAttributes<Inventory
 interface IProductWithInventoriesBody extends Omit<InferAttributes<Product>, "isActive" | "barCode"> {
     barCode?: string;
     isActive?: boolean;
-    inventories?: IInventoryWithOptionalProductId[];
+    inventories?: IInventoryWithOptionalProductIdBody[];
 }
 
 interface ILoginBody {
@@ -22,20 +22,25 @@ interface ILoginBody {
     password?: string;
 }
 
-interface IOrderProducts extends Omit<InferAttributes<OrderProduct>, "id" | "idOrder"> {
+interface IOrderProductsBody extends Omit<InferAttributes<OrderProduct>, "id" | "idOrder"> {
     id?: number;
     idOrder?: number;
 }
 
-interface IOrderWithQuantitiesOfProducts extends Omit<InferAttributes<Order>, "dateOfPurchase" | "idStatus"> {
+interface IOrderWithQuantitiesOfProductsBody extends Omit<InferAttributes<Order>, "dateOfPurchase" | "idStatus"> {
     idStore?: number;
-    products?: IOrderProducts[]; 
+    products?: IOrderProductsBody[]; 
+}
+
+interface IProductsByIdBody {
+    productsId?: number[];
 }
 
 export {
-    IInventoryWithOptionalProductId,
+    IInventoryWithOptionalProductIdBody,
     IProductWithInventoriesBody,
     ILoginBody,
-    IOrderWithQuantitiesOfProducts,
-    IOrderProducts
+    IOrderWithQuantitiesOfProductsBody,
+    IOrderProductsBody,
+    IProductsByIdBody
 }

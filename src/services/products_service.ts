@@ -1,13 +1,13 @@
 import { Op, InferAttributes } from "sequelize";
 import db from "../models";
 import SQLException from "../exceptions/services/SQLException";
-import { IProductWithInventory} from "../types/interfaces/response_bodies";
+import { IProductByIdWithStock, IProductWithInventory} from "../types/interfaces/response_bodies";
 import { IProductWithCategory } from "../types/interfaces/response_bodies";
 import Inventory from "../models/Inventory";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { ErrorMessages } from "../types/enums/error_messages";
-import { CreateProductErrorCodes, UpdateProductErrorCodes } from "../types/enums/error_codes";
-import { IInventoryWithOptionalProductId } from "../types/interfaces/request_bodies";
+import { CreateProductErrorCodes, GetStoreInventoriesErrorCodes, UpdateProductErrorCodes } from "../types/enums/error_codes";
+import { IInventoryWithOptionalProductIdBody } from "../types/interfaces/request_bodies";
 
 async function getProductsInStore(idStore: number, pagination: { offset: number, limit: number, query: string, categoryFilter?: number }) {
     const productsList: IProductWithInventory[] = [];
@@ -130,7 +130,7 @@ async function createProductWithInventories(
         imageUrl: string,
         maximumAmount: number,
         idCategory: number
-        inventories?: IInventoryWithOptionalProductId[]}
+        inventories?: IInventoryWithOptionalProductIdBody[]}
     ) {
 
     const sequelize = db.sequelize;
@@ -218,7 +218,7 @@ async function updateProductWithInventories(
         maximumAmount: number,
         isActive: boolean,
         idCategory: number
-        inventories?: IInventoryWithOptionalProductId[]}
+        inventories?: IInventoryWithOptionalProductIdBody[]}
     ) {
 
     const sequelize = db.sequelize;
@@ -311,7 +311,6 @@ async function updateProductWithInventories(
 
         await transaction.commit();
     } catch (error: any) {
-        console.log(error);
         await transaction.rollback();
         if(error.isTrusted) {
             throw error;
@@ -321,10 +320,65 @@ async function updateProductWithInventories(
     }
 }
 
+async function getStoreInventories(idStore: number, productsId: number[]) {
+    const inventoriesList: IProductByIdWithStock[] = [];
+
+    try {
+        const store = await db.Store.findByPk(idStore);
+
+        if(store === null) {
+            throw new BusinessLogicException(
+                ErrorMessages.STORE_NOT_FOUND,
+                GetStoreInventoriesErrorCodes.STORE_NOT_FOUND
+            );
+        }
+
+        for(const idProduct of productsId) {
+            const product = await db.Product.findByPk(idProduct);
+
+            if(product === null) {
+                throw new BusinessLogicException(
+                    ErrorMessages.PRODUCT_NOT_FOUND,
+                    GetStoreInventoriesErrorCodes.PRODUCT_NOT_FOUND
+                );
+            }
+
+            const inventory = await db.Inventory.findOne({
+                where: {
+                    idProduct, idStore
+                }
+            });
+
+            if(inventory === null) {
+                throw new BusinessLogicException(
+                    ErrorMessages.INVENTORY_DOES_NOT_EXIST,
+                    GetStoreInventoriesErrorCodes.INVENTORY_DOES_NOT_EXIST
+                );
+            }
+
+            const inventoriesInfo = {
+                idProduct,
+                stock: inventory?.stock
+            }
+
+            inventoriesList.push(inventoriesInfo);
+        }
+    } catch (error: any) {
+        if(error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+
+    return inventoriesList;
+}
+
 export {
     getProductsInStore,
     getAllProducts,
     getProductInventoriesByIdProduct,
     createProductWithInventories,
-    updateProductWithInventories
+    updateProductWithInventories,
+    getStoreInventories
 }

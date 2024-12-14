@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { checkSchema } from "express-validator";
-import { getProductsInStoreController, getStoresController } from "../controllers/stores_controller";
+import { getProductsInStoreController, getStoreInventoriesController, getStoresController } from "../controllers/stores_controller";
 import validateRequestSchemaMiddleware from "../middlewares/schema_validator";
-import { getProductsInStoreValidationSchema } from "../validation_schemas/products";
+import { getProductsInStoreValidationSchema, getStoreInventoriesValidationSchema } from "../validation_schemas/products";
 import { injectDefaultGetProductsInStoreQueryMiddleware } from "../middlewares/value_injectors";
 
 const router = Router();
@@ -13,6 +13,13 @@ router.get(
     validateRequestSchemaMiddleware,
     injectDefaultGetProductsInStoreQueryMiddleware,
     getProductsInStoreController
+);
+
+router.get(
+    "/:idStore/inventories",
+    checkSchema(getStoreInventoriesValidationSchema),
+    validateRequestSchemaMiddleware,
+    getStoreInventoriesController
 );
 
 router.get(

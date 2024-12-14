@@ -31,6 +31,11 @@ interface IEmployeeWithPosition extends Omit<InferAttributes<Employee>, 'passwor
     token?: string
 }
 
+interface IProductByIdWithStock {
+    idProduct?: number;
+    stock?: number;
+}
+
 function isEmployeeWithPosition(user: IClientWithOptionalPassword | IEmployeeWithPosition): user is IEmployeeWithPosition {
     return (user as IEmployeeWithPosition).position !== undefined;
 }
@@ -47,5 +52,6 @@ export {
     IPaymentMethodWithIssuer,
     IEmployeeWithPosition,
     IClientWithOptionalPassword,
-    isEmployeeWithPosition
+    isEmployeeWithPosition,
+    IProductByIdWithStock
 };
