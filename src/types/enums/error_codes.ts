@@ -19,12 +19,26 @@ enum CreateProductErrorCodes {
 
 enum UpdateProductErrorCodes {
     PRODUCT_NOT_FOUND = EndpointContexts.UPDATE_PRODUCT + "-400001",
-    PRODUCT_CATEGORY_NOT_FOUND = EndpointContexts.UPDATE_PRODUCT + "-400002"
+    PRODUCT_CATEGORY_NOT_FOUND = EndpointContexts.UPDATE_PRODUCT + "-400002",
+    INVENTORY_NOT_FOUND = EndpointContexts.UPDATE_PRODUCT + "-400003"
+}
+
+enum CreateOrderErrorCodes {
+    STORE_NOT_FOUND = EndpointContexts.CREATE_ORDER + "-400001",
+    PAYMENT_METHOD_NOT_FOUND = EndpointContexts.CREATE_ORDER + "-400002",
+    CLIENT_NOT_FOUND = EndpointContexts.CREATE_ORDER + "-400003",
+    DELIVERY_ADDRESS_NOT_FOUND = EndpointContexts.CREATE_ORDER + "-400004",
+    ORDER_STATUS_NOT_FOUND = EndpointContexts.CREATE_ORDER + "-400005",
+    PRODUCT_NOT_FOUND = EndpointContexts.CREATE_ORDER + "-400006",
+    STOCK_NOT_AVAILABLE = EndpointContexts.CREATE_ORDER + "-400007",
+    INVENTORY_DOES_NOT_EXIST = EndpointContexts.CREATE_ORDER + "-400008",
+    MAXIMUM_AMOUNT_IS_EXCEEDED = EndpointContexts.CREATE_ORDER + "-400009"
 }
 
 export { 
     CreatePaymentMethodErrorCodes,
     DeletePaymentMethodErrorCodes,
     CreateProductErrorCodes,
-    UpdateProductErrorCodes
+    UpdateProductErrorCodes,
+    CreateOrderErrorCodes
 };

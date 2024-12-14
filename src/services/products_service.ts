@@ -1,4 +1,4 @@
-import { Op, InferAttributes, Sequelize } from "sequelize";
+import { Op, InferAttributes } from "sequelize";
 import db from "../models";
 import SQLException from "../exceptions/services/SQLException";
 import { IProductWithInventory} from "../types/interfaces/response_bodies";
@@ -276,6 +276,15 @@ async function updateProductWithInventories(
         if (inventories) {
             for (const inventory of inventories) {
                 if (inventory.id) {
+                    const existingInventory = await db.Inventory.findByPk(inventory.id);
+
+                    if(existingInventory === null) {
+                        throw new BusinessLogicException(
+                            ErrorMessages.INVENTORY_NOT_FOUND,
+                            UpdateProductErrorCodes.INVENTORY_NOT_FOUND
+                        );
+                    }
+
                     await db.Inventory.update({
                         expirationDate: inventory.expirationDate,
                         stock: inventory.stock,

@@ -5,6 +5,7 @@ import clientsRouter from "../routes/clients_router";
 import sessionRouter from "../routes/session_router";
 import productCategoriesRouter from "../routes/product_categories_router";
 import productsRouter from "../routes/products_router"
+import orderRouter from "../routes/orders_router"
 import issuingBanksRouter from "../routes/issuing_banks_router";
 import handleApiErrorMiddleware from "../middlewares/error_handler";
 
@@ -20,6 +21,7 @@ export default function createApp() {
 
     app.use("/api/stores", storesRouter);
     app.use("/api/products", productsRouter);
+    app.use("/api/orders", orderRouter);
     app.use("/api/clients", clientsRouter);
     app.use("/api/product-categories", productCategoriesRouter);
     app.use("/api/issuing-banks", issuingBanksRouter);
