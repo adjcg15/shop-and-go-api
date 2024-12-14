@@ -1,7 +1,7 @@
 import db from "../models";
 import SQLException from "../exceptions/services/SQLException";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
-import { IOrderProducts } from "../types/interfaces/request_bodies";
+import { IOrderProductsBody } from "../types/interfaces/request_bodies";
 import { ErrorMessages } from "../types/enums/error_messages";
 import { CreateOrderErrorCodes } from "../types/enums/error_codes";
 import { getCurrentDateTimeSQL } from "../lib/datetime_service";
@@ -13,7 +13,7 @@ async function createOrder(
         idClient: number, 
         idDeliveryAddress: number, 
         idPaymentMethod: number,
-        products: IOrderProducts[] }
+        products: IOrderProductsBody[] }
     ) {
 
     const sequelize = db.sequelize;

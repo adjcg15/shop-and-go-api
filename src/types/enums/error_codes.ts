@@ -35,10 +35,16 @@ enum CreateOrderErrorCodes {
     MAXIMUM_AMOUNT_IS_EXCEEDED = EndpointContexts.CREATE_ORDER + "-400009"
 }
 
+enum GetStoreInventoriesErrorCodes {
+    STORE_NOT_FOUND = EndpointContexts.GET_STORE_INVENTORIES + "-400001",
+    PRODUCT_NOT_FOUND = EndpointContexts.GET_STORE_INVENTORIES + "-400002",
+}
+
 export { 
     CreatePaymentMethodErrorCodes,
     DeletePaymentMethodErrorCodes,
     CreateProductErrorCodes,
     UpdateProductErrorCodes,
-    CreateOrderErrorCodes
+    CreateOrderErrorCodes,
+    GetStoreInventoriesErrorCodes
 };

@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
-import { IOrderWithQuantitiesOfProducts } from "../types/interfaces/request_bodies";
+import { IOrderWithQuantitiesOfProductsBody } from "../types/interfaces/request_bodies";
 import { createOrder } from "../services/order_service";
 
 async function createOrderController(
-    req: Request<{}, {}, IOrderWithQuantitiesOfProducts, {}>,
+    req: Request<{}, {}, IOrderWithQuantitiesOfProductsBody, {}>,
     res: Response,
     next: NextFunction
 ) {

@@ -313,7 +313,15 @@ const updateProductWithInventoriesValidationsSchema: Schema = {
 };
 
 const getStoreInventoriesValidationSchema: Schema = {
-    products: {
+    idStore: {
+        in: ["params"],
+        isInt: {
+            options: { min: 1 },
+            errorMessage: "Parameter idStore must be a positive integer",
+        },
+        toInt: true
+    },
+    productsId: {
         in: ["body"],
         isArray: {
             options: { min: 1 },
@@ -322,15 +330,11 @@ const getStoreInventoriesValidationSchema: Schema = {
         custom: {
             options: (value: any) => {
                 if (!Array.isArray(value)) return false;
-                return value.every(item => {
-                    const idProductIsValid = typeof item.idProduct === 'number' && item.idProduct > 0;
-    
-                    return idProductIsValid;
-                });
+                return value.every(item => typeof item === 'number' && item > 0);
             },
-            errorMessage: "Each product must have a valid idProduct (integer > 0)",
+            errorMessage: "Each product must be a valid number greater than 0.",
         }
-    }
+    }    
 }
 
 export {
