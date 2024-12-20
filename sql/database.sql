@@ -26,7 +26,7 @@ CREATE TABLE Clientes (
     contrasena NCHAR(60) NOT NULL,
     fechaNacimiento DATE NOT NULL,
     nombreCompleto NVARCHAR(64) NOT NULL,
-    numeroTelefono NCHAR(10) NOT NULL
+    numeroTelefono NCHAR(10) UNIQUE NOT NULL
 );
 
 
