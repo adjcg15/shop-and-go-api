@@ -24,6 +24,7 @@ async function getEmployeeById(id: number) {
             ...dbEmployee.toJSON(), 
             position
         };
+        delete employee.passwordHash;
     } catch (error: any) {
         if(error.isTrusted) {
             throw error;

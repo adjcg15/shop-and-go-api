@@ -155,6 +155,7 @@ async function getClientById(id: number) {
         }
 
         client = dbClient.toJSON();
+        delete client.passwordHash;
     } catch (error: any) {
         if(error.isTrusted) {
             throw error;
