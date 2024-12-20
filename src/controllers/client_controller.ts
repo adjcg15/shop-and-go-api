@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
 import { IPaymentMethodWithIssuer } from "../types/interfaces/response_bodies";
 import { IClientByIdParams, IPaymentMethodByIdParams } from "../types/interfaces/request_parameters";
-import { createPaymentMethodToClient, deletePaymentMethodFromClient, getPaymentMethodsFromClient } from "../services/client_service";
+import { createPaymentMethodToClient, deletePaymentMethodFromClient, getPaymentMethodsFromClient } from "../services/clients_service";
 import { InferAttributes } from "sequelize";
 import PaymentMethod from "../models/PaymentMethod";
 

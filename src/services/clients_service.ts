@@ -6,8 +6,7 @@ import { CreatePaymentMethodErrorCodes, DeletePaymentMethodErrorCodes } from "..
 import { ErrorMessages } from "../types/enums/error_messages";
 import Client from "../models/Client";
 import PaymentMethod from "../models/PaymentMethod";
-import { InferAttributes } from "sequelize";
-import { IPaymentMethodWithIssuer } from "../types/interfaces/response_bodies";
+import { IClientWithOptionalPassword, IPaymentMethodWithIssuer } from "../types/interfaces/response_bodies";
 
 async function createPaymentMethodToClient(
     idClient: number, 
@@ -145,8 +144,31 @@ async function getPaymentMethodsFromClient(idClient: number) {
     return paymentMethodsList;
 }
 
+async function getClientById(id: number) {
+    let client: IClientWithOptionalPassword;
+
+    try {
+        const dbClient = await db.Client.findByPk(id);
+
+        if (dbClient === null) {
+            throw new BusinessLogicException(ErrorMessages.CLIENT_NOT_FOUND);
+        }
+
+        client = dbClient.toJSON();
+    } catch (error: any) {
+        if(error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+
+    return client;
+}
+
 export { 
     createPaymentMethodToClient,
     deletePaymentMethodFromClient,
-    getPaymentMethodsFromClient
+    getPaymentMethodsFromClient,
+    getClientById
 }

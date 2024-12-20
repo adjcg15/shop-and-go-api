@@ -1,7 +1,5 @@
 import db from "../models";
 import SQLException from "../exceptions/services/SQLException";
-import { InferAttributes } from "sequelize";
-import Client from "../models/Client";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { ErrorMessages } from "../types/enums/error_messages";
 import { IEmployeeWithPosition, IClientWithOptionalPassword } from "../types/interfaces/response_bodies";

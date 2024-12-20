@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import storesRouter from "../routes/stores_router";
 import clientsRouter from "../routes/clients_router";
-import sessionRouter from "../routes/session_router";
+import sessionRouter from "../routes/sessions_router";
 import productCategoriesRouter from "../routes/product_categories_router";
 import productsRouter from "../routes/products_router"
 import orderRouter from "../routes/orders_router"
