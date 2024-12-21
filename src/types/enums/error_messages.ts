@@ -1,5 +1,6 @@
 enum ErrorMessages {
     CLIENT_NOT_FOUND = "The client with the specified id is not registered",
+    EMPLOYEE_NOT_FOUND = "The employee with the specified id is not registered",
     ISSUER_NOT_FOUND = "The issuer with the specified id is not registered",
     PRODUCT_NOT_FOUND = "The product with the specified id is not registered",
     STORE_NOT_FOUND = "The store with the specified id is not registered",

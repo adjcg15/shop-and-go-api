@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
 import { IOrderWithQuantitiesOfProductsBody } from "../types/interfaces/request_bodies";
-import { createOrder } from "../services/order_service";
+import { createOrder } from "../services/orders_service";
 
 async function createOrderController(
     req: Request<{}, {}, IOrderWithQuantitiesOfProductsBody, {}>,

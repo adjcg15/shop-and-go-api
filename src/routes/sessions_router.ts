@@ -3,7 +3,8 @@ import limitPublicEndpointUse from "../middlewares/rate_limiter";
 import { checkSchema } from "express-validator";
 import loginSchema from "../validation_schemas/session";
 import validateRequestSchemaMiddleware from "../middlewares/schema_validator";
-import { sessionController } from "../controllers/session_controller";
+import { loginController, getUserProfileController } from "../controllers/sessions_controller";
+import { checkTokenValidity } from "../middlewares/access_control";
 
 const router = Router();
 
@@ -12,7 +13,13 @@ router.post(
     limitPublicEndpointUse(),
     checkSchema(loginSchema),
     validateRequestSchemaMiddleware,
-    sessionController
+    loginController
+);
+
+router.get(
+    "/profile",
+    checkTokenValidity,
+    getUserProfileController
 );
 
 export default router;

@@ -3,13 +3,15 @@ import { NextFunction, Request, Response } from "express";
 import { signToken } from "../lib/token_store";
 import { ILoginBody } from "../types/interfaces/request_bodies";
 import { IEmployeeWithPosition, IClientWithOptionalPassword, isEmployeeWithPosition } from "../types/interfaces/response_bodies";
-import { getUserByPhoneNumberOrUsername } from "../services/session_service";
-import { comparePassword, hashPassword } from "../lib/security_service";
+import { getUserByPhoneNumber, getUserByUsername} from "../services/users_service";
+import { comparePassword } from "../lib/security_service";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { ErrorMessages } from "../types/enums/error_messages";
 import UserRoles from "../types/enums/user_roles";
+import { getClientById } from "../services/clients_service";
+import { getEmployeeById } from "../services/employees_service";
 
-async function sessionController(
+async function loginController(
     req: Request<{}, {}, ILoginBody, {}>, 
     res: Response<IClientWithOptionalPassword | IEmployeeWithPosition>, 
     next: NextFunction
@@ -17,7 +19,12 @@ async function sessionController(
     try {
         const { phoneNumber, username, password } = req.body;
         
-        const user = await getUserByPhoneNumberOrUsername(phoneNumber, username);
+        let user: IClientWithOptionalPassword | IEmployeeWithPosition;
+        if(phoneNumber) {
+            user = await getUserByPhoneNumber(phoneNumber);
+        } else {
+            user = await getUserByUsername(username);
+        }
 
         const validateCredentials = await comparePassword(password!, user.passwordHash!);
 
@@ -50,4 +57,28 @@ async function sessionController(
     }
 }
 
-export { sessionController }
+async function getUserProfileController(
+    req: Request, 
+    res: Response<IClientWithOptionalPassword | IEmployeeWithPosition>, 
+    next: NextFunction
+) {
+    try {
+        const { id, userRole } = req.user;
+        let profile: IClientWithOptionalPassword | IEmployeeWithPosition | null;
+
+        if(userRole === UserRoles.CLIENT) {
+            profile = await getClientById(id);
+        } else {
+            profile = await getEmployeeById(id);
+        }
+
+        res.status(HttpStatusCodes.OK).json(profile!);
+    } catch (error) {
+        next(error);
+    }
+}
+
+export { 
+    loginController,
+    getUserProfileController
+};
