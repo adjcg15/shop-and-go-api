@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { signToken } from "../lib/token_store";
 import { ILoginBody } from "../types/interfaces/request_bodies";
 import { IEmployeeWithPosition, IClientWithOptionalPassword, isEmployeeWithPosition } from "../types/interfaces/response_bodies";
-import { getUserByPhoneNumberOrUsername } from "../services/users_service";
+import { getUserByPhoneNumber, getUserByUsername} from "../services/users_service";
 import { comparePassword } from "../lib/security_service";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { ErrorMessages } from "../types/enums/error_messages";
@@ -19,7 +19,12 @@ async function loginController(
     try {
         const { phoneNumber, username, password } = req.body;
         
-        const user = await getUserByPhoneNumberOrUsername(phoneNumber, username);
+        let user: IClientWithOptionalPassword | IEmployeeWithPosition;
+        if(phoneNumber) {
+            user = await getUserByPhoneNumber(phoneNumber);
+        } else {
+            user = await getUserByUsername(username);
+        }
 
         const validateCredentials = await comparePassword(password!, user.passwordHash!);
 
