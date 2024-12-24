@@ -119,10 +119,44 @@ async function insertE2EGetStoreInventoriesTestData() {
     }
 }
 
+async function insertE2EGetNearestStoreTestData() {
+    await db.Store.create({
+        name: "Chedraui Caram Xalapa",
+        address:
+            "Antonio Chedraui Caram 102, Francisco Villa, 91173 Xalapa-Enríquez, Ver.",
+        openingTime: "08:00:00.00",
+        closingTime: "19:00:00.00",
+        latitude: 19.539137,
+        longitude: -96.904638,
+    });
+
+    await db.Store.create({
+        name: "Plaza Crystal",
+        address: "Avenida Lázaro Cárdenas",
+        openingTime: "08:00:00.00",
+        closingTime: "19:00:00.00",
+        latitude: 19.432608,
+        longitude: -99.133209,
+    });
+
+    const nearestStore = await db.Store.create({
+        name: "El zorro Xalapa centro",
+        address:
+            "Dr. Rafael Lucio 28, Zona Centro, Centro, 91000 Xalapa-Enríquez, Ver.",
+        openingTime: "07:00:00.00",
+        closingTime: "22:00:00.00",
+        latitude: 19.528761,
+        longitude: -96.922326,
+    });
+
+    return nearestStore;
+}
+
 export {
     insertE2EGetProductsByStoreTestData,
     insertE2EGetProductCategoeriesTestData,
     insertE2EGetIssuingBanksTestData,
     insertE2EGetStoresTestData,
-    insertE2EGetStoreInventoriesTestData
+    insertE2EGetStoreInventoriesTestData,
+    insertE2EGetNearestStoreTestData
 };

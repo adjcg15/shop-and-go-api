@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { checkSchema } from "express-validator";
-import { getProductsInStoreController, getStoreInventoriesController, getStoresController } from "../controllers/stores_controller";
+import { getNearestStoreController, getProductsInStoreController, getStoreInventoriesController, getStoresController } from "../controllers/stores_controller";
 import validateRequestSchemaMiddleware from "../middlewares/schema_validator";
 import { getProductsInStoreValidationSchema, getStoreInventoriesValidationSchema } from "../validation_schemas/products";
 import { injectDefaultGetProductsInStoreQueryMiddleware } from "../middlewares/value_injectors";
+import { getNearestStoreValidationSchema } from "../validation_schemas/addresses";
 
 const router = Router();
 
@@ -26,5 +27,12 @@ router.get(
     "/",
     getStoresController
 );
+
+router.post(
+    "/nearest-store",
+    checkSchema(getNearestStoreValidationSchema),
+    validateRequestSchemaMiddleware,
+    getNearestStoreController
+)
 
 export default router;
