@@ -36,11 +36,17 @@ interface IProductsByIdBody {
     productsId?: number[];
 }
 
+interface ICoordinatesBody {
+    latitude?: number;
+    longitude?: number;
+}
+
 export {
     IInventoryWithOptionalProductIdBody,
     IProductWithInventoriesBody,
     ILoginBody,
     IOrderWithQuantitiesOfProductsBody,
     IOrderProductsBody,
-    IProductsByIdBody
+    IProductsByIdBody,
+    ICoordinatesBody
 }
