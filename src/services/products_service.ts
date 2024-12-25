@@ -31,12 +31,13 @@ async function getProductsInStore(idStore: number, pagination: { offset: number,
                             }
                             : {}
                         )
-                    }
+                    },
+                    required: true
                 },
             ],
             limit,
             offset,
-            subQuery: true
+            subQuery: false
         });
 
         inventories.forEach(inventory => {
