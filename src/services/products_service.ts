@@ -14,7 +14,6 @@ async function getProductsInStore(idStore: number, pagination: { offset: number,
 
     try {
         const { offset, limit, query, categoryFilter } = pagination;
-        //TODO: ordenar por popularidad
         const inventories = await db.Inventory.findAll({
             where: { idStore },
             include: [
@@ -37,7 +36,8 @@ async function getProductsInStore(idStore: number, pagination: { offset: number,
             ],
             limit,
             offset,
-            subQuery: false
+            subQuery: false,
+            order: [[db.Inventory.associations.product, "id", "DESC"]] 
         });
 
         inventories.forEach(inventory => {
