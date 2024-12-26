@@ -16,8 +16,11 @@ interface IProductWithCategory extends InferAttributes<Product> {
     category: ProductCategory
 }
 
-interface IPaymentMethodWithIssuer extends InferAttributes<PaymentMethod> {
-    issuer: Issuer
+interface IPaymentMethodWithIssuer {
+    id: number,
+    cardholderName: string,
+    endCardNumber: string,
+    bankIssuer: string
 }
 
 interface IClientWithOptionalPassword extends Omit<InferAttributes<Client>, 'passwordHash'> {

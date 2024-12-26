@@ -4,7 +4,6 @@ import { IPaymentMethodWithIssuer } from "../types/interfaces/response_bodies";
 import { IClientByIdParams, IPaymentMethodByIdParams } from "../types/interfaces/request_parameters";
 import { createPaymentMethodToClient, deletePaymentMethodFromClient, getPaymentMethodsFromClient } from "../services/clients_service";
 import { IPaymentMethodBody } from "../types/interfaces/request_bodies";
-import { encryptCardNumber } from "../lib/security_service";
 
 async function createPaymentMethodToClientController(
     req: Request<IClientByIdParams, {}, IPaymentMethodBody, {}>,

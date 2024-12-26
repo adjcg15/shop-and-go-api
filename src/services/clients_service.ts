@@ -7,7 +7,7 @@ import { ErrorMessages } from "../types/enums/error_messages";
 import Client from "../models/Client";
 import PaymentMethod from "../models/PaymentMethod";
 import { IClientWithOptionalPassword, IPaymentMethodWithIssuer } from "../types/interfaces/response_bodies";
-import { compareHashedString, encryptCardNumber, hashString } from "../lib/security_service";
+import { compareHashedString, decryptCardNumber, encryptCardNumber, hashString } from "../lib/security_service";
 
 async function createPaymentMethodToClient(
     idClient: number, 
@@ -100,9 +100,14 @@ async function deletePaymentMethodFromClient(idClient: number, idPaymentMethod: 
                 DeletePaymentMethodErrorCodes.PAYMENT_METHOD_NOT_FOUND);
         }
 
-        await PaymentMethod.destroy({
-            where: {idClient, id: idPaymentMethod}
-        });
+        await PaymentMethod.update(
+            {
+                isActive: false
+            },
+            {
+                where: {idClient, id: idPaymentMethod}
+            }
+        );
         
     } catch (error: any) {
         if(error.isTrusted) {
@@ -129,9 +134,16 @@ async function getPaymentMethodsFromClient(idClient: number) {
         });
         
         paymentMethods.forEach(paymentMethod => {
+            const cardNumber = decryptCardNumber(
+                paymentMethod.encryptedCardNumber, 
+                Buffer.from(paymentMethod.initialVector, 'hex'), 
+                Buffer.from(paymentMethod.authenticationTag, 'hex')
+            );
             const paymentMethodInfo = {
-                ...paymentMethod!.toJSON(),
-                issuer: paymentMethod.issuer!
+                id: paymentMethod.id,
+                cardholderName: paymentMethod.cardholderName,
+                endCardNumber: cardNumber.slice(-4),
+                bankIssuer: paymentMethod.issuer?.name!
             };
             paymentMethodsList.push(paymentMethodInfo);
         });           
