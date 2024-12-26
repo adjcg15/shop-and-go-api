@@ -7,6 +7,7 @@ import { ErrorMessages } from "../types/enums/error_messages";
 import Client from "../models/Client";
 import PaymentMethod from "../models/PaymentMethod";
 import { IClientWithOptionalPassword, IPaymentMethodWithIssuer } from "../types/interfaces/response_bodies";
+import { compareHashedString, decryptCardNumber, encryptCardNumber, hashString } from "../lib/security_service";
 
 async function createPaymentMethodToClient(
     idClient: number, 
@@ -14,11 +15,8 @@ async function createPaymentMethodToClient(
         cardholderName: string, 
         expirationMonth: number, 
         expirationYear: number, 
-        idIssuer: number, 
-        encryptedCardNumber: string, 
-        hashedCardNumber: string,
-        initialVector: string, 
-        authenticationTag: string }
+        idIssuer: number,
+        cardNumber: string, }
     ) {
 
     try {
@@ -27,10 +25,7 @@ async function createPaymentMethodToClient(
             expirationMonth, 
             expirationYear, 
             idIssuer, 
-            encryptedCardNumber, 
-            hashedCardNumber,
-            initialVector, 
-            authenticationTag } = paymentMethod;
+            cardNumber } = paymentMethod;
 
         const client = await Client.findByPk(idClient);
 
@@ -48,15 +43,22 @@ async function createPaymentMethodToClient(
                 CreatePaymentMethodErrorCodes.ISSUER_NOT_FOUND);
         }
 
-        const existingPaymentMethod = await PaymentMethod.findOne({
-            where: { hashedCardNumber, idClient }
+        const existingPaymentMethods = await PaymentMethod.findAll({
+            where: { idClient }
         });
-        
-        if (existingPaymentMethod !== null) {
-            throw new BusinessLogicException(
-                ErrorMessages.PAYMENT_METHOD_ALREADY_EXISTS, 
-                CreatePaymentMethodErrorCodes.PAYMENT_METHOD_ALREADY_EXISTS);
+
+        for(const paymentMethod of existingPaymentMethods) {
+            const paymentMethodsAreSame = await compareHashedString(cardNumber, paymentMethod.hashedCardNumber);
+
+            if(paymentMethodsAreSame) {
+                throw new BusinessLogicException(
+                    ErrorMessages.PAYMENT_METHOD_ALREADY_EXISTS, 
+                    CreatePaymentMethodErrorCodes.PAYMENT_METHOD_ALREADY_EXISTS);
+            }
         }
+
+        const { encryptedCardNumber, initialVector, authenticationTag } = encryptCardNumber(cardNumber!);
+        const hashedCardNumber = hashString(cardNumber);
 
         await db.PaymentMethod.create({
             cardholderName, 
@@ -98,9 +100,14 @@ async function deletePaymentMethodFromClient(idClient: number, idPaymentMethod: 
                 DeletePaymentMethodErrorCodes.PAYMENT_METHOD_NOT_FOUND);
         }
 
-        await PaymentMethod.destroy({
-            where: {idClient, id: idPaymentMethod}
-        });
+        await PaymentMethod.update(
+            {
+                isActive: false
+            },
+            {
+                where: {idClient, id: idPaymentMethod}
+            }
+        );
         
     } catch (error: any) {
         if(error.isTrusted) {
@@ -127,9 +134,16 @@ async function getPaymentMethodsFromClient(idClient: number) {
         });
         
         paymentMethods.forEach(paymentMethod => {
+            const cardNumber = decryptCardNumber(
+                paymentMethod.encryptedCardNumber, 
+                Buffer.from(paymentMethod.initialVector, 'hex'), 
+                Buffer.from(paymentMethod.authenticationTag, 'hex')
+            );
             const paymentMethodInfo = {
-                ...paymentMethod!.toJSON(),
-                issuer: paymentMethod.issuer!
+                id: paymentMethod.id,
+                cardholderName: paymentMethod.cardholderName,
+                endCardNumber: cardNumber.slice(-4),
+                bankIssuer: paymentMethod.issuer?.name!
             };
             paymentMethodsList.push(paymentMethodInfo);
         });           

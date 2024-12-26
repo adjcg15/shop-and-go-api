@@ -12,10 +12,10 @@ async function insertE2ECreatePaymentMethodTestData() {
         cardholderName: "Alice Johnson",
         expirationMonth: 8,
         expirationYear: 26,
-        encryptedCardNumber: "zxcvbnm12345678asdfghi",
-        hashedCardNumber: "a38b7c1f94d0a2e9f8c482ae6cbd34e16e8e91f14a5c9e30b2b3f724d047f34b",
-        initialVector: "pqr123lmn456",
-        authenticationTag: "ghi789klm456",
+        encryptedCardNumber: "81cc6aa5a713c62b2868497a696792df",
+        hashedCardNumber: "$2b$10$NRg2g3uSOU3Bkd4UX8CxZuycUhRzanbB5.PXcP2HKMQf.bN.tbaQe",
+        initialVector: "4d2dff177bef48f549c8825a",
+        authenticationTag: "6412bed2347c328599ade48f2c1e3526",
         isActive: true,
         idIssuer: banamexIssuer.id
     });
@@ -38,10 +38,10 @@ async function insertE2EDeletePaymentMethodTestData() {
         cardholderName: "Alice Johnson",
         expirationMonth: 8,
         expirationYear: 26,
-        encryptedCardNumber: "zxcvbnm12345678asdfghi",
-        hashedCardNumber: "a38b7c1f94d0a2e9f8c482ae6cbd34e16e8e91f14a5c9e30b2b3f724d047f34b",
-        initialVector: "pqr123lmn456",
-        authenticationTag: "ghi789klm456",
+        encryptedCardNumber: "7ae8d8a3f88222dcc8fe945b92ab8dfa",
+        hashedCardNumber: "$2b$10$oS5dLAVHfj.bBBnDos7oauh.6815C8X7cAG6c15uYx/tr/PcAngQC",
+        initialVector: "5c64e9d552b075706f31ced9",
+        authenticationTag: "31eef85f50b5ee2b5b6e832d06aa94eb",
         isActive: true,
         idIssuer: banamexIssuer.id
     });
@@ -64,10 +64,10 @@ async function insertE2EGetPaymentMethodsTestData() {
         cardholderName: "Alice Johnson",
         expirationMonth: 8,
         expirationYear: 26,
-        encryptedCardNumber: "zxcvbnm12345678asdfghi",
-        hashedCardNumber: "a38b7c1f94d0a2e9f8c482ae6cbd34e16e8e91f14a5c9e30b2b3f724d047f34b",
-        initialVector: "pqr123lmn456",
-        authenticationTag: "ghi789klm456",
+        encryptedCardNumber: "7ae8d8a3f88222dcc8fe945b92ab8dfa",
+        hashedCardNumber: "$2b$10$oS5dLAVHfj.bBBnDos7oauh.6815C8X7cAG6c15uYx/tr/PcAngQC",
+        initialVector: "5c64e9d552b075706f31ced9",
+        authenticationTag: "31eef85f50b5ee2b5b6e832d06aa94eb",
         isActive: true,
         idIssuer: banamexIssuer.id
     });
@@ -75,10 +75,10 @@ async function insertE2EGetPaymentMethodsTestData() {
         cardholderName: "Michael Davis",
         expirationMonth: 7,
         expirationYear: 26,
-        encryptedCardNumber: "zxcvbnm12345678asdfghj",
-        hashedCardNumber: "b28f9e746c3da7b1f72a4ab4e4cb1b438c0d704c557f9b9b7f1e45b8f83d6a26",
-        initialVector: "lmn987rst321",
-        authenticationTag: "uvw654xyz789",
+        encryptedCardNumber: "a347cc70fb1d80b5376f1da54a87361a",
+        hashedCardNumber: "$2b$10$EFGHtQ19Jn6jBiKTBCWpN.joSnez14/DGev6pjmVGVFkI50cBqWom",
+        initialVector: "2115da1fb7311dd68e723037",
+        authenticationTag: "5c10aa0884f17e9727347a0ef895e5fc",
         isActive: true,
         idIssuer: banamexIssuer.id
     });
@@ -86,10 +86,10 @@ async function insertE2EGetPaymentMethodsTestData() {
         cardholderName: "Laura Johnson",
         expirationMonth: 12,
         expirationYear: 28,
-        encryptedCardNumber: "qwertyuio1234567hjklzx",
-        hashedCardNumber: "5f4dcc3b5aa765d61d8327deb882cf99c4da447df5af96a18b469f7fa9be3b3a",
-        initialVector: "abc123def456",
-        authenticationTag: "ghi789jkl012",
+        encryptedCardNumber: "0b9779953e3bfc06bcee94ef9a813bc8",
+        hashedCardNumber: "$2b$10$mUvA2nwIE7TVDlQ024Wrhe3LeOPBOXO7raa3t2a6PISbNssoemB5e",
+        initialVector: "18f3889fb4ca2fed5b0cf58d",
+        authenticationTag: "726be28dd251784b6a127b485ad4eb89",
         isActive: true,
         idIssuer: banamexIssuer.id
     });

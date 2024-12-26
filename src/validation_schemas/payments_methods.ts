@@ -1,4 +1,5 @@
 import { Schema } from "express-validator";
+import cardValidator from 'card-validator';
 
 const createPaymentMethodToClientValidationSchema: Schema = {
     idClient: {
@@ -80,11 +81,11 @@ const createPaymentMethodToClientValidationSchema: Schema = {
         },
         toInt: true
     },
-    encryptedCardNumber: {
+    cardNumber: {
         in: ["body"],
         isLength: {
-            options: { min: 22, max: 22 },
-            errorMessage: "Card number must be exactly 22 characters long"
+            options: { min: 16, max: 16 },
+            errorMessage: "Card number must be exactly 16 characters long"
         },
         isString: {
             errorMessage: "Card number must be a string"
@@ -93,64 +94,14 @@ const createPaymentMethodToClientValidationSchema: Schema = {
             errorMessage: "Card number is required"
         },
         matches: {
-            options: /^[a-zA-Z0-9]*$/,
-            errorMessage: "Card number must contain only alphanumeric characters"
-        }
-    },
-    hashedCardNumber: {
-        in: ["body"],
-        isLength: {
-            options: { min: 64, max: 64 },
-            errorMessage: "Hashed card number must be exactly 64 characters long"
+            options: /^\d+$/,
+            errorMessage: "Card number must contain only numeric characters"
         },
-        notEmpty: {
-            errorMessage: "Hashed card number is required"
+        custom: {
+            options: (value) => cardValidator.number(value).isValid,
+            errorMessage: "Card number is not valid"
         }
-        ,
-        isString: {
-            errorMessage: "Hashed card number must be a string"
-        },
-        matches: {
-            options: /^[a-fA-F0-9]*$/,
-            errorMessage: "Hashed card number must contain only hexadecimal characters"
-        }
-    },
-    initialVector: {
-        in: ["body"],
-        isLength: {
-            options: { min: 12, max: 12 },
-            errorMessage: "Initialization Vector must be exactly 12 characters long"
-        },
-        notEmpty: {
-            errorMessage: "Initialization Vector is required"
-        }
-        ,
-        isString: {
-            errorMessage: "Initialization Vector must be a string"
-        },
-        matches: {
-            options: /^[a-zA-Z0-9]*$/,
-            errorMessage: "Initialization Vector must contain only alphanumeric characters"
-        }
-    },
-    authenticationTag: {
-        in: ["body"],
-        isLength: {
-            options: { min: 12, max: 12 },
-            errorMessage: "Initialization Vector must be exactly 12 characters long"
-        },
-        notEmpty: {
-            errorMessage: "Authentication Tag is required"
-        }
-        ,
-        isString: {
-            errorMessage: "Initialization Vector must be a string"
-        },
-        matches: {
-            options: /^[a-zA-Z0-9]*$/,
-            errorMessage: "Initialization Vector must contain only alphanumeric characters"
-        }
-    }
+    }    
 };
 
 const deletePaymentMethodFromClientValidationSchema: Schema = {

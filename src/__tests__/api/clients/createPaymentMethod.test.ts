@@ -33,10 +33,7 @@ describe("/api/clients/:idClient/payment-methods", () => {
             cardholderName: "Michael Davis",
             expirationMonth: "07",
             expirationYear: "26",
-            encryptedCardNumber: "zxcvbnm12345678asdfghj",
-            hashedCardNumber: "b28f9e746c3da7b1f72a4ab4e4cb1b438c0d704c557f9b9b7f1e45b8f83d6a26",
-            initialVector: "lmn987rst321",
-            authenticationTag: "uvw654xyz789",
+            cardNumber: "4772480142745977",
             idIssuer: idIssuer
         };
         const response = await request(app).post(`/api/clients/${idClient}/payment-methods`)
@@ -47,13 +44,10 @@ describe("/api/clients/:idClient/payment-methods", () => {
 
     it("Should display an error message indicating that the issuer does not exist", async () => {
         const paymentMethodData = {
-            cardholderName: "Alice Johnson",
-            expirationMonth: "08",
+            cardholderName: "Michael Davis",
+            expirationMonth: "07",
             expirationYear: "26",
-            encryptedCardNumber: "zxcvbnm12345678asdfghi",
-            hashedCardNumber: "a38b7c1f94d0a2e9f8c482ae6cbd34e16e8e91f14a5c9e30b2b3f724d047f34b",
-            initialVector: "pqr123lmn456",
-            authenticationTag: "ghi789klm456",
+            cardNumber: "4772480142745977",
             idIssuer: idIssuer+1
         };
         const response = await request(app).post(`/api/clients/${idClient}/payment-methods`)
@@ -67,13 +61,10 @@ describe("/api/clients/:idClient/payment-methods", () => {
 
     it("Should display an error message indicating that the payment method already exists", async () => {
         const paymentMethodData = {
-            cardholderName: "Alice Johnson",
-            expirationMonth: "08",
+            cardholderName: "Michael Davis",
+            expirationMonth: "07",
             expirationYear: "26",
-            encryptedCardNumber: "zxcvbnm12345678asdfghi",
-            hashedCardNumber: "a38b7c1f94d0a2e9f8c482ae6cbd34e16e8e91f14a5c9e30b2b3f724d047f34b",
-            initialVector: "pqr123lmn456",
-            authenticationTag: "ghi789klm456",
+            cardNumber: "5428780191997345",
             idIssuer: idIssuer
         };
         const response = await request(app).post(`/api/clients/${idClient}/payment-methods`)
@@ -94,13 +85,10 @@ describe("/api/clients/:idClient/payment-methods", () => {
         });
 
         const paymentMethodData = {
-            cardholderName: "Alice Johnson",
-            expirationMonth: "08",
+            cardholderName: "Michael Davis",
+            expirationMonth: "07",
             expirationYear: "26",
-            encryptedCardNumber: "zxcvbnm12345678asdfghi",
-            hashedCardNumber: "a38b7c1f94d0a2e9f8c482ae6cbd34e16e8e91f14a5c9e30b2b3f724d047f34b",
-            initialVector: "pqr123lmn456",
-            authenticationTag: "ghi789klm456",
+            cardNumber: "4772480142745977",
             idIssuer: idIssuer
         };
         const response = await request(app).post(`/api/clients/${idClient}/payment-methods`)

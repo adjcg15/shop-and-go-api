@@ -4,7 +4,7 @@ import { signToken } from "../lib/token_store";
 import { ILoginBody } from "../types/interfaces/request_bodies";
 import { IEmployeeWithPosition, IClientWithOptionalPassword, isEmployeeWithPosition } from "../types/interfaces/response_bodies";
 import { getUserByPhoneNumber, getUserByUsername} from "../services/users_service";
-import { comparePassword } from "../lib/security_service";
+import { compareHashedString } from "../lib/security_service";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { ErrorMessages } from "../types/enums/error_messages";
 import UserRoles from "../types/enums/user_roles";
@@ -26,7 +26,7 @@ async function loginController(
             user = await getUserByUsername(username);
         }
 
-        const validateCredentials = await comparePassword(password!, user.passwordHash!);
+        const validateCredentials = await compareHashedString(password!, user.passwordHash!);
 
         if (!validateCredentials) {
             throw new BusinessLogicException(ErrorMessages.INVALID_CREDENTIALS);

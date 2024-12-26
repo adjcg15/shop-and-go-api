@@ -33,19 +33,9 @@ describe("/api/clients/:idClient/payment-methods", () => {
         paymentMethods.forEach((paymentMethod: any) => {
             expect(paymentMethod).toMatchObject({
                 id: expect.any(Number),
-                expirationYear: expect.any(Number),
-                expirationMonth: expect.any(Number),
-                encryptedCardNumber: expect.any(String),
-                hashedCardNumber: expect.any(String),
-                initialVector: expect.any(String),
-                authenticationTag: expect.any(String),
+                endCardNumber: expect.any(String),
+                bankIssuer: expect.any(String),
                 cardholderName: expect.any(String),
-                isActive: expect.any(Boolean),
-            });
-        
-            expect(paymentMethod.issuer).toMatchObject({
-                id: expect.any(Number),
-                name: expect.any(String),
             });
         });        
     });

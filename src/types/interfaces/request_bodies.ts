@@ -32,6 +32,14 @@ interface IOrderWithQuantitiesOfProductsBody extends Omit<InferAttributes<Order>
     products?: IOrderProductsBody[]; 
 }
 
+interface IPaymentMethodBody {
+    cardholderName?: string;
+    expirationMonth?: number;
+    expirationYear?: number;
+    cardNumber?: string;
+    idIssuer?: number;
+}
+
 interface IProductsByIdBody {
     productsId?: number[];
 }
@@ -47,6 +55,7 @@ export {
     ILoginBody,
     IOrderWithQuantitiesOfProductsBody,
     IOrderProductsBody,
+    IPaymentMethodBody,
     IProductsByIdBody,
     ICoordinatesBody
 }
