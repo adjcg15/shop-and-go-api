@@ -12,6 +12,12 @@ DECLARE @idCategoriaEnlatados INT;
 DECLARE @idCargoAdmin INT;
 DECLARE @idCargoEjecutivo INT;
 DECLARE @idCargoRepartidor INT;
+DECLARE @idEmisorBanamex INT;
+DECLARE @idEmisorBBVA INT;
+DECLARE @idClienteRodrigo INT;
+
+DELETE FROM MetodosPago;
+DELETE FROM EmisoresMetodosPago;
 
 DELETE FROM Clientes;
 DELETE FROM Trabajadores;
@@ -80,7 +86,27 @@ INSERT INTO Inventarios (
 
 --Llenar la tabla de clientes
 INSERT INTO Clientes ([contrasena],[fechaNacimiento],[nombreCompleto],[numeroTelefono])
-VALUES ('$2a$12$Hg2zf5PeoguYwtnAm6lwV.B1zhvCj/4C2BywOsJCFlpeD3caSrsi2', '2001-04-15', 'Ángel de Jesús De la cruz García', '2281645442');
+VALUES 
+('$2a$12$Hg2zf5PeoguYwtnAm6lwV.B1zhvCj/4C2BywOsJCFlpeD3caSrsi2', '2001-04-15', 'Ángel de Jesús De la cruz García', '2281645442'),
+('$2a$12$Hg2zf5PeoguYwtnAm6lwV.B1zhvCj/4C2BywOsJCFlpeD3caSrsi2', '1990-05-15', 'Rodrigo Aguilar López', '2321983692');
+
+SELECT @idClienteRodrigo = idCliente FROM Clientes WHERE nombreCompleto = 'Rodrigo Aguilar López';
+
+--Llenar la tabla de emisores de métodos de pago
+INSERT INTO EmisoresMetodosPago (
+	[nombre]
+) VALUES
+('Banamex'), ('BBVA');
+
+SELECT @idEmisorBanamex = idEmisor FROM EmisoresMetodosPago WHERE nombre = 'Banamex';
+SELECT @idEmisorBBVA = idEmisor FROM EmisoresMetodosPago WHERE nombre = 'BBVA';
+
+--Llenar la tabla de metodos de pago
+INSERT INTO MetodosPago ([anioVencimiento], [mesVencimiento], [idEmisor], [numeroTarjetaEncriptado], [numeroTarjetaHasheado], [vectorInicializacion], [etiquetaAutenticacion], [nombreTitular], [esActivo], [idCliente])
+VALUES 
+(26, 8, @idEmisorBanamex, '81cc6aa5a713c62b2868497a696792df', '$2b$10$NRg2g3uSOU3Bkd4UX8CxZuycUhRzanbB5.PXcP2HKMQf.bN.tbaQe', '4d2dff177bef48f549c8825a', '6412bed2347c328599ade48f2c1e3526', 'Rodrigo Aguilar López', 1, @idClienteRodrigo),
+(26, 7, @idEmisorBanamex, 'a347cc70fb1d80b5376f1da54a87361a', '$2b$10$EFGHtQ19Jn6jBiKTBCWpN.joSnez14/DGev6pjmVGVFkI50cBqWom', '2115da1fb7311dd68e723037', '5c10aa0884f17e9727347a0ef895e5fc', 'Margarita López Viveros', 1, @idClienteRodrigo),
+(29, 3, @idEmisorBBVA, '0b9779953e3bfc06bcee94ef9a813bc8', '$2b$10$mUvA2nwIE7TVDlQ024Wrhe3LeOPBOXO7raa3t2a6PISbNssoemB5e', '18f3889fb4ca2fed5b0cf58d', '726be28dd251784b6a127b485ad4eb89', 'Miguel Aguilar López', 1, @idClienteRodrigo);
 
 --Llenar la tabla de trabajadores con sus respectivos roles
 INSERT INTO CargosTrabajador (nombre) 
