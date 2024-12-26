@@ -39,10 +39,6 @@ interface IProductByIdWithStock {
     stock?: number;
 }
 
-function isEmployeeWithPosition(user: IClientWithOptionalPassword | IEmployeeWithPosition): user is IEmployeeWithPosition {
-    return (user as IEmployeeWithPosition).position !== undefined;
-}
-
 interface IErrorMessageWithCode {
     details: string;
     errorCode?: string;
@@ -55,6 +51,5 @@ export {
     IPaymentMethodWithIssuer,
     IEmployeeWithPosition,
     IClientWithOptionalPassword,
-    isEmployeeWithPosition,
     IProductByIdWithStock
 };
