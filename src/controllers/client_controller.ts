@@ -3,11 +3,11 @@ import { HttpStatusCodes } from "../types/enums/http";
 import { IPaymentMethodWithIssuer } from "../types/interfaces/response_bodies";
 import { IClientByIdParams, IPaymentMethodByIdParams } from "../types/interfaces/request_parameters";
 import { createPaymentMethodToClient, deletePaymentMethodFromClient, getPaymentMethodsFromClient } from "../services/clients_service";
-import { InferAttributes } from "sequelize";
-import PaymentMethod from "../models/PaymentMethod";
+import { IPaymentMethodBody } from "../types/interfaces/request_bodies";
+import { hashString, encryptCardNumber } from "../lib/security_service";
 
 async function createPaymentMethodToClientController(
-    req: Request<IClientByIdParams, {}, InferAttributes<PaymentMethod>, {}>,
+    req: Request<IClientByIdParams, {}, IPaymentMethodBody, {}>,
     res: Response,
     next: NextFunction
 ) {
@@ -17,11 +17,11 @@ async function createPaymentMethodToClientController(
             expirationMonth, 
             expirationYear, 
             idIssuer, 
-            encryptedCardNumber,
-            hashedCardNumber, 
-            initialVector, 
-            authenticationTag } = req.body;
+            cardNumber } = req.body;
         const { idClient } = req.params;
+
+        const hashedCardNumber = hashString(cardNumber!);
+        const { encryptedCardNumber, initialVector, authenticationTag } = encryptCardNumber(cardNumber!);
 
         await createPaymentMethodToClient(
             idClient!,
