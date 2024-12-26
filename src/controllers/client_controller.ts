@@ -4,7 +4,7 @@ import { IPaymentMethodWithIssuer } from "../types/interfaces/response_bodies";
 import { IClientByIdParams, IPaymentMethodByIdParams } from "../types/interfaces/request_parameters";
 import { createPaymentMethodToClient, deletePaymentMethodFromClient, getPaymentMethodsFromClient } from "../services/clients_service";
 import { IPaymentMethodBody } from "../types/interfaces/request_bodies";
-import { hashString, encryptCardNumber } from "../lib/security_service";
+import { encryptCardNumber } from "../lib/security_service";
 
 async function createPaymentMethodToClientController(
     req: Request<IClientByIdParams, {}, IPaymentMethodBody, {}>,
@@ -20,19 +20,13 @@ async function createPaymentMethodToClientController(
             cardNumber } = req.body;
         const { idClient } = req.params;
 
-        const hashedCardNumber = hashString(cardNumber!);
-        const { encryptedCardNumber, initialVector, authenticationTag } = encryptCardNumber(cardNumber!);
-
         await createPaymentMethodToClient(
             idClient!,
             { cardholderName: cardholderName!, 
             expirationMonth: expirationMonth!, 
             expirationYear: expirationYear!, 
             idIssuer: idIssuer!, 
-            encryptedCardNumber: encryptedCardNumber!, 
-            hashedCardNumber: hashedCardNumber!,
-            initialVector: initialVector!, 
-            authenticationTag: authenticationTag! }
+            cardNumber: cardNumber! }
         );
 
         res.status(HttpStatusCodes.CREATED).json();

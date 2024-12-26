@@ -12,10 +12,10 @@ async function insertE2ECreatePaymentMethodTestData() {
         cardholderName: "Alice Johnson",
         expirationMonth: 8,
         expirationYear: 26,
-        encryptedCardNumber: "7ae8d8a3f88222dcc8fe945b92ab8dfa",
-        hashedCardNumber: "$2b$10$oS5dLAVHfj.bBBnDos7oauh.6815C8X7cAG6c15uYx/tr/PcAngQC",
-        initialVector: "5c64e9d552b075706f31ced9",
-        authenticationTag: "31eef85f50b5ee2b5b6e832d06aa94eb",
+        encryptedCardNumber: "81cc6aa5a713c62b2868497a696792df",
+        hashedCardNumber: "$2b$10$NRg2g3uSOU3Bkd4UX8CxZuycUhRzanbB5.PXcP2HKMQf.bN.tbaQe",
+        initialVector: "4d2dff177bef48f549c8825a",
+        authenticationTag: "6412bed2347c328599ade48f2c1e3526",
         isActive: true,
         idIssuer: banamexIssuer.id
     });

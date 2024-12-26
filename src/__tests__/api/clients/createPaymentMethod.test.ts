@@ -48,7 +48,7 @@ describe("/api/clients/:idClient/payment-methods", () => {
             expirationMonth: "07",
             expirationYear: "26",
             cardNumber: "4772480142745977",
-            idIssuer: idIssuer
+            idIssuer: idIssuer+1
         };
         const response = await request(app).post(`/api/clients/${idClient}/payment-methods`)
             .set("Authorization", `Bearer ${token}`)

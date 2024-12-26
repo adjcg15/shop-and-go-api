@@ -20,22 +20,22 @@ export default (sequelize: Sequelize) => {
             allowNull: false
         },
         encryptedCardNumber: {
-            type: DataTypes.CHAR(22),
+            type: DataTypes.CHAR(32),
             field: "numeroTarjetaEncriptada",
             allowNull: false
         },
         hashedCardNumber: {
-            type: DataTypes.CHAR(64),
+            type: DataTypes.CHAR(60),
             field: "numeroTarjetaHasheada",
             allowNull: false
         },
         initialVector: {
-            type: DataTypes.CHAR(16),
+            type: DataTypes.CHAR(24),
             field: "vectorInicializacion",
             allowNull: false
         },
         authenticationTag: {
-            type: DataTypes.CHAR(22),
+            type: DataTypes.CHAR(32),
             field: "etiquetaAutenticacion",
             allowNull: false
         },
