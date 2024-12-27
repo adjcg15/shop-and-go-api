@@ -45,6 +45,11 @@ enum CreateClientErrorCodes {
     CLIENT_ALREADY_EXISTS = EndpointContexts.CREATE_CLIENT + "-400001",
 }
 
+enum CreateAddressMethodErrorCodes {
+    CLIENT_NOT_FOUND = EndpointContexts.CREATE_ADDRESS + "-400001",
+    ADDRESS_ALREADY_EXISTS = EndpointContexts.CREATE_ADDRESS + "-400002"
+}
+
 export { 
     CreatePaymentMethodErrorCodes,
     DeletePaymentMethodErrorCodes,
@@ -52,5 +57,6 @@ export {
     UpdateProductErrorCodes,
     CreateOrderErrorCodes,
     GetStoreInventoriesErrorCodes,
-    CreateClientErrorCodes
+    CreateClientErrorCodes,
+    CreateAddressMethodErrorCodes
 };

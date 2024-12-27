@@ -49,6 +49,19 @@ interface ICoordinatesBody {
     longitude?: number;
 }
 
+interface IClientAddressBody {
+    street?: string;
+    streetNumber?: string;
+    apartmentNumber?: string;
+    neighborhood?: string;
+    municipality?: string;
+    city?: string;
+    postalCode?: string;
+    state?: string;
+    latitude?: number;
+    longitude?: number;
+}
+
 interface IClientBody {
     password?: string,
     birthdate?: string,
@@ -65,5 +78,6 @@ export {
     IPaymentMethodBody,
     IProductsByIdBody,
     ICoordinatesBody,
+    IClientAddressBody,
     IClientBody
 }

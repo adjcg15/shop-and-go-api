@@ -16,6 +16,7 @@ enum ErrorMessages {
     PRODUCT_CATEGORY_NOT_FOUND = "The category with the specified id is not registered",
     MAXIMUM_AMOUNT_IS_EXCEEDED = "In at least one product, the maximum allowed purchase amount has been exceeded",
     NO_STORE_NEARBY = "No stores within 5km radius",
+    ADDRESS_ALREADY_EXISTS = "The address already exists, verify it",
     CLIENT_ALREADY_EXISTS = "The client with the specified phone number already exists"
 }
 

@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { checkTokenValidity, allowRoles, validateClientOwnership } from "../middlewares/access_control";
 import { checkSchema } from "express-validator";
-import { createClientController, createPaymentMethodToClientController, deletePaymentMethodFromClientController, getAddressesFromClientController, getPaymentMethodsFromClientController } from "../controllers/client_controller";
+import { createClientController,createAddressToClientController, createPaymentMethodToClientController, deletePaymentMethodFromClientController, getAddressesFromClientController, getPaymentMethodsFromClientController } from "../controllers/client_controller";
 import validateRequestSchemaMiddleware from "../middlewares/schema_validator";
 import { createPaymentMethodToClientValidationSchema, deletePaymentMethodFromClientValidationSchema, getPaymentMethodsFromClientValidationSchema } from "../validation_schemas/payments_methods";
 import UserRoles from "../types/enums/user_roles";
-import { getAddressesFromClientValidationSchema } from "../validation_schemas/addresses";
+import { createAddressToClientValidationSchema, getAddressesFromClientValidationSchema } from "../validation_schemas/addresses";
 import { createClientSchema } from "../validation_schemas/clients";
 
 const router = Router();
@@ -55,5 +55,15 @@ router.post(
     validateRequestSchemaMiddleware,
     createClientController
 );
+
+router.post(
+    "/:idClient/addresses",
+    checkTokenValidity,
+    validateClientOwnership,
+    allowRoles([UserRoles.CLIENT]),
+    checkSchema(createAddressToClientValidationSchema),
+    validateRequestSchemaMiddleware,
+    createAddressToClientController
+)
 
 export default router;
