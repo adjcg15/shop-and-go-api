@@ -5,7 +5,8 @@ enum EndpointContexts {
     CREATE_PRODUCT = "CRPR",
     UPDATE_PRODUCT = "UPPR",
     CREATE_ORDER = "CROR",
-    GET_STORE_INVENTORIES = "GESN"
+    GET_STORE_INVENTORIES = "GESN",
+    CREATE_CLIENT = "CRCL"
 }
 
 export { EndpointContexts };
