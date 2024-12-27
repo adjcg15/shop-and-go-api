@@ -44,6 +44,20 @@ interface IErrorMessageWithCode {
     errorCode?: string;
 }
 
+interface IClientAddress {
+    id: number,
+    street: string,
+    streetNumber: string,
+    apartmentNumber?: string,
+    neighborhood: string,
+    municipality: string,
+    city: string,
+    postalCode: string,
+    state: string,
+    latitude: number,
+    longitude: number
+}
+
 export {
     IProductWithInventory,
     IProductWithCategory,
@@ -51,5 +65,6 @@ export {
     IPaymentMethodWithIssuer,
     IEmployeeWithPosition,
     IClientWithOptionalPassword,
-    IProductByIdWithStock
+    IProductByIdWithStock,
+    IClientAddress
 };
