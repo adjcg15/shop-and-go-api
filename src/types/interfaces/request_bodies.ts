@@ -49,6 +49,19 @@ interface ICoordinatesBody {
     longitude?: number;
 }
 
+interface IClientAddressBody {
+    street?: string;
+    streetNumber?: string;
+    apartmentNumber?: string;
+    neighborhood?: string;
+    municipality?: string;
+    city?: string;
+    postalCode?: string;
+    state?: string;
+    latitude?: number;
+    longitude?: number;
+}
+
 export {
     IInventoryWithOptionalProductIdBody,
     IProductWithInventoriesBody,
@@ -57,5 +70,6 @@ export {
     IOrderProductsBody,
     IPaymentMethodBody,
     IProductsByIdBody,
-    ICoordinatesBody
+    ICoordinatesBody,
+    IClientAddressBody
 }
