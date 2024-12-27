@@ -20,6 +20,7 @@ async function getProductsInStore(idStore: number, pagination: { offset: number,
                 {
                     association: db.Inventory.associations.product,
                     where: {
+                        isActive: true,
                         ...(categoryFilter ? { idCategory: categoryFilter } : {}),
                         ...(query
                             ? {
