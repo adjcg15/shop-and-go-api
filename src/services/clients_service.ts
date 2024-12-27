@@ -2,7 +2,7 @@ import db from "../models";
 import SQLException from "../exceptions/services/SQLException";
 import Issuer from "../models/Issuer";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
-import { CreateAddressMethodErrorCodes, CreatePaymentMethodErrorCodes, DeletePaymentMethodErrorCodes } from "../types/enums/error_codes";
+import { CreateClientErrorCodes,CreateAddressMethodErrorCodes, CreatePaymentMethodErrorCodes, DeletePaymentMethodErrorCodes } from "../types/enums/error_codes";
 import { ErrorMessages } from "../types/enums/error_messages";
 import Client from "../models/Client";
 import PaymentMethod from "../models/PaymentMethod";
@@ -221,6 +221,50 @@ async function getAddressesFromClient(idClient: number) {
     return addressesList;
 }
 
+async function createClient(
+    client: {
+        password: string,
+        birthdate: string,
+        fullName: string,
+        phoneNumber: string
+    }
+) {
+    try {
+        const {
+            password,
+            birthdate,
+            fullName,
+            phoneNumber
+        } = client;
+    
+        const existingPhoneNumber = await Client.findOne({
+            where: { phoneNumber }
+        });
+        
+        if (existingPhoneNumber !== null) {
+            throw new BusinessLogicException(
+                ErrorMessages.CLIENT_ALREADY_EXISTS, 
+                CreateClientErrorCodes.CLIENT_ALREADY_EXISTS);
+        }
+
+        const passwordHash = hashString(password);
+
+        await db.Client.create({
+            passwordHash: passwordHash,
+            birthdate: birthdate,
+            fullName: fullName,
+            phoneNumber: phoneNumber
+        });
+        
+    } catch (error: any) {
+        if(error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+}
+
 async function createAddressToClient(
     idClient: number, 
     address: {
@@ -279,5 +323,6 @@ export {
     getPaymentMethodsFromClient,
     getClientById,
     getAddressesFromClient,
+    createClient,
     createAddressToClient
 }

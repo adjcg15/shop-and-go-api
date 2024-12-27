@@ -62,6 +62,13 @@ interface IClientAddressBody {
     longitude?: number;
 }
 
+interface IClientBody {
+    password?: string,
+    birthdate?: string,
+    fullName?: string,
+    phoneNumber?: string
+}
+
 export {
     IInventoryWithOptionalProductIdBody,
     IProductWithInventoriesBody,
@@ -71,5 +78,6 @@ export {
     IPaymentMethodBody,
     IProductsByIdBody,
     ICoordinatesBody,
-    IClientAddressBody
+    IClientAddressBody,
+    IClientBody
 }

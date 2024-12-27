@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
 import { IClientAddress, IPaymentMethodWithIssuer } from "../types/interfaces/response_bodies";
 import { IClientByIdParams, IPaymentMethodByIdParams } from "../types/interfaces/request_parameters";
-import { createAddressToClient, createPaymentMethodToClient, deletePaymentMethodFromClient, getAddressesFromClient, getPaymentMethodsFromClient } from "../services/clients_service";
-import { IClientAddressBody, IPaymentMethodBody } from "../types/interfaces/request_bodies";
+import { createAddressToClient, createClient, createPaymentMethodToClient, deletePaymentMethodFromClient, getAddressesFromClient, getPaymentMethodsFromClient } from "../services/clients_service";
+import { IClientBody, IClientAddressBody, IPaymentMethodBody } from "../types/interfaces/request_bodies";
 
 async function createPaymentMethodToClientController(
     req: Request<IClientByIdParams, {}, IPaymentMethodBody, {}>,
@@ -73,10 +73,29 @@ async function getAddressesFromClientController(
 ) {
     try {
         const { idClient } = req.params;
-
         const addresses = await getAddressesFromClient(idClient!);
-
         res.status(HttpStatusCodes.OK).send(addresses);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function createClientController(
+    req: Request<{}, {}, IClientBody, {}>,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const { password, birthdate, fullName, phoneNumber } = req.body;
+        await createClient(
+            {
+                password: password!,
+                birthdate: birthdate!,
+                fullName: fullName!,
+                phoneNumber: phoneNumber!
+            }
+        );
+        res.status(HttpStatusCodes.CREATED).json();
     } catch (error) {
         next(error);
     }
@@ -107,5 +126,6 @@ export {
     deletePaymentMethodFromClientController,
     getPaymentMethodsFromClientController,
     getAddressesFromClientController,
-    createAddressToClientController
+    createAddressToClientController,
+    createClientController
 };
