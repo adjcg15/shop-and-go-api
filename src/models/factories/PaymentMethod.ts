@@ -21,12 +21,12 @@ export default (sequelize: Sequelize) => {
         },
         encryptedCardNumber: {
             type: DataTypes.CHAR(32),
-            field: "numeroTarjetaEncriptada",
+            field: "numeroTarjetaEncriptado",
             allowNull: false
         },
         hashedCardNumber: {
             type: DataTypes.CHAR(60),
-            field: "numeroTarjetaHasheada",
+            field: "numeroTarjetaHasheado",
             allowNull: false
         },
         initialVector: {
