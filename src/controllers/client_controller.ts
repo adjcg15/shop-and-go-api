@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
-import { IPaymentMethodWithIssuer } from "../types/interfaces/response_bodies";
+import { IClientAddress, IPaymentMethodWithIssuer } from "../types/interfaces/response_bodies";
 import { IClientByIdParams, IPaymentMethodByIdParams } from "../types/interfaces/request_parameters";
-import { createPaymentMethodToClient, deletePaymentMethodFromClient, getPaymentMethodsFromClient } from "../services/clients_service";
+import { createPaymentMethodToClient, deletePaymentMethodFromClient, getAddressesFromClient, getPaymentMethodsFromClient } from "../services/clients_service";
 import { IPaymentMethodBody } from "../types/interfaces/request_bodies";
 
 async function createPaymentMethodToClientController(
@@ -66,8 +66,25 @@ async function getPaymentMethodsFromClientController(
     }
 }
 
+async function getAddressesFromClientController(
+    req: Request<IClientByIdParams, {}, {}, {}>,
+    res: Response<IClientAddress[]>,
+    next: NextFunction
+) {
+    try {
+        const { idClient } = req.params;
+
+        const addresses = await getAddressesFromClient(idClient!);
+
+        res.status(HttpStatusCodes.OK).send(addresses);
+    } catch (error) {
+        next(error);
+    }
+}
+
 export { 
     createPaymentMethodToClientController,
     deletePaymentMethodFromClientController,
-    getPaymentMethodsFromClientController
+    getPaymentMethodsFromClientController,
+    getAddressesFromClientController
 };

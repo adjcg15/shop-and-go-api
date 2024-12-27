@@ -6,8 +6,9 @@ import { CreatePaymentMethodErrorCodes, DeletePaymentMethodErrorCodes } from "..
 import { ErrorMessages } from "../types/enums/error_messages";
 import Client from "../models/Client";
 import PaymentMethod from "../models/PaymentMethod";
-import { IClientWithOptionalPassword, IPaymentMethodWithIssuer } from "../types/interfaces/response_bodies";
+import { IClientAddress, IClientWithOptionalPassword, IPaymentMethodWithIssuer } from "../types/interfaces/response_bodies";
 import { compareHashedString, decryptCardNumber, encryptCardNumber, hashString } from "../lib/security_service";
+import Address from "../models/Address";
 
 async function createPaymentMethodToClient(
     idClient: number, 
@@ -181,9 +182,49 @@ async function getClientById(id: number) {
     return client;
 }
 
+async function getAddressesFromClient(idClient: number) {
+    const addressesList: IClientAddress[] = [];
+    try {
+        const client = await Client.findByPk(idClient);
+        if (client === null) {
+            throw new BusinessLogicException(ErrorMessages.CLIENT_NOT_FOUND);
+        }
+
+        const addresses = await Address.findAll({
+            where: { idClient, isActive: true }
+        })
+        
+        addresses.forEach(address => {
+            const addressInfo: IClientAddress = {
+                id: address.id,
+                street: address.street,
+                streetNumber: address.streetNumber,
+                apartmentNumber: address.apartmentNumber ?? undefined,
+                neighborhood: address.neighborhood,
+                municipality: address.municipality,
+                city: address.city,
+                postalCode: address.postalCode,
+                state: address.state,
+                latitude: address.latitude,
+                longitude: address.longitude
+            };
+            addressesList.push(addressInfo);
+        });          
+    } catch (error: any) {
+        if(error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    } 
+
+    return addressesList;
+}
+
 export { 
     createPaymentMethodToClient,
     deletePaymentMethodFromClient,
     getPaymentMethodsFromClient,
-    getClientById
+    getClientById,
+    getAddressesFromClient
 }
