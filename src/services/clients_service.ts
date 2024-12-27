@@ -2,7 +2,7 @@ import db from "../models";
 import SQLException from "../exceptions/services/SQLException";
 import Issuer from "../models/Issuer";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
-import { CreatePaymentMethodErrorCodes, DeletePaymentMethodErrorCodes } from "../types/enums/error_codes";
+import { CreateAddressMethodErrorCodes, CreatePaymentMethodErrorCodes, DeletePaymentMethodErrorCodes } from "../types/enums/error_codes";
 import { ErrorMessages } from "../types/enums/error_messages";
 import Client from "../models/Client";
 import PaymentMethod from "../models/PaymentMethod";
@@ -221,10 +221,63 @@ async function getAddressesFromClient(idClient: number) {
     return addressesList;
 }
 
+async function createAddressToClient(
+    idClient: number, 
+    address: {
+        street: string,
+        streetNumber: string,
+        neighborhood: string,
+        municipality: string,
+        city: string,
+        postalCode: string,
+        state: string,
+        latitude: number,
+        longitude: number,
+        apartmentNumber?: string | null
+    }
+) {
+    let newAddress: Address;
+
+    try {
+        const client = await Client.findByPk(idClient);
+
+        if (client === null) {
+            throw new BusinessLogicException(ErrorMessages.CLIENT_NOT_FOUND,
+                CreateAddressMethodErrorCodes.CLIENT_NOT_FOUND
+            );
+        }
+
+        const existingAddress = await Address.findOne({
+            where: { idClient, isActive: true, ...address }
+        })
+
+        if (existingAddress !== null) {
+            throw new BusinessLogicException(ErrorMessages.ADDRESS_ALREADY_EXISTS,
+                CreateAddressMethodErrorCodes.ADDRESS_ALREADY_EXISTS
+            );
+        }
+
+        newAddress = await db.Address.create({
+            ...address,
+            idClient,
+            isActive: true
+        });
+    } catch (error: any) {
+        if(error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+
+    return newAddress;
+}
+
 export { 
     createPaymentMethodToClient,
     deletePaymentMethodFromClient,
     getPaymentMethodsFromClient,
     getClientById,
-    getAddressesFromClient
+    getAddressesFromClient,
+    createAddressToClient
 }
