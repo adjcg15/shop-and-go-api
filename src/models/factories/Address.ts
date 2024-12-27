@@ -46,7 +46,7 @@ export default (sequelize: Sequelize) => {
         },
         state: {
             type: DataTypes.STRING(255),
-            field: "codigoPostal",
+            field: "entidadFederativa",
             allowNull: false
         },
         latitude: {
