@@ -152,9 +152,23 @@ async function insertE2EGetAddressesTestData() {
     }
 }
 
+async function insertE2ECreateAddressTestData() {
+    const client = await db.Client.create({
+        passwordHash: "$2b$10$MqRHa10Cw5PzHIu2ihG5suOljpAlcw6i1FQKcyj2pRS2pTGa60ycC",
+        birthdate: "1990-05-15",
+        fullName: "John Doe",
+        phoneNumber: "1234567890"
+    });
+
+    return {
+        idClient: client.id
+    }
+}
+
 export { 
     insertE2ECreatePaymentMethodTestData,
     insertE2EDeletePaymentMethodTestData,
     insertE2EGetPaymentMethodsTestData,
-    insertE2EGetAddressesTestData
+    insertE2EGetAddressesTestData,
+    insertE2ECreateAddressTestData
 };
