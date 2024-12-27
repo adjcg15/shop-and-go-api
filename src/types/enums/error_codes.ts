@@ -41,11 +41,17 @@ enum GetStoreInventoriesErrorCodes {
     INVENTORY_DOES_NOT_EXIST = EndpointContexts.GET_STORE_INVENTORIES + "-400003"
 }
 
+enum CreateAddressMethodErrorCodes {
+    CLIENT_NOT_FOUND = EndpointContexts.CREATE_ADDRESS + "-400001",
+    ADDRESS_ALREADY_EXISTS = EndpointContexts.CREATE_ADDRESS + "-400002"
+}
+
 export { 
     CreatePaymentMethodErrorCodes,
     DeletePaymentMethodErrorCodes,
     CreateProductErrorCodes,
     UpdateProductErrorCodes,
     CreateOrderErrorCodes,
-    GetStoreInventoriesErrorCodes
+    GetStoreInventoriesErrorCodes,
+    CreateAddressMethodErrorCodes
 };
