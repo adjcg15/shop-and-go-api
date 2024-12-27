@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
 import { IPaymentMethodWithIssuer } from "../types/interfaces/response_bodies";
 import { IClientByIdParams, IPaymentMethodByIdParams } from "../types/interfaces/request_parameters";
-import { createPaymentMethodToClient, deletePaymentMethodFromClient, getPaymentMethodsFromClient } from "../services/clients_service";
-import { IPaymentMethodBody } from "../types/interfaces/request_bodies";
+import { createClient, createPaymentMethodToClient, deletePaymentMethodFromClient, getPaymentMethodsFromClient } from "../services/clients_service";
+import { IClientBody, IPaymentMethodBody } from "../types/interfaces/request_bodies";
 
 async function createPaymentMethodToClientController(
     req: Request<IClientByIdParams, {}, IPaymentMethodBody, {}>,
@@ -66,8 +66,32 @@ async function getPaymentMethodsFromClientController(
     }
 }
 
+async function createClientController(
+    req: Request<{}, {}, IClientBody, {}>,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const { password, birthdate, fullName, phoneNumber } = req.body;
+
+        await createClient(
+            {
+                password: password!,
+                birthdate: birthdate!,
+                fullName: fullName!,
+                phoneNumber: phoneNumber!
+            }
+        );
+
+        res.status(HttpStatusCodes.CREATED).json();
+    } catch (error) {
+        next(error);
+    }
+}
+
 export { 
     createPaymentMethodToClientController,
     deletePaymentMethodFromClientController,
-    getPaymentMethodsFromClientController
+    getPaymentMethodsFromClientController,
+    createClientController
 };
