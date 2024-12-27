@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { checkTokenValidity, allowRoles, validateClientOwnership } from "../middlewares/access_control";
 import { checkSchema } from "express-validator";
-import { createPaymentMethodToClientController, deletePaymentMethodFromClientController, getPaymentMethodsFromClientController } from "../controllers/client_controller";
+import { createPaymentMethodToClientController, deletePaymentMethodFromClientController, getAddressesFromClientController, getPaymentMethodsFromClientController } from "../controllers/client_controller";
 import validateRequestSchemaMiddleware from "../middlewares/schema_validator";
 import { createPaymentMethodToClientValidationSchema, deletePaymentMethodFromClientValidationSchema, getPaymentMethodsFromClientValidationSchema } from "../validation_schemas/payments_methods";
 import UserRoles from "../types/enums/user_roles";
+import { getAddressesFromClientValidationSchema } from "../validation_schemas/addresses";
 
 const router = Router();
 
@@ -37,5 +38,15 @@ router.get(
     validateRequestSchemaMiddleware,
     getPaymentMethodsFromClientController
 );
+
+router.get(
+    "/:idClient/addresses",
+    checkTokenValidity,
+    validateClientOwnership,
+    allowRoles([UserRoles.CLIENT]),
+    checkSchema(getAddressesFromClientValidationSchema),
+    validateRequestSchemaMiddleware,
+    getAddressesFromClientController
+)
 
 export default router;

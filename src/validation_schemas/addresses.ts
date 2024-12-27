@@ -33,6 +33,21 @@ const getNearestStoreValidationSchema: Schema = {
     }
 }
 
+const getAddressesFromClientValidationSchema: Schema = {
+    idClient: {
+        in: ["params"],
+        isInt: {
+            options: { min: 1 },
+            errorMessage: "Parameter idClient must be a positive integer",
+        },
+        notEmpty: {
+            errorMessage: "idClient is required"
+        },
+        toInt: true
+    }
+}
+
 export {
-    getNearestStoreValidationSchema
+    getNearestStoreValidationSchema,
+    getAddressesFromClientValidationSchema
 }
