@@ -30,6 +30,7 @@ DECLARE @idCargoRepartidor INT;
 DECLARE @idEmisorBanamex INT;
 DECLARE @idEmisorBBVA INT;
 DECLARE @idClienteRodrigo INT;
+DECLARE @idClienteAngel INT;
 
 DELETE FROM MetodosPago;
 DELETE FROM EmisoresMetodosPago;
@@ -139,8 +140,10 @@ INSERT INTO Inventarios (
 INSERT INTO Clientes ([contrasena],[fechaNacimiento],[nombreCompleto],[numeroTelefono])
 VALUES 
 ('$2a$12$Hg2zf5PeoguYwtnAm6lwV.B1zhvCj/4C2BywOsJCFlpeD3caSrsi2', '2001-04-15', 'Ángel de Jesús De la cruz García', '2281645442'),
-('$2a$12$Hg2zf5PeoguYwtnAm6lwV.B1zhvCj/4C2BywOsJCFlpeD3caSrsi2', '1990-05-15', 'Rodrigo Aguilar López', '2321983692');
+('$2a$12$Hg2zf5PeoguYwtnAm6lwV.B1zhvCj/4C2BywOsJCFlpeD3caSrsi2', '1990-05-15', 'Rodrigo Aguilar López', '2321983692'),
+('$2a$12$Hg2zf5PeoguYwtnAm6lwV.B1zhvCj/4C2BywOsJCFlpeD3caSrsi2', '2003-09-02', 'Enrique Gamboa Hernández', '2281983692'); -- No agregar direcciones de entrega para este cliente para pruebas
 
+SELECT @idClienteAngel = idCliente FROM Clientes WHERE nombreCompleto = 'Ángel de Jesús De la cruz García';
 SELECT @idClienteRodrigo = idCliente FROM Clientes WHERE nombreCompleto = 'Rodrigo Aguilar López';
 
 --Llenar la tabla de emisores de métodos de pago
@@ -183,3 +186,23 @@ VALUES ('Ángel de Jesús De la cruz García', 'admin', '$2a$12$Hg2zf5PeoguYwtnA
 '2023-01-04', 1, 1, @idSucursal1, @idCargoEjecutivo),
 ('Ángel de Jesús De la cruz García', 'repartidor', '$2a$12$Hg2zf5PeoguYwtnAm6lwV.B1zhvCj/4C2BywOsJCFlpeD3caSrsi2',
 '2023-01-04', 1, 1, @idSucursal1, @idCargoRepartidor);
+
+
+INSERT INTO DireccionesEntrega (
+	[calle],
+	[numeroExterior],
+	[numeroInterior],
+	[colonia],
+	[municipio],
+	[ciudad],
+	[codigoPostal],
+	[entidadFederativa],
+	[latitud],
+	[longitud],
+	[esActivo],
+	[idCliente]
+)
+VALUES ('C Adalberto Tejeda ', '403', 'A','Salvador Díaz Miron', 'Xalapa-Enríquez', 'Xalapa', '91090', 'Veracruz', 19.540103, -96.904000, 1, @idClienteRodrigo),
+('Agustín F. Blancas', '7', NULL, 'Col del Maestro', 'Xalapa-Enríquez', 'Xalapa', '91030', 'Veracruz', 19.541299, -96.925154, 1, @idClienteRodrigo),
+('Naranjas', '6', 'B', 'Framboyanes', 'Xalapa-Enríquez', 'Xalapa', '91015', 'Veracruz', 19.561216, -96.937488, 1, @idClienteAngel),
+('Ismael Cristein', '547', NULL, 'Rafael Lucio', 'Xalapa-Enríquez', 'Xalapa', '91110', 'Veracruz', 19.565027, -96.921050, 1, @idClienteAngel);
