@@ -26,4 +26,20 @@ function verifyToken(token: string): IJWTPayload | undefined {
     }
 }
 
-export { signToken, verifyToken };
+const isValidToken = (token: string) => token.startsWith("Bearer ");
+
+const getToken = (authorizationHeader: string) => authorizationHeader.split(' ')[1];
+
+function isTokenAboutToExpire(tokenPayload: IJWTPayload) {
+    const TOKEN_RENEWAL_LIMIT = 60 * 5;
+    const tokenValiditySeconds = (tokenPayload.exp ?? 0) - (new Date().getTime() / 1000);
+    return tokenValiditySeconds < TOKEN_RENEWAL_LIMIT;
+};
+
+export { 
+    signToken, 
+    verifyToken,
+    isValidToken,
+    getToken,
+    isTokenAboutToExpire
+};

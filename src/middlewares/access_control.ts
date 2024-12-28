@@ -1,17 +1,16 @@
-import { getToken, isValidToken, signToken, verifyToken } from "../lib/token_store";
+import { getToken, isTokenAboutToExpire, isValidToken, signToken, verifyToken } from "../lib/token_store";
 import { HttpStatusCodes } from "../types/enums/http";
 import UserRoles from "../types/enums/user_roles";
 import { NextFunction, Request, Response } from "express";
 
 function checkTokenValidity(req: Request, res: Response, next: NextFunction): void {
-    const TOKEN_RENEWAL_LIMIT = 60 * 5;
     const authorizationHeader = String(req.headers.authorization);
-    if(!authorizationHeader.startsWith("Bearer ")) {
+    if(!isValidToken(authorizationHeader)) {
         res.status(HttpStatusCodes.UNAUTHORIZED).send();
         return;
     }
 
-    const token = authorizationHeader.split(' ')[1];
+    const token = getToken(authorizationHeader);
     const payload = verifyToken(token); 
 
     if(!payload) {
@@ -19,8 +18,7 @@ function checkTokenValidity(req: Request, res: Response, next: NextFunction): vo
         return;
     }
 
-    const tokenValiditySeconds = (payload.exp ?? 0) - (new Date().getTime() / 1000);
-    if(tokenValiditySeconds < TOKEN_RENEWAL_LIMIT) {
+    if(isTokenAboutToExpire(payload)) {
         const { id, userRole } = payload;
         const newToken = signToken({ id, userRole });
 
@@ -41,6 +39,13 @@ function initializeOptionalSession(req: Request, res: Response, next: NextFuncti
         if(!payload) {
             res.status(HttpStatusCodes.UNAUTHORIZED).send();
             return;
+        }
+
+        if(isTokenAboutToExpire(payload)) {
+            const { id, userRole } = payload;
+            const newToken = signToken({ id, userRole });
+    
+            res.header("Set-Authorization", newToken);
         }
 
         req.user = payload;
