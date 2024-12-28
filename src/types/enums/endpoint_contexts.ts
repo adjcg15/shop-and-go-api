@@ -7,6 +7,7 @@ enum EndpointContexts {
     CREATE_ORDER = "CROR",
     GET_STORE_INVENTORIES = "GESN",
     CREATE_ADDRESS = "CRAD",
+    DELETE_ADDRESS = "DLAD",
     CREATE_CLIENT = "CRCL"
 }
 

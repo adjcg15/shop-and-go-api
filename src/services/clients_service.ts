@@ -2,7 +2,7 @@ import db from "../models";
 import SQLException from "../exceptions/services/SQLException";
 import Issuer from "../models/Issuer";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
-import { CreateClientErrorCodes,CreateAddressMethodErrorCodes, CreatePaymentMethodErrorCodes, DeletePaymentMethodErrorCodes } from "../types/enums/error_codes";
+import { CreateClientErrorCodes,CreateAddressMethodErrorCodes, CreatePaymentMethodErrorCodes, DeletePaymentMethodErrorCodes, DeleteAddressErrorCodes } from "../types/enums/error_codes";
 import { ErrorMessages } from "../types/enums/error_messages";
 import Client from "../models/Client";
 import PaymentMethod from "../models/PaymentMethod";
@@ -317,6 +317,43 @@ async function createAddressToClient(
     return newAddress;
 }
 
+async function deleteAddressFromClient(idClient: number, idAddress: number) {
+    try {
+        const client = await Client.findByPk(idClient);
+
+        if(client === null) {
+            throw new BusinessLogicException(
+                ErrorMessages.CLIENT_NOT_FOUND,
+                DeleteAddressErrorCodes.CLIENT_NOT_FOUND
+            );
+        }
+
+        const address = await Address.findByPk(idAddress);
+
+        if (address === null) {
+            throw new BusinessLogicException(
+                ErrorMessages.ADDRESS_NOT_FOUND,
+                DeleteAddressErrorCodes.DELIVERY_ADDRESS_NOT_FOUND
+            );
+        }
+
+        await Address.update(
+            {
+                isActive: false
+            },
+            {
+                where: {idClient, id: idAddress}
+            }
+        )
+    } catch (error: any) {
+        if(error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+}
+
 export { 
     createPaymentMethodToClient,
     deletePaymentMethodFromClient,
@@ -324,5 +361,6 @@ export {
     getClientById,
     getAddressesFromClient,
     createClient,
-    createAddressToClient
+    createAddressToClient,
+    deleteAddressFromClient
 }

@@ -14,9 +14,14 @@ interface IPaymentMethodByIdParams {
     idPaymentMethod?: number
 }
 
+interface IClientAddressId {
+    idAddress?: number;
+}
+
 export {
     IStoreByIdParams,
     IClientByIdParams,
     IProductByIdParams,
-    IPaymentMethodByIdParams
+    IPaymentMethodByIdParams,
+    IClientAddressId
 };
