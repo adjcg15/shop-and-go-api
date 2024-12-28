@@ -1,4 +1,4 @@
-import { signToken, verifyToken } from "../lib/token_store";
+import { getToken, isValidToken, signToken, verifyToken } from "../lib/token_store";
 import { HttpStatusCodes } from "../types/enums/http";
 import UserRoles from "../types/enums/user_roles";
 import { NextFunction, Request, Response } from "express";
@@ -31,6 +31,24 @@ function checkTokenValidity(req: Request, res: Response, next: NextFunction): vo
     next();
 }
 
+function initializeOptionalSession(req: Request, res: Response, next: NextFunction) {
+    const authorizationHeader = String(req.headers.authorization);
+    
+    if(isValidToken(authorizationHeader)) {
+        const token = getToken(authorizationHeader);
+        const payload = verifyToken(token); 
+
+        if(!payload) {
+            res.status(HttpStatusCodes.UNAUTHORIZED).send();
+            return;
+        }
+
+        req.user = payload;
+    }
+
+    next();
+}
+
 function allowRoles(allowedRoles: UserRoles[]) {
     return function(req: Request, res: Response, next: NextFunction) {
         const { userRole } = req.user;
@@ -57,5 +75,6 @@ function validateClientOwnership(req: Request, res: Response, next: NextFunction
 export { 
     checkTokenValidity, 
     allowRoles,
-    validateClientOwnership 
+    validateClientOwnership,
+    initializeOptionalSession 
 };
