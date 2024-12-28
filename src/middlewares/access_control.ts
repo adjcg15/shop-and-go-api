@@ -1,11 +1,11 @@
-import { getToken, isTokenAboutToExpire, isValidToken, signToken, verifyToken } from "../lib/token_store";
+import { decodeToken, getToken, isTokenAboutToExpire, isValidAuthHeader, signToken, verifyToken } from "../lib/token_store";
 import { HttpStatusCodes } from "../types/enums/http";
 import UserRoles from "../types/enums/user_roles";
 import { NextFunction, Request, Response } from "express";
 
 function checkTokenValidity(req: Request, res: Response, next: NextFunction): void {
     const authorizationHeader = String(req.headers.authorization);
-    if(!isValidToken(authorizationHeader)) {
+    if(!isValidAuthHeader(authorizationHeader)) {
         res.status(HttpStatusCodes.UNAUTHORIZED).send();
         return;
     }
@@ -29,29 +29,35 @@ function checkTokenValidity(req: Request, res: Response, next: NextFunction): vo
     next();
 }
 
-function initializeOptionalSession(req: Request, res: Response, next: NextFunction) {
-    const authorizationHeader = String(req.headers.authorization);
+function initializeOptionalSession(rolesToCheck: UserRoles[]) {
+    return (req: Request, res: Response, next: NextFunction) => {
+        const authorizationHeader = String(req.headers.authorization);
+        
+        if(isValidAuthHeader(authorizationHeader)) {
+            const token = getToken(authorizationHeader);
+            const tokenInfo = decodeToken(token);
     
-    if(isValidToken(authorizationHeader)) {
-        const token = getToken(authorizationHeader);
-        const payload = verifyToken(token); 
+            if(tokenInfo && rolesToCheck.includes(tokenInfo.userRole)) {
+                const payload = verifyToken(token); 
 
-        if(!payload) {
-            res.status(HttpStatusCodes.UNAUTHORIZED).send();
-            return;
+                if(!payload) {
+                    res.status(HttpStatusCodes.UNAUTHORIZED).send();
+                    return;
+                }
+
+                if(isTokenAboutToExpire(payload)) {
+                    const { id, userRole } = payload;
+                    const newToken = signToken({ id, userRole });
+            
+                    res.header("Set-Authorization", newToken);
+                }
+
+                req.user = payload;
+            }
         }
-
-        if(isTokenAboutToExpire(payload)) {
-            const { id, userRole } = payload;
-            const newToken = signToken({ id, userRole });
     
-            res.header("Set-Authorization", newToken);
-        }
-
-        req.user = payload;
+        next();
     }
-
-    next();
 }
 
 function allowRoles(allowedRoles: UserRoles[]) {

@@ -1,5 +1,5 @@
 import { IJWTPayload } from "../types/interfaces/jwt";
-import { SignOptions, sign, verify } from "jsonwebtoken";
+import { SignOptions, decode, sign, verify } from "jsonwebtoken";
 
 function signToken(user: IJWTPayload): string {
     if (!process.env.JWT_SECRET) {
@@ -26,7 +26,15 @@ function verifyToken(token: string): IJWTPayload | undefined {
     }
 }
 
-const isValidToken = (token: string) => token.startsWith("Bearer ");
+function decodeToken(token: string): IJWTPayload | undefined {
+    try {
+        return decode(token) as IJWTPayload;
+    } catch (error) {
+        return undefined;
+    }
+}
+
+const isValidAuthHeader = (header: string) => header.startsWith("Bearer ");
 
 const getToken = (authorizationHeader: string) => authorizationHeader.split(' ')[1];
 
@@ -39,7 +47,8 @@ function isTokenAboutToExpire(tokenPayload: IJWTPayload) {
 export { 
     signToken, 
     verifyToken,
-    isValidToken,
+    isValidAuthHeader,
     getToken,
-    isTokenAboutToExpire
+    isTokenAboutToExpire,
+    decodeToken
 };
