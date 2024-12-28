@@ -8,7 +8,7 @@ import { IStoreByIdParams } from "../types/interfaces/request_parameters";
 import { IProductByIdWithStock, IProductWithInventory} from "../types/interfaces/response_bodies";
 import Store from "../models/Store";
 import { ICoordinatesBody, IProductsByIdBody } from "../types/interfaces/request_bodies";
-import { findNearestStore, validateNearestStoreDistance } from "../../utils/store_utils";
+import { findNearestStore, validateNearestStoreDistance } from "../lib/distance_service";
 
 async function getProductsInStoreController(
     req: Request<IStoreByIdParams, {}, {}, IProductsListPaginationQuery>, 
