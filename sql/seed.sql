@@ -20,9 +20,27 @@ DECLARE @idProductoArrozConLeche INT;
 DECLARE @idProductoPiniaEnlatada INT;
 DECLARE @idProductoChipotles INT;
 DECLARE @idProductoAtun INT;
+DECLARE @idProductoSmirnoff INT;
+DECLARE @idProductoPanBlanco INT;
+DECLARE @idProductoCoca3L INT;
+DECLARE @idProductoPaqueteJabonNeutro INT;
+DECLARE @idProductoFlautasCongeladas INT;
+DECLARE @idProductoPiniaMielKilo INT;
+DECLARE @idProductoCostalAlimentoGatos INT;
+DECLARE @idProductoTijeras INT;
+DECLARE @idProductoPinol INT;
 
 DECLARE @idCategoriaLacteos INT;
 DECLARE @idCategoriaEnlatados INT;
+DECLARE @idCategoriaLicores INT;
+DECLARE @idCategoriaPanaderia INT;
+DECLARE @idCategoriaBebidas INT;
+DECLARE @idCategoriaHigienePersonal INT;
+DECLARE @idCategoriaCongelados INT;
+DECLARE @idCategoriaFrutasYVerduras INT;
+DECLARE @idCategoriaAlimentosMascota INT;
+DECLARE @idCategoriaPapeleria INT;
+DECLARE @idCategoriaLimpiezaHogar INT;
 
 DECLARE @idCargoAdmin INT;
 DECLARE @idCargoEjecutivo INT;
@@ -45,10 +63,23 @@ DELETE FROM Sucursales;
 DELETE FROM Categorias;
 
 --Llenar la tabla de categorías
-INSERT INTO Categorias (nombre, esActiva) VALUES ('Lacteos', 1), ('Enlatados', 1), ('Vinos y licores', 0);
+INSERT INTO Categorias (nombre, esActiva) VALUES 
+('Lacteos', 1), ('Enlatados', 1), ('Vinos y licores', 0),
+('Panadería', 1), ('Bebidas', 1), ('Higiene personal', 1),
+('Productos congelados', 1), ('Frutas y verduras', 1), ('Alimentos para mascotas', 1),
+('Artículos de papelería', 1), ('Limpieza del hogar', 1);
 
 SELECT @idCategoriaLacteos = idCategoria FROM Categorias WHERE nombre = 'Lacteos';
 SELECT @idCategoriaEnlatados = idCategoria FROM Categorias WHERE nombre = 'Enlatados';
+SELECT @idCategoriaLicores = idCategoria FROM Categorias WHERE nombre = 'Vinos y licores';
+SELECT @idCategoriaPanaderia = idCategoria FROM Categorias WHERE nombre = 'Panadería';
+SELECT @idCategoriaBebidas = idCategoria FROM Categorias WHERE nombre = 'Bebidas';
+SELECT @idCategoriaHigienePersonal = idCategoria FROM Categorias WHERE nombre = 'Higiene personal';
+SELECT @idCategoriaCongelados = idCategoria FROM Categorias WHERE nombre = 'Productos congelados';
+SELECT @idCategoriaFrutasYVerduras = idCategoria FROM Categorias WHERE nombre = 'Frutas y verduras';
+SELECT @idCategoriaAlimentosMascota = idCategoria FROM Categorias WHERE nombre = 'Alimentos para mascotas';
+SELECT @idCategoriaPapeleria = idCategoria FROM Categorias WHERE nombre = 'Artículos de papelería';
+SELECT @idCategoriaLimpiezaHogar = idCategoria FROM Categorias WHERE nombre = 'Limpieza del hogar';
 
 --Llenar la tabla de productos
 INSERT INTO Productos (
@@ -78,7 +109,16 @@ INSERT INTO Productos (
 ('9890187253346', 'Arroz con Leche Lala 4 pz 125g', 'El postre perfecto para consentir a tu familia, el Arroz con Leche Lala tiene se caracteriza por su sabor casero, apelando a la nostalgia de las recetas tradicionales de familia. Consiente a los que más quieres con este delicioso postre que a todos encantará.', 'https://res.cloudinary.com/dblao5461/image/upload/v1735176910/shopandgo/uebatfpy4im6eshnbanr.jpg', 36.9, 15, 1, @idCategoriaLacteos),
 ('9087108267891', 'Piña en almíbar La Costeña en rebanadas 800g', 'La tradicional PIÑA EN ALMÍBAR EN REBANADAS será el aliado perfecto en tus postres, con su delicioso sabor que no puede faltar en tu mesa, podrás prepara el mejor volteado de piña para una fiesta.', 'https://res.cloudinary.com/dblao5461/image/upload/v1735145875/shopandgo/tfxa2vzzrgmvfvu0ydmx.webp', 71, 8, 1, @idCategoriaEnlatados),
 ('8129172801888', 'Chiles chipotles La Costeña adobados 220g', 'Disfruta de los chiles chipotles adobados con tus comidas, prepara ricas y rápidas recetas en solo unos minutos y aporta ese delicioso sabor picante, ideales para estar siempre en tu alacena.', 'https://res.cloudinary.com/dblao5461/image/upload/v1735145876/shopandgo/mtjjuywlaszqvldi9yq3.webp', 34.5, 12, 1, @idCategoriaEnlatados),
-('1612091827291', 'Atún Tuny clásico en agua 140g', '¡Descubre, Nuestro Atún clásico adquiérelo desde la comodidad de tu hogar! Contiene proteínas, ayuda a proteger tu corazón y figura es la opción perfecta para una alimentación saludable, puedes disfrutarlo en desayunos, comidas o cenas, llévalo siempre contigo y no requiere refrigeración', 'https://res.cloudinary.com/dblao5461/image/upload/v1735145876/shopandgo/j6oxvocvqmkref7fpn04.webp', 22, 20, 1, @idCategoriaEnlatados);
+('1612091827291', 'Atún Tuny clásico en agua 140g', '¡Descubre, Nuestro Atún clásico adquiérelo desde la comodidad de tu hogar! Contiene proteínas, ayuda a proteger tu corazón y figura es la opción perfecta para una alimentación saludable, puedes disfrutarlo en desayunos, comidas o cenas, llévalo siempre contigo y no requiere refrigeración', 'https://res.cloudinary.com/dblao5461/image/upload/v1735145876/shopandgo/j6oxvocvqmkref7fpn04.webp', 22, 20, 1, @idCategoriaEnlatados),
+('7180019291023', 'Vodka Smirnoff Sabor Tamarindo Picante 750ml', 'Smirnoff X1, vodka con sabor a México. Inspirado en los tradicionales dulces mexicanos, tamarindo picosito, el vodka que puedes disfrutar tomándolo sólo y frío. Disponible en presentación de 750 ml. La venta se realizará únicamente a mayores de edad. El abuso en el consumo de este producto es nocivo para la salud. EVITA EL EXCESO. Válido solo para mayores de 18 años. Al momento de su entrega solicitaremos alguna identificación oficial (INE, pasaporte o licencia de conducir) para corroborar mayoría de edad. Cuando visites tu tienda en línea no olvides visitar el departamento de vinos y licores, donde encontrarás una amplia variedad de vinos con marcas reconocidas. Entra ya a tu tienda en línea y conoce la variedad de vinos y licores que tenemos especialmente para ti.', 'https://res.cloudinary.com/dblao5461/image/upload/v1735360226/shopandgo/kahky4ywzjo82snhnh6b.webp', 209, 7, 1, @idCategoriaLicores),
+('1782934560101', 'Pan Bimbo blanco 620g', 'Pan Blanco Bimbo es una opción ideal para preparar un sándwich en cualquier momento del día, puedes combinarlo con tus ingredientes favoritos y así disfrutar de tus diferentes recetas y creaciones únicas. Ahora con una rebanada más grande y corteza brillada. Sin jarabe de alta fructosa. Hazlo como quieras. Haz sándwich.', 'https://res.cloudinary.com/dblao5461/image/upload/v1735360439/shopandgo/fvqirpxtsav4hwzsribj.webp', 51, 3, 1, @idCategoriaPanaderia),
+('1102988377101', 'Refresco Coca Cola botella de 3L', 'Coca-Cola es el refresco de cola de mayor éxito por su delicioso sabor refrescante y es un buen compañero para la comida o cualquier momento.', 'https://res.cloudinary.com/dblao5461/image/upload/v1735360785/shopandgo/xmasbyqqq1vw7kzyfvfm.webp', 47.5, 5, 1, @idCategoriaBebidas),
+('2156678888901', 'Jabon de Baño Palmolive Neutro Balance Dermolimpiador Humecta y Protege tu Piel 4 x 120g', 'El Jabón en barra Palmolive Neutro Balance Dermolimpiador con su fórmula mejorada cuida el balance de tu piel, manteniendo su humectación natural, siendo ideal para ti y para tu familia. Con la fórmula de este Jabón Palmolive Neutro Balance.', 'https://res.cloudinary.com/dblao5461/image/upload/v1735361054/shopandgo/fxkvhnqaus4kwi0umv9o.webp', 75, 15, 1, @idCategoriaHigienePersonal),
+('2223789177890', 'Taquitos de pollo Alamesa congelados 720g', 'Consiente a tu familia con el gran sabor de estos taquitos de pollo.', 'https://res.cloudinary.com/dblao5461/image/upload/v1735361283/shopandgo/how4gumrf6ryj66idyf6.webp', 110, 3, 1, @idCategoriaCongelados),
+('2892002122231', 'Piña Miel por kilo', 'La piña es ideal para comer en cualquier hora del día, ya sea como un postre dulce o salado.', 'https://res.cloudinary.com/dblao5461/image/upload/v1735361543/shopandgo/cjx9ssxj4un4mnqkr1nc.webp', 27, 15, 1, @idCategoriaFrutasYVerduras),
+('0011822293365', 'Alimento para gatos Minino Adultos pollo y res 3kg', '¡Dale a tu felino lo mejor con nuestras croquetas para gato y comida para gatos! Ofrecemos una variedad de opciones, desde comida húmeda para gatos hasta croquetas para gatos bebés, asegurando una nutrición completa. Prueba nuestras mejores croquetas para gato o aventúrate con la dieta BARF para gatos. También tenemos recetas de comida casera para gatos. ¡Tu gato lo agradecerá! ¡Accede a todo nuestro catálogo de Alimento para Gatos en Tu Tienda en Línea!', 'https://res.cloudinary.com/dblao5461/image/upload/v1735361833/shopandgo/w0srildg27gudm4piylj.webp', 213, 2, 1, @idCategoriaAlimentosMascota),
+('2781920928472', 'Tijeras Prichos de uso general', 'En la casa, oficina y escuela no pueden faltar las tijeras, así que lleva contigo éstas que son de uso general. Recuerda que ya puedes realizar tus compras en nuestra tienda en línea, donde encontrarás todo lo necesario para tu día a día o para surtir la despensa de tu hogar. Compra lo que necesites y recíbelo hasta la puerta de tu hogar, pues contamos con nuestro servicio de entregas a domicilio.', 'https://res.cloudinary.com/dblao5461/image/upload/v1735362069/shopandgo/t1isbwr96fpzumxzwr9h.webp', 27, 5, 1, @idCategoriaPapeleria),
+('1278192182912', 'Limpiador Multiusos Pinol El Original 2L', 'Pinol El Original es un Multilimpiador desinfectante que elimina el 99.9% de virus y bacterias.', 'https://res.cloudinary.com/dblao5461/image/upload/v1735362412/shopandgo/yqx5xj2zcgjszt1073i9.webp', 55, 10, 1, @idCategoriaLimpiezaHogar);
 
 --Llenar las sucursales con sus inventarios
 INSERT INTO Sucursales (
@@ -110,6 +150,15 @@ SELECT @idProductoArrozConLeche = idProducto FROM Productos WHERE codigoBarras =
 SELECT @idProductoPiniaEnlatada = idProducto FROM Productos WHERE codigoBarras = '9087108267891';
 SELECT @idProductoChipotles = idProducto FROM Productos WHERE codigoBarras = '8129172801888';
 SELECT @idProductoAtun = idProducto FROM Productos WHERE codigoBarras = '1612091827291';
+SELECT @idProductoSmirnoff = idProducto FROM Productos WHERE codigoBarras = '7180019291023';
+SELECT @idProductoPanBlanco = idProducto FROM Productos WHERE codigoBarras = '1782934560101';
+SELECT @idProductoCoca3L = idProducto FROM Productos WHERE codigoBarras = '1102988377101';
+SELECT @idProductoPaqueteJabonNeutro = idProducto FROM Productos WHERE codigoBarras = '2156678888901';
+SELECT @idProductoFlautasCongeladas = idProducto FROM Productos WHERE codigoBarras = '2223789177890';
+SELECT @idProductoPiniaMielKilo = idProducto FROM Productos WHERE codigoBarras = '2892002122231';
+SELECT @idProductoCostalAlimentoGatos = idProducto FROM Productos WHERE codigoBarras = '0011822293365';
+SELECT @idProductoTijeras = idProducto FROM Productos WHERE codigoBarras = '2781920928472';
+SELECT @idProductoPinol = idProducto FROM Productos WHERE codigoBarras = '1278192182912';
 
 INSERT INTO Inventarios (
 	[cantidad]
@@ -134,7 +183,16 @@ INSERT INTO Inventarios (
 (23, '2025-11-15', @idProductoArrozConLeche, @idSucursal1),
 (23, '2026-02-12', @idProductoPiniaEnlatada, @idSucursal1),
 (35, '2026-06-06', @idProductoChipotles, @idSucursal1),
-(134, '2027-04-15', @idProductoAtun, @idSucursal1);
+(134, '2027-04-15', @idProductoAtun, @idSucursal1),
+(54, '2029-12-15', @idProductoSmirnoff, @idSucursal1),
+(12, '2025-01-13', @idProductoPanBlanco, @idSucursal1),
+(85, '2025-09-04', @idProductoCoca3L, @idSucursal1),
+(37, '2030-05-05', @idProductoPaqueteJabonNeutro, @idSucursal1),
+(16, '2025-06-10', @idProductoFlautasCongeladas, @idSucursal1),
+(40, '2025-01-03', @idProductoPiniaMielKilo, @idSucursal1),
+(25, '2026-06-08', @idProductoCostalAlimentoGatos, @idSucursal1),
+(41, '2050-12-31', @idProductoTijeras, @idSucursal1),
+(129, '2035-10-06', @idProductoPinol, @idSucursal1);
 
 --Llenar la tabla de clientes
 INSERT INTO Clientes ([contrasena],[fechaNacimiento],[nombreCompleto],[numeroTelefono])
