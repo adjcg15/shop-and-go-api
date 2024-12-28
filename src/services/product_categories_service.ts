@@ -3,13 +3,11 @@ import db from "../models";
 import SQLException from "../exceptions/services/SQLException";
 import ProductCategory from "../models/ProductCategory";
 
-async function getProductCategories() {
+async function getProductCategories(includeInactive: boolean = false) {
     const productCategoriesList: InferAttributes<ProductCategory>[] = [];
     try {
         const productCategories = await db.ProductCategory.findAll({
-            where: {
-                isActive: true
-            }
+            where: includeInactive ? {} : { isActive: true }
         });
 
         productCategories.forEach(productCategory => {
