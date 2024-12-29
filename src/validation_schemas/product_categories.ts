@@ -16,7 +16,7 @@ const updateProductCategoryValidationSchema: Schema = {
         in: ["body"],
         optional: { options: { nullable: true } },
         matches: {
-            options: [/^[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\\s]{1,255}$/],
+            options: [/^[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\s]{1,255}$/],
             errorMessage: "Body value name must contain only letters and spaces",
         },
         isLength:{
