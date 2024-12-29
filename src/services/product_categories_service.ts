@@ -5,12 +5,14 @@ import ProductCategory from "../models/ProductCategory";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { ErrorMessages } from "../types/enums/error_messages";
 import { HttpStatusCodes } from "../types/enums/http";
+import { UniqueConstraintError } from "sequelize";
 
 async function getProductCategories(includeInactive: boolean = false) {
     const productCategoriesList: InferAttributes<ProductCategory>[] = [];
     try {
         const productCategories = await db.ProductCategory.findAll({
-            where: includeInactive ? {} : { isActive: true }
+            where: includeInactive ? {} : { isActive: true },
+            order: [["name", "ASC"]]
         });
 
         productCategories.forEach(productCategory => {
@@ -61,7 +63,25 @@ async function updateProductCategory(idCategory: number, updatedInfo: Partial<Om
     return updatedCategory;
 }
 
+async function createProductCategory(categoryInfo: Omit<InferAttributes<ProductCategory>, "id">) {
+    let createdCategory = null;
+
+    try {
+        const dbCategory = await db.ProductCategory.create(categoryInfo);
+        createdCategory = dbCategory.toJSON();
+    } catch (error: any) {
+        if(error instanceof UniqueConstraintError) {
+            throw new BusinessLogicException(ErrorMessages.DUPLICATED_PRODUCT_CATEGORY);
+        } else {
+            throw new SQLException(error);
+        }
+    }
+
+    return createdCategory;
+}
+
 export {
     getProductCategories,
-    updateProductCategory
+    updateProductCategory,
+    createProductCategory
 }
