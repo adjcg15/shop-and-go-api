@@ -1,36 +1,76 @@
 import { InferAttributes } from "sequelize";
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
-import { getProductsInStore, getStoreInventories } from "../services/products_service";
+import {
+    getProductsInStore,
+    getProductWithStockInStore,
+    getStoreInventories,
+} from "../services/products_service";
 import { getStores } from "../services/stores_service";
 import { IProductsListPaginationQuery } from "../types/interfaces/request_queries";
-import { IStoreByIdParams } from "../types/interfaces/request_parameters";
-import { IProductByIdWithStock, IProductWithInventory} from "../types/interfaces/response_bodies";
+import {
+    IProductByBarCodeParams,
+    IProductByIdParams,
+    IStoreByIdParams,
+} from "../types/interfaces/request_parameters";
+import {
+    IProductByIdWithStock,
+    IProductWithInventory,
+    IProductWithStock,
+} from "../types/interfaces/response_bodies";
 import Store from "../models/Store";
-import { ICoordinatesBody, IProductsByIdBody } from "../types/interfaces/request_bodies";
-import { findNearestStore, validateNearestStoreDistance } from "../lib/distance_service";
+import {
+    ICoordinatesBody,
+    IProductsByIdBody,
+} from "../types/interfaces/request_bodies";
+import {
+    findNearestStore,
+    validateNearestStoreDistance,
+} from "../lib/distance_service";
 
 async function getProductsInStoreController(
-    req: Request<IStoreByIdParams, {}, {}, IProductsListPaginationQuery>, 
-    res: Response<IProductWithInventory[]>, 
+    req: Request<IStoreByIdParams, {}, {}, IProductsListPaginationQuery>,
+    res: Response<IProductWithInventory[]>,
     next: NextFunction
 ) {
     try {
         const { limit, offset, query, categoryFilter } = req.query;
         const { idStore } = req.params;
 
-        const products = await getProductsInStore(
-            idStore!,
-            { limit: limit!, offset: offset!, query: query!, categoryFilter }
-        );
-        
+        const products = await getProductsInStore(idStore!, {
+            limit: limit!,
+            offset: offset!,
+            query: query!,
+            categoryFilter,
+        });
+
         res.status(HttpStatusCodes.OK).json(products);
     } catch (error) {
         next(error);
     }
 }
 
-async function getStoresController(req: Request, res: Response<InferAttributes<Store>[]>, next: NextFunction) {
+async function getProductWithStockInStoreController(
+    req: Request<IProductByBarCodeParams & IStoreByIdParams, {}, {}, {}>,
+    res: Response<IProductWithStock>,
+    next: NextFunction
+) {
+    try {
+        const { barCode, idStore } = req.params;
+
+        const product = await getProductWithStockInStore(barCode!, idStore!);
+
+        res.status(HttpStatusCodes.OK).json(product);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function getStoresController(
+    req: Request,
+    res: Response<InferAttributes<Store>[]>,
+    next: NextFunction
+) {
     try {
         const stores = await getStores();
 
@@ -41,8 +81,8 @@ async function getStoresController(req: Request, res: Response<InferAttributes<S
 }
 
 async function getStoreInventoriesController(
-    req: Request<IStoreByIdParams, {}, IProductsByIdBody, {}>, 
-    res: Response<IProductByIdWithStock[]>, 
+    req: Request<IStoreByIdParams, {}, IProductsByIdBody, {}>,
+    res: Response<IProductByIdWithStock[]>,
     next: NextFunction
 ) {
     try {
@@ -77,7 +117,9 @@ async function getNearestStoreController(
 
             validateNearestStoreDistance(nearestStoreResult!.minDistance);
 
-            res.status(HttpStatusCodes.OK).json(nearestStoreResult!.nearestStore);
+            res.status(HttpStatusCodes.OK).json(
+                nearestStoreResult!.nearestStore
+            );
         }
     } catch (error) {
         next(error);
@@ -87,6 +129,7 @@ async function getNearestStoreController(
 export {
     getProductsInStoreController,
     getStoresController,
+    getProductWithStockInStoreController,
     getStoreInventoriesController,
-    getNearestStoreController
+    getNearestStoreController,
 };

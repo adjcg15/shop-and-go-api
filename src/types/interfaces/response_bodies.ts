@@ -1,37 +1,41 @@
 import { InferAttributes } from "sequelize";
 import Product from "../../models/Product";
-import PaymentMethod from "../../models/PaymentMethod";
 import Employee from "../../models/Employee";
 import Client from "../../models/Client";
 import UserRoles from "../enums/user_roles";
-import Issuer from "../../models/Issuer";
 import Inventory from "../../models/Inventory";
 import ProductCategory from "../../models/ProductCategory";
 
-interface IProductWithInventory extends InferAttributes<Product> { 
-    inventory: Inventory 
-};
+interface IProductWithInventory extends InferAttributes<Product> {
+    inventory: Inventory;
+}
+
+interface IProductWithStock extends InferAttributes<Product> {
+    stock: number;
+}
 
 interface IProductWithCategory extends InferAttributes<Product> {
-    category: ProductCategory
+    category: ProductCategory;
 }
 
 interface IPaymentMethodWithIssuer {
-    id: number,
-    cardholderName: string,
-    endCardNumber: string,
-    bankIssuer: string
+    id: number;
+    cardholderName: string;
+    endCardNumber: string;
+    bankIssuer: string;
 }
 
-interface IClientWithOptionalPassword extends Omit<InferAttributes<Client>, 'passwordHash'> {
-    passwordHash?: string,
-    token?: string
+interface IClientWithOptionalPassword
+    extends Omit<InferAttributes<Client>, "passwordHash"> {
+    passwordHash?: string;
+    token?: string;
 }
 
-interface IEmployeeWithPosition extends Omit<InferAttributes<Employee>, 'passwordHash'>{
-    passwordHash?: string,
-    position: UserRoles,
-    token?: string
+interface IEmployeeWithPosition
+    extends Omit<InferAttributes<Employee>, "passwordHash"> {
+    passwordHash?: string;
+    position: UserRoles;
+    token?: string;
 }
 
 interface IProductByIdWithStock {
@@ -45,17 +49,17 @@ interface IErrorMessageWithCode {
 }
 
 interface IClientAddress {
-    id: number,
-    street: string,
-    streetNumber: string,
-    apartmentNumber?: string,
-    neighborhood: string,
-    municipality: string,
-    city: string,
-    postalCode: string,
-    state: string,
-    latitude: number,
-    longitude: number
+    id: number;
+    street: string;
+    streetNumber: string;
+    apartmentNumber?: string;
+    neighborhood: string;
+    municipality: string;
+    city: string;
+    postalCode: string;
+    state: string;
+    latitude: number;
+    longitude: number;
 }
 
 export {
@@ -65,6 +69,7 @@ export {
     IPaymentMethodWithIssuer,
     IEmployeeWithPosition,
     IClientWithOptionalPassword,
+    IProductWithStock,
     IProductByIdWithStock,
-    IClientAddress
+    IClientAddress,
 };

@@ -1,6 +1,6 @@
 interface IStoreByIdParams {
     idStore?: number;
-};
+}
 
 interface IClientByIdParams {
     idClient?: number;
@@ -10,8 +10,12 @@ interface IProductByIdParams {
     idProduct?: number;
 }
 
+interface IProductByBarCodeParams {
+    barCode?: string;
+}
+
 interface IPaymentMethodByIdParams {
-    idPaymentMethod?: number
+    idPaymentMethod?: number;
 }
 
 interface IClientAddressId {
@@ -26,7 +30,8 @@ export {
     IStoreByIdParams,
     IClientByIdParams,
     IProductByIdParams,
+    IProductByBarCodeParams,
     IPaymentMethodByIdParams,
     IClientAddressId,
-    IProductCategoryIdParams
+    IProductCategoryIdParams,
 };
