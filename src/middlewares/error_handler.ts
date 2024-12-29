@@ -13,7 +13,7 @@ function handleApiErrorMiddleware(error: any, req: Request, res: Response<IError
     let statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
 
     if(error instanceof BusinessLogicException) {
-        statusCode = HttpStatusCodes.BAD_REQUEST;
+        statusCode = error.httpCode ?? HttpStatusCodes.BAD_REQUEST;
         response.details = error.message;
         response.errorCode = error.errorCode;
 

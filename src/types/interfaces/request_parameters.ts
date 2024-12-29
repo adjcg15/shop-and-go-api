@@ -18,10 +18,15 @@ interface IClientAddressId {
     idAddress?: number;
 }
 
+interface IProductCategoryIdParams {
+    idCategory?: number;
+}
+
 export {
     IStoreByIdParams,
     IClientByIdParams,
     IProductByIdParams,
     IPaymentMethodByIdParams,
-    IClientAddressId
+    IClientAddressId,
+    IProductCategoryIdParams
 };
