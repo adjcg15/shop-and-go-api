@@ -35,6 +35,29 @@ const updateProductCategoryValidationSchema: Schema = {
     }
 }
 
+const createProductCategoryValidationSchema: Schema = {
+    name: {
+        in: ["body"],
+        matches: {
+            options: [/^[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\s]{1,255}$/],
+            errorMessage: "Body value name must contain only letters and spaces",
+        },
+        isLength:{
+            options: { max: 255 },
+            errorMessage: "Body value name must have a maximum length of 255 characters"
+        },
+        trim: true
+    },
+    isActive: {
+        in: ["body"],
+        isBoolean: {
+            errorMessage: "Body value isActive must be a boolean",
+        },
+        toBoolean: true
+    }
+}
+
 export {
-    updateProductCategoryValidationSchema
+    updateProductCategoryValidationSchema,
+    createProductCategoryValidationSchema
 };
