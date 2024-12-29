@@ -1,7 +1,7 @@
 import { InferAttributes } from "sequelize";
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
-import { getProductCategories, updateProductCategory } from "../services/product_categories_service";
+import { createProductCategory, getProductCategories, updateProductCategory } from "../services/product_categories_service";
 import ProductCategory from "../models/ProductCategory";
 import UserRoles from "../types/enums/user_roles";
 import { IProductCategoryIdParams } from "../types/interfaces/request_parameters";
@@ -39,7 +39,23 @@ async function updateProductCategoryController(
     }
 }
 
+async function createProductCategoryController(
+    req: Request<IProductCategoryIdParams, {}, Omit<InferAttributes<ProductCategory>, "id">>, 
+    res: Response, 
+    next: NextFunction
+) {
+    try {
+        const category = req.body;
+        
+        const categoryCreated = await createProductCategory(category);
+        res.status(HttpStatusCodes.CREATED).json(categoryCreated);
+    } catch (error) {
+        next(error);
+    }
+}
+
 export {
     getProductCategoriesController,
-    updateProductCategoryController
+    updateProductCategoryController,
+    createProductCategoryController
 }
