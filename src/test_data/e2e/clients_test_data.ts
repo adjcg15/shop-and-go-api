@@ -165,10 +165,36 @@ async function insertE2ECreateAddressTestData() {
     }
 }
 
+async function insertE2EDeleteAddressTestData() {
+    const client = await db.Client.create({
+        passwordHash: "$2b$10$MqRHa10Cw5PzHIu2ihG5suOljpAlcw6i1FQKcyj2pRS2pTGa60ycC",
+        birthdate: "1990-05-15",
+        fullName: "John Doe",
+        phoneNumber: "1234567890"
+    });
+
+    const address = await db.Address.create({
+        street: "Main Street",
+        streetNumber: "123",
+        neighborhood: "Downtown",
+        municipality: "City",
+        city: "Metropolis",
+        postalCode: "12345",
+        state: "State",
+        latitude: 19.4326,
+        longitude: 99.1332,
+        isActive: true,
+        idClient: client.id
+    });
+
+    return { idClient: client.id, idAddress: address.id };
+}
+
 export { 
     insertE2ECreatePaymentMethodTestData,
     insertE2EDeletePaymentMethodTestData,
     insertE2EGetPaymentMethodsTestData,
     insertE2EGetAddressesTestData,
-    insertE2ECreateAddressTestData
+    insertE2ECreateAddressTestData,
+    insertE2EDeleteAddressTestData
 };
