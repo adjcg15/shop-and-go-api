@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
 import { IClientAddress, IPaymentMethodWithIssuer } from "../types/interfaces/response_bodies";
-import { IClientByIdParams, IPaymentMethodByIdParams } from "../types/interfaces/request_parameters";
-import { createAddressToClient, createClient, createPaymentMethodToClient, deletePaymentMethodFromClient, getAddressesFromClient, getPaymentMethodsFromClient } from "../services/clients_service";
+import { IClientAddressId, IClientByIdParams, IPaymentMethodByIdParams } from "../types/interfaces/request_parameters";
+import { createAddressToClient, createClient, createPaymentMethodToClient, deleteAddressFromClient, deletePaymentMethodFromClient, getAddressesFromClient, getPaymentMethodsFromClient } from "../services/clients_service";
 import { IClientBody, IClientAddressBody, IPaymentMethodBody } from "../types/interfaces/request_bodies";
 
 async function createPaymentMethodToClientController(
@@ -121,11 +121,28 @@ async function createAddressToClientController(
     }
 }
 
+async function deleteAddressFromClientController(
+    req: Request<IClientByIdParams & IClientAddressId, {}, {}, {}>,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const { idClient, idAddress } = req.params;
+
+        await deleteAddressFromClient(idClient!, idAddress!);
+
+        res.status(HttpStatusCodes.NO_CONTENT).json();
+    } catch (error) {
+        next(error);
+    }
+}
+
 export { 
     createPaymentMethodToClientController,
     deletePaymentMethodFromClientController,
     getPaymentMethodsFromClientController,
     getAddressesFromClientController,
     createAddressToClientController,
-    createClientController
+    createClientController,
+    deleteAddressFromClientController
 };
