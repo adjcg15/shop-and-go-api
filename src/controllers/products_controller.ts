@@ -1,7 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
 import { IPaginationQuery } from "../types/interfaces/request_queries";
-import { createProductWithInventories, getAllProducts, getProductInventoriesByIdProduct, updateProductWithInventories } from "../services/products_service";
+import {
+    createProductWithInventories,
+    getAllProducts,
+    getProductInventoriesByIdProduct,
+    updateProductWithInventories,
+} from "../services/products_service";
 import { IProductWithCategory } from "../types/interfaces/response_bodies";
 import { IProductByIdParams } from "../types/interfaces/request_parameters";
 import { InferAttributes } from "sequelize";
@@ -9,14 +14,17 @@ import Inventory from "../models/Inventory";
 import { IProductWithInventoriesBody } from "../types/interfaces/request_bodies";
 
 async function getAllProductsController(
-    req: Request<{}, {}, {}, IPaginationQuery>, 
-    res: Response<IProductWithCategory[]>, 
+    req: Request<{}, {}, {}, IPaginationQuery>,
+    res: Response<IProductWithCategory[]>,
     next: NextFunction
 ) {
     try {
         const { limit, offset } = req.query;
 
-        const products = await getAllProducts({ limit: limit!, offset: offset! });
+        const products = await getAllProducts({
+            limit: limit!,
+            offset: offset!,
+        });
         res.status(HttpStatusCodes.OK).json(products);
     } catch (error) {
         next(error);
@@ -24,8 +32,8 @@ async function getAllProductsController(
 }
 
 async function getProductInventoriesByIdProductController(
-    req: Request<IProductByIdParams, {}, {}, {}>, 
-    res: Response<InferAttributes<Inventory>[]>, 
+    req: Request<IProductByIdParams, {}, {}, {}>,
+    res: Response<InferAttributes<Inventory>[]>,
     next: NextFunction
 ) {
     try {
@@ -44,20 +52,27 @@ async function createProductWithInventoriesController(
     next: NextFunction
 ) {
     try {
-        const { barCode, name, description, salePrice, imageUrl, maximumAmount, idCategory, inventories } = req.body;
+        const {
+            barCode,
+            name,
+            description,
+            salePrice,
+            imageUrl,
+            maximumAmount,
+            idCategory,
+            inventories,
+        } = req.body;
 
-        await createProductWithInventories(
-            { 
-                barCode: barCode!, 
-                name, 
-                description, 
-                salePrice, 
-                imageUrl, 
-                maximumAmount, 
-                idCategory, 
-                inventories
-            }
-        );
+        await createProductWithInventories({
+            barCode: barCode!,
+            name,
+            description,
+            salePrice,
+            imageUrl,
+            maximumAmount,
+            idCategory,
+            inventories,
+        });
 
         res.status(HttpStatusCodes.CREATED).json();
     } catch (error) {
@@ -71,22 +86,29 @@ async function updateProductWithInventoriesController(
     next: NextFunction
 ) {
     try {
-        const { name, description, salePrice, imageUrl, maximumAmount, isActive, idCategory, inventories } = req.body;
+        const {
+            name,
+            description,
+            salePrice,
+            imageUrl,
+            maximumAmount,
+            isActive,
+            idCategory,
+            inventories,
+        } = req.body;
         const { idProduct } = req.params;
 
-        await updateProductWithInventories(
-            { 
-                idProduct: idProduct!,
-                name, 
-                description, 
-                salePrice, 
-                imageUrl, 
-                maximumAmount,
-                isActive: isActive!, 
-                idCategory, 
-                inventories
-            }
-        );
+        await updateProductWithInventories({
+            idProduct: idProduct!,
+            name,
+            description,
+            salePrice,
+            imageUrl,
+            maximumAmount,
+            isActive: isActive!,
+            idCategory,
+            inventories,
+        });
 
         res.status(HttpStatusCodes.CREATED).json();
     } catch (error) {
@@ -94,9 +116,9 @@ async function updateProductWithInventoriesController(
     }
 }
 
-export{
+export {
     getAllProductsController,
     getProductInventoriesByIdProductController,
     createProductWithInventoriesController,
-    updateProductWithInventoriesController
-}
+    updateProductWithInventoriesController,
+};
