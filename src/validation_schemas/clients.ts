@@ -76,6 +76,55 @@ const createClientSchema: Schema = {
     }
 }
 
+const updateClientSchema: Schema = {
+    anyField: {
+        custom: {
+            options: (value, { req }) => {
+                const { fullName, birthdate } = req.body;
+                return fullName || birthdate;
+            },
+            errorMessage: "At least one field (fullName or birthdate) must be provided"
+        }
+    },
+    birthdate: {
+        in: ["body"],
+        optional: true,
+        matches: {
+            options: /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\d|3[0-1])$/,
+            errorMessage: "Birthdate must be in the format YYYY-MM-DD"
+        },
+        custom: {
+            options: (value: any) => {
+                const birthdate = new Date(value);
+                const today = new Date();
+
+                const minDate = new Date(today.getFullYear() - 120, today.getMonth(), today.getDate());
+                const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+
+                return birthdate.getTime() <= maxDate.getTime() && birthdate.getTime() >= minDate.getTime();
+            },
+            errorMessage: "Birthdate must be between 18 and 120 years ago"
+        }
+    },
+    fullName: {
+        in: ["body"],
+        optional: true,
+        matches: {
+            options: [/^[\p{L}\s\-']+$/u],
+            errorMessage: "Full name can only contain letters, spaces, hyphens, and apostrophes"
+        },
+        custom: {
+            options: (value: any) => {
+                const nameParts = value.split(" ");
+                return nameParts.length >= 2;
+            },
+            errorMessage: "Full name must contain at least a first name and a last name"
+        }
+    }
+};
+
+
 export {
-    createClientSchema
+    createClientSchema,
+    updateClientSchema
 };
