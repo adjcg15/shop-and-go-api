@@ -286,6 +286,42 @@ async function createClient(client: {
   }
 }
 
+async function updateClient(
+  idClient: number,
+  newClientInfo: {
+    birthdate?: string;
+    fullName?: string;
+  }
+) {
+  try {
+    const client = await Client.findByPk(idClient);
+
+    if (client === null) {
+      throw new BusinessLogicException(
+        ErrorMessages.CLIENT_NOT_FOUND,
+      );
+    }
+
+    const { birthdate, fullName } = newClientInfo;
+
+    await db.Client.update(
+      {
+        ...(birthdate && { birthdate }),
+        ...(fullName && { fullName }),
+      },
+      {
+        where: { id: idClient },
+      }
+    );
+  } catch (error: any) {
+    if (error.isTrusted) {
+      throw error;
+    } else {
+      throw new SQLException(error);
+    }
+  }
+}
+
 async function createAddressToClient(
   idClient: number,
   address: {
@@ -384,6 +420,7 @@ export {
   getClientById,
   getAddressesFromClient,
   createClient,
+  updateClient,
   createAddressToClient,
   deleteAddressFromClient,
 };
