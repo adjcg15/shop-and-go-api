@@ -7,7 +7,7 @@ import {
     getProductInventoriesByIdProduct,
     updateProductWithInventories,
 } from "../services/products_service";
-import { IProductWithCategory } from "../types/interfaces/response_bodies";
+import { IProduct } from "../types/interfaces/response_bodies";
 import { IProductByIdParams } from "../types/interfaces/request_parameters";
 import { InferAttributes } from "sequelize";
 import Inventory from "../models/Inventory";
@@ -15,7 +15,7 @@ import { IProductWithInventoriesBody } from "../types/interfaces/request_bodies"
 
 async function getAllProductsController(
     req: Request<{}, {}, {}, IPaginationQuery>,
-    res: Response<IProductWithCategory[]>,
+    res: Response<IProduct[]>,
     next: NextFunction
 ) {
     try {

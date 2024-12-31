@@ -23,22 +23,12 @@ describe("/api/products", () => {
         expect(response.status).toBe(HttpStatusCodes.OK);
         expect(Array.isArray(products)).toBe(true);
         expect(products.length).toBe(3);
-        products.forEach((product:any) => {
+        products.forEach((product: any) => {
             expect(product).toMatchObject({
                 id: expect.any(Number),
                 barCode: expect.any(String),
                 name: expect.any(String),
-                description: expect.any(String),
                 imageUrl: expect.any(String),
-                salePrice: expect.any(Number),
-                maximumAmount: expect.any(Number),
-                idCategory: expect.any(Number)
-            });
-
-            expect(product.category).toMatchObject({
-                id: expect.any(Number),
-                name: expect.any(String),
-                isActive: expect.any(Boolean)
             });
         });
     });

@@ -6,7 +6,7 @@ import {
     IProductWithInventory,
     IProductWithStock,
 } from "../types/interfaces/response_bodies";
-import { IProductWithCategory } from "../types/interfaces/response_bodies";
+import { IProduct } from "../types/interfaces/response_bodies";
 import Inventory from "../models/Inventory";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { ErrorMessages } from "../types/enums/error_messages";
@@ -82,28 +82,23 @@ async function getProductsInStore(
 }
 
 async function getAllProducts(pagination: { offset: number; limit: number }) {
-    const productsList: IProductWithCategory[] = [];
+    const productsList: IProduct[] = [];
 
     try {
         const { offset, limit } = pagination;
 
         const products = await db.Product.findAll({
-            where: { isActive: true },
-            include: [
-                {
-                    association: db.Product.associations.category,
-                },
-            ],
             limit,
             offset,
         });
 
         products.forEach((product) => {
-            const productInfo = {
-                ...product.toJSON(),
-                category: product.category!,
-            };
-            productsList.push(productInfo);
+            productsList.push({
+                id: product.id,
+                barCode: product.barCode,
+                name: product.name,
+                imageUrl: product.imageUrl,
+            });
         });
     } catch (error: any) {
         if (error.isTrusted) {
