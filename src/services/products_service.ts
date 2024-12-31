@@ -15,8 +15,11 @@ import {
     GetStoreInventoriesErrorCodes,
     GetProductWithStockInStoreErrorCodes,
     UpdateProductErrorCodes,
+    GetProductErrorCodes,
 } from "../types/enums/error_codes";
 import { IInventoryWithOptionalProductIdBody } from "../types/interfaces/request_bodies";
+import Product from "../models/Product";
+import { HttpStatusCodes } from "../types/enums/http";
 
 async function getProductsInStore(
     idStore: number,
@@ -109,6 +112,33 @@ async function getAllProducts(pagination: { offset: number; limit: number }) {
     }
 
     return productsList;
+}
+
+async function getProduct(barCode: string) {
+    let productInfo: InferAttributes<Product> | null = null;
+    try {
+        const product = await db.Product.findOne({
+            where: { barCode },
+        });
+
+        if (product === null) {
+            throw new BusinessLogicException(
+                ErrorMessages.PRODUCT_NOT_FOUND,
+                GetProductErrorCodes.PRODUCT_NOT_FOUND,
+                HttpStatusCodes.NOT_FOUND
+            );
+        }
+
+        productInfo = { ...product.toJSON() };
+    } catch (error: any) {
+        if (error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+
+    return productInfo;
 }
 
 async function getProductWithStockInStore(barCode: string, idStore: number) {
@@ -461,6 +491,7 @@ async function getStoreInventories(idStore: number, productsId: number[]) {
 export {
     getProductsInStore,
     getAllProducts,
+    getProduct,
     getProductInventoriesByIdProduct,
     getProductWithStockInStore,
     createProductWithInventories,

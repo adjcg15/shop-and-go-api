@@ -5,6 +5,7 @@ import { injectDefaultGetProductsQueryMiddleware } from "../middlewares/value_in
 import {
     createProductWithInventoriesController,
     getAllProductsController,
+    getProductController,
     getProductInventoriesByIdProductController,
     updateProductWithInventoriesController,
 } from "../controllers/products_controller";
@@ -14,6 +15,7 @@ import {
     createProductWithInventoriesValidationsSchema,
     getAllProductsValidationSchema,
     getProductInventoriesValidationSchema,
+    getProductValidationSchema,
     updateProductWithInventoriesValidationsSchema,
 } from "../validation_schemas/products";
 import UserRoles from "../types/enums/user_roles";
@@ -25,6 +27,12 @@ router.get(
     checkSchema(getAllProductsValidationSchema),
     injectDefaultGetProductsQueryMiddleware,
     getAllProductsController
+);
+
+router.get(
+    "/:barCode",
+    checkSchema(getProductValidationSchema),
+    getProductController
 );
 
 router.post(

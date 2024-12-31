@@ -4,14 +4,19 @@ import { IPaginationQuery } from "../types/interfaces/request_queries";
 import {
     createProductWithInventories,
     getAllProducts,
+    getProduct,
     getProductInventoriesByIdProduct,
     updateProductWithInventories,
 } from "../services/products_service";
 import { IProduct } from "../types/interfaces/response_bodies";
-import { IProductByIdParams } from "../types/interfaces/request_parameters";
+import {
+    IProductByBarCodeParams,
+    IProductByIdParams,
+} from "../types/interfaces/request_parameters";
 import { InferAttributes } from "sequelize";
 import Inventory from "../models/Inventory";
 import { IProductWithInventoriesBody } from "../types/interfaces/request_bodies";
+import Product from "../models/Product";
 
 async function getAllProductsController(
     req: Request<{}, {}, {}, IPaginationQuery>,
@@ -26,6 +31,22 @@ async function getAllProductsController(
             offset: offset!,
         });
         res.status(HttpStatusCodes.OK).json(products);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function getProductController(
+    req: Request<IProductByBarCodeParams, {}, {}, {}>,
+    res: Response<InferAttributes<Product>>,
+    next: NextFunction
+) {
+    try {
+        const { barCode } = req.params;
+
+        const product = await getProduct(barCode!);
+
+        res.status(HttpStatusCodes.OK).json(product);
     } catch (error) {
         next(error);
     }
@@ -118,6 +139,7 @@ async function updateProductWithInventoriesController(
 
 export {
     getAllProductsController,
+    getProductController,
     getProductInventoriesByIdProductController,
     createProductWithInventoriesController,
     updateProductWithInventoriesController,
