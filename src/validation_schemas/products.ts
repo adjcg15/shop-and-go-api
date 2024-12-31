@@ -65,6 +65,22 @@ const getAllProductsValidationSchema: Schema = {
     },
 };
 
+const getProductValidationSchema: Schema = {
+    barCode: {
+        in: ["params"],
+        isString: {
+            errorMessage: "Barcode must be a string.",
+        },
+        matches: {
+            options: [/^\d{13}$/],
+            errorMessage: "Barcode must have exactly 13 numeric characters.",
+        },
+        notEmpty: {
+            errorMessage: "Barcode cannot be empty.",
+        },
+    },
+};
+
 const getProductInventoriesValidationSchema: Schema = {
     idProduct: {
         in: ["params"],
@@ -78,7 +94,7 @@ const getProductInventoriesValidationSchema: Schema = {
 
 const getProductWithStockInStoreValidationSchema: Schema = {
     barCode: {
-        in: ["body"],
+        in: ["params"],
         isString: {
             errorMessage: "Barcode must be a string.",
         },
@@ -386,6 +402,7 @@ const getStoreInventoriesValidationSchema: Schema = {
 export {
     getProductsInStoreValidationSchema,
     getAllProductsValidationSchema,
+    getProductValidationSchema,
     getProductInventoriesValidationSchema,
     createProductWithInventoriesValidationsSchema,
     updateProductWithInventoriesValidationsSchema,

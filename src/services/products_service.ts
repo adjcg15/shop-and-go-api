@@ -6,7 +6,7 @@ import {
     IProductWithInventory,
     IProductWithStock,
 } from "../types/interfaces/response_bodies";
-import { IProductWithCategory } from "../types/interfaces/response_bodies";
+import { IProduct } from "../types/interfaces/response_bodies";
 import Inventory from "../models/Inventory";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { ErrorMessages } from "../types/enums/error_messages";
@@ -15,8 +15,11 @@ import {
     GetStoreInventoriesErrorCodes,
     GetProductWithStockInStoreErrorCodes,
     UpdateProductErrorCodes,
+    GetProductErrorCodes,
 } from "../types/enums/error_codes";
 import { IInventoryWithOptionalProductIdBody } from "../types/interfaces/request_bodies";
+import Product from "../models/Product";
+import { HttpStatusCodes } from "../types/enums/http";
 
 async function getProductsInStore(
     idStore: number,
@@ -82,28 +85,23 @@ async function getProductsInStore(
 }
 
 async function getAllProducts(pagination: { offset: number; limit: number }) {
-    const productsList: IProductWithCategory[] = [];
+    const productsList: IProduct[] = [];
 
     try {
         const { offset, limit } = pagination;
 
         const products = await db.Product.findAll({
-            where: { isActive: true },
-            include: [
-                {
-                    association: db.Product.associations.category,
-                },
-            ],
             limit,
             offset,
         });
 
         products.forEach((product) => {
-            const productInfo = {
-                ...product.toJSON(),
-                category: product.category!,
-            };
-            productsList.push(productInfo);
+            productsList.push({
+                id: product.id,
+                barCode: product.barCode,
+                name: product.name,
+                imageUrl: product.imageUrl,
+            });
         });
     } catch (error: any) {
         if (error.isTrusted) {
@@ -114,6 +112,33 @@ async function getAllProducts(pagination: { offset: number; limit: number }) {
     }
 
     return productsList;
+}
+
+async function getProduct(barCode: string) {
+    let productInfo: InferAttributes<Product> | null = null;
+    try {
+        const product = await db.Product.findOne({
+            where: { barCode },
+        });
+
+        if (product === null) {
+            throw new BusinessLogicException(
+                ErrorMessages.PRODUCT_NOT_FOUND,
+                GetProductErrorCodes.PRODUCT_NOT_FOUND,
+                HttpStatusCodes.NOT_FOUND
+            );
+        }
+
+        productInfo = { ...product.toJSON() };
+    } catch (error: any) {
+        if (error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+
+    return productInfo;
 }
 
 async function getProductWithStockInStore(barCode: string, idStore: number) {
@@ -466,6 +491,7 @@ async function getStoreInventories(idStore: number, productsId: number[]) {
 export {
     getProductsInStore,
     getAllProducts,
+    getProduct,
     getProductInventoriesByIdProduct,
     getProductWithStockInStore,
     createProductWithInventories,

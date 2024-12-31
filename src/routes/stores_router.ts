@@ -29,6 +29,7 @@ router.get(
 router.get(
     "/:idStore/products/:barCode",
     checkSchema(getProductWithStockInStoreValidationSchema),
+    validateRequestSchemaMiddleware,
     getProductWithStockInStoreController
 );
 
