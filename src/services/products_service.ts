@@ -6,7 +6,6 @@ import {
     IProductWithInventory,
     IProductWithStock,
 } from "../types/interfaces/response_bodies";
-import { IProduct } from "../types/interfaces/response_bodies";
 import Inventory from "../models/Inventory";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { ErrorMessages } from "../types/enums/error_messages";
@@ -85,7 +84,7 @@ async function getProductsInStore(
 }
 
 async function getAllProducts(pagination: { offset: number; limit: number }) {
-    const productsList: IProduct[] = [];
+    const productsList: InferAttributes<Product>[] = [];
 
     try {
         const { offset, limit } = pagination;
@@ -97,10 +96,7 @@ async function getAllProducts(pagination: { offset: number; limit: number }) {
 
         products.forEach((product) => {
             productsList.push({
-                id: product.id,
-                barCode: product.barCode,
-                name: product.name,
-                imageUrl: product.imageUrl,
+                ...product.toJSON(),
             });
         });
     } catch (error: any) {
@@ -110,7 +106,6 @@ async function getAllProducts(pagination: { offset: number; limit: number }) {
             throw new SQLException(error);
         }
     }
-
     return productsList;
 }
 

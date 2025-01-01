@@ -8,7 +8,6 @@ import {
     getProductInventoriesByIdProduct,
     updateProductWithInventories,
 } from "../services/products_service";
-import { IProduct } from "../types/interfaces/response_bodies";
 import {
     IProductByBarCodeParams,
     IProductByIdParams,
@@ -20,7 +19,7 @@ import Product from "../models/Product";
 
 async function getAllProductsController(
     req: Request<{}, {}, {}, IPaginationQuery>,
-    res: Response<IProduct[]>,
+    res: Response<InferAttributes<Product>[]>,
     next: NextFunction
 ) {
     try {

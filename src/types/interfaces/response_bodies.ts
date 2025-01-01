@@ -14,13 +14,6 @@ interface IProductWithStock extends InferAttributes<Product> {
     stock: number;
 }
 
-interface IProduct {
-    id: number;
-    barCode: string;
-    name: string;
-    imageUrl: string;
-}
-
 interface IPaymentMethodWithIssuer {
     id: number;
     cardholderName: string;
@@ -67,7 +60,6 @@ interface IClientAddress {
 
 export {
     IProductWithInventory,
-    IProduct,
     IErrorMessageWithCode,
     IPaymentMethodWithIssuer,
     IEmployeeWithPosition,

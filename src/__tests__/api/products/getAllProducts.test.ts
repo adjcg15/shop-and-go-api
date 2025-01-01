@@ -28,7 +28,11 @@ describe("/api/products", () => {
                 id: expect.any(Number),
                 barCode: expect.any(String),
                 name: expect.any(String),
+                description: expect.any(String),
                 imageUrl: expect.any(String),
+                salePrice: expect.any(Number),
+                maximumAmount: expect.any(Number),
+                idCategory: expect.any(Number),
             });
         });
     });
