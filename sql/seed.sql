@@ -29,6 +29,7 @@ DECLARE @idProductoPiniaMielKilo INT;
 DECLARE @idProductoCostalAlimentoGatos INT;
 DECLARE @idProductoTijeras INT;
 DECLARE @idProductoPinol INT;
+DECLARE @idProductoQuesoOaxaca INT;
 
 DECLARE @idCategoriaLacteos INT;
 DECLARE @idCategoriaEnlatados INT;
@@ -118,7 +119,8 @@ INSERT INTO Productos (
 ('2892002122231', 'Piña Miel por kilo', 'La piña es ideal para comer en cualquier hora del día, ya sea como un postre dulce o salado.', 'https://res.cloudinary.com/dblao5461/image/upload/v1735361543/shopandgo/cjx9ssxj4un4mnqkr1nc.webp', 27, 15, 1, @idCategoriaFrutasYVerduras),
 ('0011822293365', 'Alimento para gatos Minino Adultos pollo y res 3kg', '¡Dale a tu felino lo mejor con nuestras croquetas para gato y comida para gatos! Ofrecemos una variedad de opciones, desde comida húmeda para gatos hasta croquetas para gatos bebés, asegurando una nutrición completa. Prueba nuestras mejores croquetas para gato o aventúrate con la dieta BARF para gatos. También tenemos recetas de comida casera para gatos. ¡Tu gato lo agradecerá! ¡Accede a todo nuestro catálogo de Alimento para Gatos en Tu Tienda en Línea!', 'https://res.cloudinary.com/dblao5461/image/upload/v1735361833/shopandgo/w0srildg27gudm4piylj.webp', 213, 2, 1, @idCategoriaAlimentosMascota),
 ('2781920928472', 'Tijeras Prichos de uso general', 'En la casa, oficina y escuela no pueden faltar las tijeras, así que lleva contigo éstas que son de uso general. Recuerda que ya puedes realizar tus compras en nuestra tienda en línea, donde encontrarás todo lo necesario para tu día a día o para surtir la despensa de tu hogar. Compra lo que necesites y recíbelo hasta la puerta de tu hogar, pues contamos con nuestro servicio de entregas a domicilio.', 'https://res.cloudinary.com/dblao5461/image/upload/v1735362069/shopandgo/t1isbwr96fpzumxzwr9h.webp', 27, 5, 1, @idCategoriaPapeleria),
-('1278192182912', 'Limpiador Multiusos Pinol El Original 2L', 'Pinol El Original es un Multilimpiador desinfectante que elimina el 99.9% de virus y bacterias.', 'https://res.cloudinary.com/dblao5461/image/upload/v1735362412/shopandgo/yqx5xj2zcgjszt1073i9.webp', 55, 10, 1, @idCategoriaLimpiezaHogar);
+('1278192182912', 'Limpiador Multiusos Pinol El Original 2L', 'Pinol El Original es un Multilimpiador desinfectante que elimina el 99.9% de virus y bacterias.', 'https://res.cloudinary.com/dblao5461/image/upload/v1735362412/shopandgo/yqx5xj2zcgjszt1073i9.webp', 55, 10, 1, @idCategoriaLimpiezaHogar),
+('1278192182913', 'Queso Oaxaca La Villita 200 g', 'Te presentamos el Queso Oaxaca La Villita 200 g, ya muy conocido como el favorito de los mexicanos. Lo encuentras en el Departamento de Quesos, Salchichas y Deli. Es una variante de consistencia blanda y su color más común es el blanco. Su origen es específicamente de los Valles Centrales del Estado de Oaxaca, de allí se deriva su nombre.', 'https://res.cloudinary.com/ddxhwrolb/image/upload/v1735783664/shopandgo/szeqnhwngvdzwd3ywggh.webp', 47.5, 10, 0, @idCategoriaLacteos);
 
 --Llenar las sucursales con sus inventarios
 INSERT INTO Sucursales (
@@ -159,6 +161,7 @@ SELECT @idProductoPiniaMielKilo = idProducto FROM Productos WHERE codigoBarras =
 SELECT @idProductoCostalAlimentoGatos = idProducto FROM Productos WHERE codigoBarras = '0011822293365';
 SELECT @idProductoTijeras = idProducto FROM Productos WHERE codigoBarras = '2781920928472';
 SELECT @idProductoPinol = idProducto FROM Productos WHERE codigoBarras = '1278192182912';
+SELECT @idProductoQuesoOaxaca = idProducto FROM Productos WHERE codigoBarras = '1278192182913';
 
 INSERT INTO Inventarios (
 	[cantidad]
@@ -192,7 +195,8 @@ INSERT INTO Inventarios (
 (40, '2025-01-03', @idProductoPiniaMielKilo, @idSucursal1),
 (25, '2026-06-08', @idProductoCostalAlimentoGatos, @idSucursal1),
 (41, '2050-12-31', @idProductoTijeras, @idSucursal1),
-(129, '2035-10-06', @idProductoPinol, @idSucursal1);
+(129, '2035-10-06', @idProductoPinol, @idSucursal1),
+(129, '2025-10-06', @idProductoQuesoOaxaca, @idSucursal1);
 
 --Llenar la tabla de clientes
 INSERT INTO Clientes ([contrasena],[fechaNacimiento],[nombreCompleto],[numeroTelefono])

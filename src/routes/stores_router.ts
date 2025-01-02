@@ -15,11 +15,14 @@ import {
 } from "../validation_schemas/products";
 import { injectDefaultGetProductsInStoreQueryMiddleware } from "../middlewares/value_injectors";
 import { getNearestStoreValidationSchema } from "../validation_schemas/addresses";
+import UserRoles from "../types/enums/user_roles";
+import { initializeOptionalSession } from "../middlewares/access_control";
 
 const router = Router();
 
 router.get(
     "/:idStore/products",
+    initializeOptionalSession([UserRoles.SALES_EXECUTIVE]),
     checkSchema(getProductsInStoreValidationSchema),
     validateRequestSchemaMiddleware,
     injectDefaultGetProductsInStoreQueryMiddleware,

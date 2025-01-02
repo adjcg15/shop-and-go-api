@@ -27,6 +27,7 @@ import {
     findNearestStore,
     validateNearestStoreDistance,
 } from "../lib/distance_service";
+import UserRoles from "../types/enums/user_roles";
 
 async function getProductsInStoreController(
     req: Request<IStoreByIdParams, {}, {}, IProductsListPaginationQuery>,
@@ -34,15 +35,22 @@ async function getProductsInStoreController(
     next: NextFunction
 ) {
     try {
+        const user = req.user;
+        const includeInactiveProducts =
+            user?.userRole === UserRoles.SALES_EXECUTIVE;
         const { limit, offset, query, categoryFilter } = req.query;
         const { idStore } = req.params;
 
-        const products = await getProductsInStore(idStore!, {
-            limit: limit!,
-            offset: offset!,
-            query: query!,
-            categoryFilter,
-        });
+        const products = await getProductsInStore(
+            idStore!,
+            {
+                limit: limit!,
+                offset: offset!,
+                query: query!,
+                categoryFilter,
+            },
+            includeInactiveProducts
+        );
 
         res.status(HttpStatusCodes.OK).json(products);
     } catch (error) {

@@ -27,7 +27,8 @@ async function getProductsInStore(
         limit: number;
         query: string;
         categoryFilter?: number;
-    }
+    },
+    includeInactive: boolean = false
 ) {
     const productsList: IProductWithInventory[] = [];
 
@@ -39,7 +40,7 @@ async function getProductsInStore(
                 {
                     association: db.Inventory.associations.product,
                     where: {
-                        isActive: true,
+                        ...(includeInactive ? {} : { isActive: true }),
                         ...(categoryFilter
                             ? { idCategory: categoryFilter }
                             : {}),
@@ -92,6 +93,7 @@ async function getAllProducts(pagination: { offset: number; limit: number }) {
         const products = await db.Product.findAll({
             limit,
             offset,
+            order: [["id", "DESC"]],
         });
 
         products.forEach((product) => {
