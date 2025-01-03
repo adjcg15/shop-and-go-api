@@ -6,13 +6,12 @@ import Store from "../models/Store";
 async function getStores() {
     const storesList: InferAttributes<Store>[] = [];
     try {
-        const stores = await db.Store.findAll();
+        const stores = await db.Store.findAll({
+            order: [["name", "ASC"]]
+        });
 
-        stores.forEach(stores => {
-            const storesInfo = {
-                ...stores!.toJSON()
-            }
-            storesList.push(storesInfo);
+        stores.forEach(store => {
+            storesList.push(store.toJSON());
         });
     } catch (error: any) {
         if(error.isTrusted) {
