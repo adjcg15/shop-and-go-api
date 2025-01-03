@@ -8,7 +8,7 @@ import UserRoles from "../../../types/enums/user_roles";
 import { signToken } from "../../../lib/token_store";
 import { insertE2EGetProductCategoeriesTestData } from "../../../test_data/e2e/product_categories_test_data";
 
-describe("/api/product-categories", () => {
+describe("GET /api/product-categories", () => {
     let app: Express;
 
     beforeAll(async () => {
