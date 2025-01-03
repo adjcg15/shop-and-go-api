@@ -3,10 +3,10 @@ import createApp from "../../../lib/app";
 import { Express } from "express";
 import { HttpStatusCodes } from "../../../types/enums/http";
 import db from "../../../models";
-import { insertE2EGetProductCategoeriesTestData } from "../../../test_data/e2e/stores_test_data";
 import { Sequelize } from "sequelize";
 import UserRoles from "../../../types/enums/user_roles";
 import { signToken } from "../../../lib/token_store";
+import { insertE2EGetProductCategoeriesTestData } from "../../../test_data/e2e/product_categories_test_data";
 
 describe("/api/product-categories", () => {
     let app: Express;

@@ -149,14 +149,6 @@ async function insertE2EGetProductsWithStockInStoreTestData() {
     };
 }
 
-async function insertE2EGetProductCategoeriesTestData() {
-    await db.ProductCategory.create({ name: "Lacteos", isActive: false });
-    await db.ProductCategory.create({ name: "Enlatados", isActive: true });
-    await db.ProductCategory.create({ name: "Juguetes", isActive: false });
-    await db.ProductCategory.create({ name: "Higiene personal", isActive: true });
-    await db.ProductCategory.create({ name: "Productos congelados", isActive: true });
-}
-
 async function insertE2EGetIssuingBanksTestData() {
     await db.Issuer.create({ name: "Banamex" });
     await db.Issuer.create({ name: "Santander" });
@@ -306,7 +298,6 @@ async function insertE2EGetNearestStoreTestData() {
 export {
     insertE2EGetProductsByStoreTestData,
     insertE2EGetProductsWithStockInStoreTestData,
-    insertE2EGetProductCategoeriesTestData,
     insertE2EGetIssuingBanksTestData,
     insertE2EGetStoresTestData,
     insertE2EGetStoreInventoriesTestData,
