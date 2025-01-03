@@ -5,6 +5,8 @@ import { HttpStatusCodes } from "../../../types/enums/http";
 import db from "../../../models";
 import { insertE2EGetProductCategoeriesTestData } from "../../../test_data/e2e/stores_test_data";
 import { Sequelize } from "sequelize";
+import UserRoles from "../../../types/enums/user_roles";
+import { signToken } from "../../../lib/token_store";
 
 describe("/api/product-categories", () => {
     let app: Express;
@@ -28,6 +30,43 @@ describe("/api/product-categories", () => {
             expect(productCategory).toMatchObject({
                 id: expect.any(Number),
                 name: expect.any(String),
+                isActive: true
+            });
+        });
+    });
+
+    it("Should return an array of 3 product categories registered in database", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.CLIENT });
+        const response = await request(app)
+            .get(`/api/product-categories`)
+            .set("Authorization", `Bearer ${token}`);
+        const productCategories = response.body;
+
+        expect(response.status).toBe(HttpStatusCodes.OK);
+        expect(Array.isArray(productCategories)).toBe(true);
+        expect(productCategories.length).toBe(3);
+        productCategories.forEach((productCategory:any) => {
+            expect(productCategory).toMatchObject({
+                id: expect.any(Number),
+                name: expect.any(String),
+                isActive: true
+            });
+        });
+    });
+
+    it("Should return an array of 5 all product categories registered in database", async() => {
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .get(`/api/product-categories`)
+            .set("Authorization", `Bearer ${token}`);
+        const productCategories = response.body;
+
+        expect(response.status).toBe(HttpStatusCodes.OK);
+        expect(Array.isArray(productCategories)).toBe(true);
+        productCategories.forEach((productCategory:any) => {
+            expect(productCategory).toMatchObject({
+                id: expect.any(Number),
+                name: expect.any(String),
                 isActive: expect.any(Boolean)
             });
         });
@@ -35,10 +74,10 @@ describe("/api/product-categories", () => {
 
     it("should display an error message indicating that the database server connection failed", async () => {
         await db.sequelize.close();
-        db.sequelize = new Sequelize('database', 'username', 'password', {
-            host: 'invalid-host',
+        db.sequelize = new Sequelize("database", "username", "password", {
+            host: "invalid-host",
             port: 9999,
-            dialect: 'mssql',
+            dialect: "mssql",
         });
         
         const response = await request(app).get(`/api/product-categories`);
@@ -47,10 +86,10 @@ describe("/api/product-categories", () => {
     });
 
     afterAll(async () => {
-        db.sequelize = new Sequelize('database', 'username', 'password', {
-            host: 'localhost',
+        db.sequelize = new Sequelize("database", "username", "password", {
+            host: "localhost",
             port: 1433,
-            dialect: 'mssql',
+            dialect: "mssql",
         });
         await db.sequelize.close();
     });
