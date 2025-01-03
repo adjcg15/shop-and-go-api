@@ -8,6 +8,15 @@ async function insertE2EGetProductCategoeriesTestData() {
     await db.ProductCategory.create({ name: "Productos congelados", isActive: true });
 }
 
+async function insertE2EUpdateProductCategoryTestData() {
+    const category = await db.ProductCategory.create({ name: "Lacteos", isActive: true });
+    
+    return {
+        idCategory: category.id
+    };
+}
+
 export {
-    insertE2EGetProductCategoeriesTestData
+    insertE2EGetProductCategoeriesTestData,
+    insertE2EUpdateProductCategoryTestData
 };
