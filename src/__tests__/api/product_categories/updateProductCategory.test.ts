@@ -100,7 +100,7 @@ describe("PATCH /api/product-categories/:idCategory", () => {
         expect(Array.isArray(response.body.details)).toBe(true);
     });
 
-    it("Should validate empty name body value", async () => {
+    it("Should validate name body value format", async () => {
         const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
         const response = await request(app)
             .patch(`/api/product-categories/${idCategory}`)
