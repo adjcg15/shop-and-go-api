@@ -16,7 +16,7 @@ import {
 import { injectDefaultGetProductsInStoreQueryMiddleware } from "../middlewares/value_injectors";
 import { getNearestStoreValidationSchema } from "../validation_schemas/addresses";
 import UserRoles from "../types/enums/user_roles";
-import { initializeOptionalSession } from "../middlewares/access_control";
+import { allowRoles, checkTokenValidity, initializeOptionalSession } from "../middlewares/access_control";
 
 const router = Router();
 
@@ -43,7 +43,12 @@ router.get(
     getStoreInventoriesController
 );
 
-router.get("/", getStoresController);
+router.get(
+    "/", 
+    checkTokenValidity,
+    allowRoles([UserRoles.ADMINISTRATOR]),
+    getStoresController
+);
 
 router.post(
     "/nearest-store",
