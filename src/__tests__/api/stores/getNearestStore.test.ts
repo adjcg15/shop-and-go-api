@@ -7,7 +7,7 @@ import { insertE2EGetNearestStoreTestData } from "../../../test_data/e2e/stores_
 import { ErrorMessages } from "../../../types/enums/error_messages";
 import Store from "../../../models/Store";
 
-describe("/api/stores/nearest-store", () => {
+describe("POST /api/stores/nearest-store", () => {
     let app: Express;
     let nearestStore: Store;
 

@@ -5,7 +5,7 @@ import { HttpStatusCodes } from "../../../types/enums/http";
 import db from "../../../models";
 import { insertE2EUpdateClientTestData } from "../../../test_data/e2e/clients_test_data";
 
-describe("/api/clients/:idClient", () => {
+describe("PUT /api/clients/:idClient", () => {
     let app: Express;
     let idClient: number;
     let token: string = "";

@@ -7,7 +7,7 @@ import { HttpStatusCodes } from "../../../types/enums/http";
 import { ErrorMessages } from "../../../types/enums/error_messages";
 import { DeleteAddressErrorCodes } from "../../../types/enums/error_codes";
 
-describe("/api/clients/:idClient/addresses/:idAddress", () => {
+describe("DELETE /api/clients/:idClient/addresses/:idAddress", () => {
     let app: Express;
     let idClient: number;
     let idAddress: number;

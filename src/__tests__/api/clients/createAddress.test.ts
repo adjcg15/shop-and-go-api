@@ -7,7 +7,7 @@ import { ErrorMessages } from '../../../types/enums/error_messages';
 import { HttpStatusCodes } from '../../../types/enums/http';
 import { CreateAddressMethodErrorCodes } from '../../../types/enums/error_codes';
 
-describe ("api/clients/:idClient/addresses", () => {
+describe ("POST api/clients/:idClient/addresses", () => {
     let app: Express;
     let idClient: number;
     let token: string = "";
