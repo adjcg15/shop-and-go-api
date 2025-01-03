@@ -121,4 +121,56 @@ describe("PATCH /api/product-categories/:idCategory", () => {
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
         expect(Array.isArray(response.body.details)).toBe(true);
     });
+
+    it("Should update name only", async () => {
+        const newCategoryName = "Lacteos y quesos";
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .patch(`/api/product-categories/${idCategory}`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ name: newCategoryName });
+        const newCategory = response.body;
+
+        expect(response.status).toBe(HttpStatusCodes.OK);
+        expect(newCategory).toMatchObject({
+            id: idCategory,
+            name: newCategoryName,
+            isActive: true
+        });
+    });
+
+    it("Should update isActive value only", async () => {
+        const newIsActiveValue = false;
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .patch(`/api/product-categories/${idCategory}`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ isActive: newIsActiveValue });
+        const newCategory = response.body;
+
+        expect(response.status).toBe(HttpStatusCodes.OK);
+        expect(newCategory).toMatchObject({
+            id: idCategory,
+            name: "Lacteos y quesos",
+            isActive: newIsActiveValue
+        });
+    });
+
+    it("Should update all category", async () => {
+        const newCategoryName = "Lacteos y derivados";
+        const newIsActiveValue = true;
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .patch(`/api/product-categories/${idCategory}`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ isActive: newIsActiveValue, name: newCategoryName });
+        const newCategory = response.body;
+
+        expect(response.status).toBe(HttpStatusCodes.OK);
+        expect(newCategory).toMatchObject({
+            id: idCategory,
+            name: newCategoryName,
+            isActive: newIsActiveValue
+        });
+    });
 });
