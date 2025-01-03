@@ -57,4 +57,68 @@ describe("PATCH /api/product-categories/:idCategory", () => {
 
         expect(response.status).toBe(HttpStatusCodes.FORBIDDEN);
     });
+
+    it("Should omit any category update when no body is sent", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .patch(`/api/product-categories/${idCategory}`)
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(response.status).toBe(HttpStatusCodes.NO_CONTENT);
+    });
+
+    it("Should validate idCategory parameter format", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .patch(`/api/product-categories/juan`)
+            .set("Authorization", `Bearer ${token}`)
+            .send();
+
+        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
+        expect(Array.isArray(response.body.details)).toBe(true);
+    });
+
+    it("Should validate idCategory parameter existance", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .patch(`/api/product-categories/1000000`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ name: "test name" });
+
+        expect(response.status).toBe(HttpStatusCodes.NOT_FOUND);
+        expect(typeof response.body.details).toBe("string");
+    });
+
+    it("Should validate empty name body value", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .patch(`/api/product-categories/${idCategory}`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ name: "        " });
+
+        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
+        expect(Array.isArray(response.body.details)).toBe(true);
+    });
+
+    it("Should validate empty name body value", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .patch(`/api/product-categories/${idCategory}`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ name: "nombre_malo" });
+
+        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
+        expect(Array.isArray(response.body.details)).toBe(true);
+    });
+
+    it("Should validate isActive body value format", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .patch(`/api/product-categories/${idCategory}`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ isActive: "invalido" });
+
+        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
+        expect(Array.isArray(response.body.details)).toBe(true);
+    });
 });
