@@ -97,4 +97,22 @@ describe("POST /api/product-categories", () => {
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
         expect(response.body.details).toBe(ErrorMessages.DUPLICATED_PRODUCT_CATEGORY);
     });
+
+    it("Should create category", async () => {
+        const newCategoryName = "Enlatados";
+        const newCategoryActiveState = true;
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .post(`/api/product-categories`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ name: newCategoryName, isActive: newCategoryActiveState });
+        const newCategory = response.body;
+
+        expect(response.status).toBe(HttpStatusCodes.CREATED);
+        expect(newCategory).toMatchObject({
+            id: expect.any(Number),
+            name: newCategoryName,
+            isActive: newCategoryActiveState
+        });
+    });
 });
