@@ -11,6 +11,11 @@ function getCurrentDateTimeSQL() {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
+function getTimeOnCommonFormat(date: Date) {
+    return `${date.getUTCHours()}:${date.getUTCMinutes().toString().padStart(2, '0')}`;
+}
+
 export {
-    getCurrentDateTimeSQL
+    getCurrentDateTimeSQL,
+    getTimeOnCommonFormat
 }

@@ -1,3 +1,4 @@
+import { getTimeOnCommonFormat } from "../../lib/datetime_service";
 import Store from "../Store";
 import { DataTypes, Sequelize } from "sequelize";
 
@@ -23,12 +24,24 @@ export default (sequelize: Sequelize) => {
         openingTime: {
             type: DataTypes.TIME,
             field: "horaApertura",
-            allowNull: false
+            allowNull: false,
+            get() {
+                const rawValue = this.getDataValue("openingTime");
+                const openingDate = new Date(rawValue);
+                
+                return getTimeOnCommonFormat(openingDate);
+            }
         },
         closingTime: {
             type: DataTypes.TIME,
-            field: "horaApertura",
-            allowNull: false
+            field: "horaCierre",
+            allowNull: false,
+            get() {
+                const rawValue = this.getDataValue("closingTime");
+                const closingDate = new Date(rawValue);
+                
+                return getTimeOnCommonFormat(closingDate);
+            }
         },
         latitude: {
             type: DataTypes.DECIMAL(9, 6),
