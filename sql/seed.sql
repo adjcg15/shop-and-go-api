@@ -130,10 +130,13 @@ INSERT INTO Sucursales (
 	,[horaCierre]
 	,[latitud]
 	,[longitud])
-VALUES ('Abarrotera el zorro centro', 'Dr. Rafael Lucio 28, Zona Centro, Centro, 91000 Xalapa-Enríquez, Ver.',
-'07:00:00', '23:00:00', 19.52854, -96.92230);
+VALUES 
+('Abarrotera cuevas Xalapa centro', 'Dr. Rafael Lucio 28, Zona Centro, Centro, 91000 Xalapa-Enríquez, Ver.',
+'07:00:00', '23:00:00', 19.52854, -96.92230),
+('Abarrotera cuevas Banderilla', 'Dr. Rafael Lucio 28, Zona Centro, Centro, 91000 Xalapa-Enríquez, Ver.',
+'09:00:00', '22:00:00', 19.59278, -96.94459);
 
-SELECT @idSucursal1 = idSucursal FROM Sucursales WHERE nombreComercial = 'Abarrotera el zorro centro';
+SELECT @idSucursal1 = idSucursal FROM Sucursales WHERE nombreComercial = 'Abarrotera cuevas Xalapa centro';
 SELECT @idProductoLecheEntera = idProducto FROM Productos WHERE codigoBarras = '3368205723086';
 SELECT @idProductoLecheDeslactosada = idProducto FROM Productos WHERE codigoBarras = '1838663396907';
 SELECT @idProductoLecheSemidescremada = idProducto FROM Productos WHERE codigoBarras = '8778830965493';
