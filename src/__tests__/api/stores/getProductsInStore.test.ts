@@ -5,7 +5,7 @@ import { HttpStatusCodes } from "../../../types/enums/http";
 import db from "../../../models";
 import { insertE2EGetProductsByStoreTestData } from "../../../test_data/e2e/stores_test_data";
 
-describe("/api/stores/:idStore/products", () => {
+describe("GET /api/stores/:idStore/products", () => {
     let app: Express;
     let idStore: number = 1;
     let idDairyCategory: number = 1;
