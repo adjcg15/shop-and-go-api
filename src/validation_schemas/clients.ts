@@ -46,7 +46,7 @@ const createClientSchema: Schema = {
             errorMessage: "Full name cannot be empty"
         },
         matches: {
-            options: [/^[a-zA-Z\s\-']+$/],
+            options: [/^[\p{L}\s\-']+$/u],
             errorMessage: "Full name can only contain letters, spaces, hyphens, and apostrophes"
         },
         custom: {
