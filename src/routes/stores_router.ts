@@ -6,19 +6,29 @@ import {
     getProductWithStockInStoreController,
     getStoreInventoriesController,
     getStoresController,
+    updateStoreController,
 } from "../controllers/stores_controller";
 import validateRequestSchemaMiddleware from "../middlewares/schema_validator";
 import {
     getProductsInStoreValidationSchema,
     getProductWithStockInStoreValidationSchema,
-    getStoreInventoriesValidationSchema,
+    getStoreInventoriesValidationSchema
 } from "../validation_schemas/products";
 import { injectDefaultGetProductsInStoreQueryMiddleware } from "../middlewares/value_injectors";
 import { getNearestStoreValidationSchema } from "../validation_schemas/addresses";
 import UserRoles from "../types/enums/user_roles";
 import { allowRoles, checkTokenValidity, initializeOptionalSession } from "../middlewares/access_control";
+import { updateStoreValidationSchema } from "../validation_schemas/stores";
 
 const router = Router();
+
+router.put(
+    "/:idStore",
+    initializeOptionalSession([UserRoles.ADMINISTRATOR]),
+    checkSchema(updateStoreValidationSchema),
+    validateRequestSchemaMiddleware,
+    updateStoreController
+);
 
 router.get(
     "/:idStore/products",
