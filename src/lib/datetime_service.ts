@@ -12,7 +12,7 @@ function getCurrentDateTimeSQL() {
 }
 
 function getTimeOnCommonFormat(date: Date) {
-    return `${date.getUTCHours()}:${date.getUTCMinutes().toString().padStart(2, '0')}`;
+    return `${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')}`;
 }
 
 export {
