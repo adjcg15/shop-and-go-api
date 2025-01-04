@@ -1,4 +1,4 @@
-import { getTimeOnCommonFormat } from "../../lib/datetime_service";
+import { getTimeOnMSQLFormat } from "../../lib/datetime_service";
 import Store from "../Store";
 import { DataTypes, Sequelize } from "sequelize";
 
@@ -27,9 +27,12 @@ export default (sequelize: Sequelize) => {
             allowNull: false,
             get() {
                 const rawValue = this.getDataValue("openingTime");
-                const openingDate = new Date(rawValue);
+                if(typeof rawValue !== "string") {
+                    const openingDate = new Date(rawValue);
+                    return getTimeOnMSQLFormat(openingDate);
+                }
                 
-                return getTimeOnCommonFormat(openingDate);
+                return rawValue;
             }
         },
         closingTime: {
@@ -38,9 +41,12 @@ export default (sequelize: Sequelize) => {
             allowNull: false,
             get() {
                 const rawValue = this.getDataValue("closingTime");
-                const closingDate = new Date(rawValue);
+                if(typeof rawValue !== "string") {
+                    const closingDate = new Date(rawValue);
+                    return getTimeOnMSQLFormat(closingDate);
+                }
                 
-                return getTimeOnCommonFormat(closingDate);
+                return rawValue;
             }
         },
         latitude: {
