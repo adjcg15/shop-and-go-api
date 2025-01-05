@@ -6,18 +6,24 @@ import { HttpStatusCodes } from "../../../types/enums/http";
 import { signToken } from "../../../lib/token_store";
 import UserRoles from "../../../types/enums/user_roles";
 import { insertE2EUpdateStoreTestData } from "../../../test_data/e2e/stores_test_data";
+import { InferAttributes } from "sequelize";
+import Store from "../../../models/Store";
+import { UpdateStoreErrorCodes } from "../../../types/enums/error_codes";
+import { ErrorMessages } from "../../../types/enums/error_messages";
 
 describe("PUT /api/stores/:idStore", () => {
     let app: Express;
     let idStore = 0;
+    let storeAlreadyRegistered: InferAttributes<Store>;
 
     beforeAll(async () => {
         app = createApp();
 
         await db.sequelize.sync({ force: true });
 
-        const newStore = await insertE2EUpdateStoreTestData();
-        idStore = newStore.idStore;
+        const dbResult = await insertE2EUpdateStoreTestData();
+        idStore = dbResult.idStoreToUpdate;
+        storeAlreadyRegistered = dbResult.storeAlreadyRegistered;
     });
 
     it("Should avoid request under a GUEST role", async () => {
@@ -105,6 +111,27 @@ describe("PUT /api/stores/:idStore", () => {
 
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
         expect(Array.isArray(response.body.details)).toBe(true);
+    });
+
+    it("Should validate duplicated store name", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .put(`/api/stores/${idStore}`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({
+                name: storeAlreadyRegistered.name,
+                address: "New store address",
+                openingTime: "08:00:00",
+                closingTime: "12:00:00",
+                latitude: 19.432608,
+                longitude: -99.133209,
+            });
+
+        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
+        expect(response.body).toMatchObject({
+            errorCode: UpdateStoreErrorCodes.STORE_NAME_DUPLICATED,
+            details: ErrorMessages.STORE_NAME_DUPLICATED
+        });
     });
 
     it("Should validate not empty address body value", async () => {
@@ -326,6 +353,27 @@ describe("PUT /api/stores/:idStore", () => {
             });
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
         expect(Array.isArray(response.body.details)).toBe(true);
+    });
+
+    it("Should validate duplicated store location", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .put(`/api/stores/${idStore}`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({
+                name: "New store name",
+                address: "New store address",
+                openingTime: "08:00:00",
+                closingTime: "12:00:00",
+                latitude: storeAlreadyRegistered.latitude,
+                longitude: storeAlreadyRegistered.longitude
+            });
+
+        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
+        expect(response.body).toMatchObject({
+            errorCode: UpdateStoreErrorCodes.STORE_LOCATION_DUPLICATED,
+            details: ErrorMessages.STORE_LOCATION_DUPLICATED
+        });
     });
 
     it("Should validate store existance", async () => {
