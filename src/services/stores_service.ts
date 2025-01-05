@@ -1,10 +1,10 @@
-import { InferAttributes, UniqueConstraintError } from "sequelize";
+import { InferAttributes, Op, UniqueConstraintError } from "sequelize";
 import db from "../models";
 import SQLException from "../exceptions/services/SQLException";
 import Store from "../models/Store";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { ErrorMessages } from "../types/enums/error_messages";
-import { CreateStoreErrorCodes, GetStoreErrorCodes } from "../types/enums/error_codes";
+import { CreateStoreErrorCodes, GetStoreErrorCodes, UpdateStoreErrorCodes } from "../types/enums/error_codes";
 import { HttpStatusCodes } from "../types/enums/http";
 
 async function getStores() {
@@ -42,12 +42,31 @@ async function updateStore(store: InferAttributes<Store>) {
             );
         }
 
-        await dbStore.update(store);
+        const duplicatedStore = await db.Store.findOne({
+            where: { 
+                id: { [Op.ne]: store.id },
+                latitude: store.latitude, 
+                longitude: store.longitude 
+            }
+        });
 
+        if(duplicatedStore) {
+            throw new BusinessLogicException(
+                ErrorMessages.STORE_LOCATION_DUPLICATED,
+                UpdateStoreErrorCodes.STORE_LOCATION_DUPLICATED
+            );
+        }
+
+        await dbStore.update(store);
         updatedStore = dbStore.toJSON();
     } catch (error: any) {
         if (error.isTrusted) {
             throw error;
+        } else if(error instanceof UniqueConstraintError) {
+            throw new BusinessLogicException(
+                ErrorMessages.STORE_NAME_DUPLICATED, 
+                UpdateStoreErrorCodes.STORE_NAME_DUPLICATED
+            );
         } else {
             throw new SQLException(error);
         }
