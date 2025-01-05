@@ -6,11 +6,10 @@ import {
     getProductWithStockInStore,
     getStoreInventories,
 } from "../services/products_service";
-import { getStore, getStores } from "../services/stores_service";
+import { getStore, getStores, updateStore } from "../services/stores_service";
 import { IProductsListPaginationQuery } from "../types/interfaces/request_queries";
 import {
     IProductByBarCodeParams,
-    IProductByIdParams,
     IStoreByIdParams,
 } from "../types/interfaces/request_parameters";
 import {
@@ -28,6 +27,25 @@ import {
     validateNearestStoreDistance,
 } from "../lib/distance_service";
 import UserRoles from "../types/enums/user_roles";
+
+async function updateStoreController(
+    req: Request<IStoreByIdParams, {}, Omit<InferAttributes<Store>, "id">, {}>,
+    res: Response,
+    next: NextFunction
+) {
+    const { idStore } = req.params;
+    const store = req.body;
+
+    try {
+        const updatedStore = await updateStore({
+            id: idStore!,
+            ...store,
+        });
+        res.status(HttpStatusCodes.OK).json(updatedStore);
+    } catch (error) {
+        next(error);
+    }
+}
 
 async function getProductsInStoreController(
     req: Request<IStoreByIdParams, {}, {}, IProductsListPaginationQuery>,
@@ -157,4 +175,5 @@ export {
     getProductWithStockInStoreController,
     getStoreInventoriesController,
     getNearestStoreController,
+    updateStoreController,
 };

@@ -28,6 +28,34 @@ async function getStores() {
     return storesList;
 }
 
+async function updateStore(store: InferAttributes<Store>) {
+    let updatedStore: InferAttributes<Store> | null = null;
+
+    try {
+        const dbStore = await db.Store.findByPk(store.id);
+
+        if (dbStore === null) {
+            throw new BusinessLogicException(
+                ErrorMessages.STORE_NOT_FOUND,
+                undefined,
+                HttpStatusCodes.NOT_FOUND
+            );
+        }
+
+        await dbStore.update(store);
+
+        updatedStore = dbStore.toJSON();
+    } catch (error: any) {
+        if (error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+
+    return updatedStore;
+}
+
 async function getStore(idStore: number) {
     let store: InferAttributes<Store> | null = null;
     try {
@@ -53,4 +81,4 @@ async function getStore(idStore: number) {
     return store;
 }
 
-export { getStores, getStore };
+export { updateStore, getStores, getStore };

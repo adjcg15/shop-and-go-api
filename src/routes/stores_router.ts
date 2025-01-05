@@ -7,6 +7,7 @@ import {
     getStoreController,
     getStoreInventoriesController,
     getStoresController,
+    updateStoreController,
 } from "../controllers/stores_controller";
 import validateRequestSchemaMiddleware from "../middlewares/schema_validator";
 import {
@@ -23,8 +24,17 @@ import {
     initializeOptionalSession,
 } from "../middlewares/access_control";
 import { getStoreValidationSchema } from "../validation_schemas/stores";
+import { updateStoreValidationSchema } from "../validation_schemas/stores";
 
 const router = Router();
+
+router.put(
+    "/:idStore",
+    initializeOptionalSession([UserRoles.ADMINISTRATOR]),
+    checkSchema(updateStoreValidationSchema),
+    validateRequestSchemaMiddleware,
+    updateStoreController
+);
 
 router.get(
     "/:idStore/products",
