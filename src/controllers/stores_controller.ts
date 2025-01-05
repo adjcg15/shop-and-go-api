@@ -6,7 +6,7 @@ import {
     getProductWithStockInStore,
     getStoreInventories,
 } from "../services/products_service";
-import { getStores, updateStore } from "../services/stores_service";
+import { getStore, getStores, updateStore } from "../services/stores_service";
 import { IProductsListPaginationQuery } from "../types/interfaces/request_queries";
 import {
     IProductByBarCodeParams,
@@ -39,7 +39,7 @@ async function updateStoreController(
     try {
         const updatedStore = await updateStore({
             id: idStore!,
-            ...store
+            ...store,
         });
         res.status(HttpStatusCodes.OK).json(updatedStore);
     } catch (error) {
@@ -106,6 +106,22 @@ async function getStoresController(
     }
 }
 
+async function getStoreController(
+    req: Request<IStoreByIdParams, {}, {}, {}>,
+    res: Response<InferAttributes<Store>>,
+    next: NextFunction
+) {
+    try {
+        const { idStore } = req.params;
+
+        const store = await getStore(idStore!);
+
+        res.status(HttpStatusCodes.OK).json(store);
+    } catch (error) {
+        next(error);
+    }
+}
+
 async function getStoreInventoriesController(
     req: Request<IStoreByIdParams, {}, IProductsByIdBody, {}>,
     res: Response<IProductByIdWithStock[]>,
@@ -155,8 +171,9 @@ async function getNearestStoreController(
 export {
     getProductsInStoreController,
     getStoresController,
+    getStoreController,
     getProductWithStockInStoreController,
     getStoreInventoriesController,
     getNearestStoreController,
-    updateStoreController
+    updateStoreController,
 };

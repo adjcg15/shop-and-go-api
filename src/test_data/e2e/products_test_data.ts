@@ -80,7 +80,7 @@ async function insertE2EGetProductTestData() {
         isActive: true,
     });
     const milk = await dairyCategory.createProduct({
-        barCode: "1234567890",
+        barCode: "1234567890123",
         name: "Leche Lala entera 1.5L",
         description:
             "Además de ser deliciosa y cremosa, la leche Lala Entera está adicionada con vitaminas A y D, proteínas y calcio que complementarán tu alimentación y la de tu familia. Rinde 6 vasos de 250 ml vs. 4 vasos de 250 ml en 1 L.",

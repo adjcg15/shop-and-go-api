@@ -25,6 +25,7 @@ const router = Router();
 router.get(
     "/",
     checkSchema(getAllProductsValidationSchema),
+    validateRequestSchemaMiddleware,
     injectDefaultGetProductsQueryMiddleware,
     getAllProductsController
 );
@@ -32,6 +33,7 @@ router.get(
 router.get(
     "/:barCode",
     checkSchema(getProductValidationSchema),
+    validateRequestSchemaMiddleware,
     getProductController
 );
 

@@ -4,6 +4,7 @@ import {
     getNearestStoreController,
     getProductsInStoreController,
     getProductWithStockInStoreController,
+    getStoreController,
     getStoreInventoriesController,
     getStoresController,
     updateStoreController,
@@ -12,12 +13,17 @@ import validateRequestSchemaMiddleware from "../middlewares/schema_validator";
 import {
     getProductsInStoreValidationSchema,
     getProductWithStockInStoreValidationSchema,
-    getStoreInventoriesValidationSchema
+    getStoreInventoriesValidationSchema,
 } from "../validation_schemas/products";
 import { injectDefaultGetProductsInStoreQueryMiddleware } from "../middlewares/value_injectors";
 import { getNearestStoreValidationSchema } from "../validation_schemas/addresses";
 import UserRoles from "../types/enums/user_roles";
-import { allowRoles, checkTokenValidity, initializeOptionalSession } from "../middlewares/access_control";
+import {
+    allowRoles,
+    checkTokenValidity,
+    initializeOptionalSession,
+} from "../middlewares/access_control";
+import { getStoreValidationSchema } from "../validation_schemas/stores";
 import { updateStoreValidationSchema } from "../validation_schemas/stores";
 
 const router = Router();
@@ -54,10 +60,19 @@ router.get(
 );
 
 router.get(
-    "/", 
+    "/",
     checkTokenValidity,
     allowRoles([UserRoles.ADMINISTRATOR]),
     getStoresController
+);
+
+router.get(
+    "/:idStore",
+    checkTokenValidity,
+    allowRoles([UserRoles.SALES_EXECUTIVE]),
+    checkSchema(getStoreValidationSchema),
+    validateRequestSchemaMiddleware,
+    getStoreController
 );
 
 router.post(
