@@ -30,7 +30,8 @@ const router = Router();
 
 router.put(
     "/:idStore",
-    initializeOptionalSession([UserRoles.ADMINISTRATOR]),
+    checkTokenValidity,
+    allowRoles([UserRoles.ADMINISTRATOR]),
     checkSchema(updateStoreValidationSchema),
     validateRequestSchemaMiddleware,
     updateStoreController

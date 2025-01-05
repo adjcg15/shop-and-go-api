@@ -8,7 +8,7 @@ import { Sequelize } from "sequelize";
 import { signToken } from "../../../lib/token_store";
 import UserRoles from "../../../types/enums/user_roles";
 
-describe("/api/stores", () => {
+describe("GET /api/stores", () => {
     let app: Express;
 
     beforeAll(async () => {
@@ -17,6 +17,39 @@ describe("/api/stores", () => {
         await db.sequelize.sync({ force: true });
 
         await insertE2EGetStoresTestData();
+    });
+
+    it("Should avoid request under a GUEST role", async () => {
+        const response = await request(app).get(`/api/stores`);
+
+        expect(response.status).toBe(HttpStatusCodes.UNAUTHORIZED);
+    });
+
+    it("Should avoid request under a CLIENT role", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.CLIENT });
+        const response = await request(app)
+            .get(`/api/stores`)
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(response.status).toBe(HttpStatusCodes.FORBIDDEN);
+    });
+
+    it("Should avoid request under a SALES EXECUTIVE role", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.SALES_EXECUTIVE });
+        const response = await request(app)
+            .get(`/api/stores`)
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(response.status).toBe(HttpStatusCodes.FORBIDDEN);
+    });
+
+    it("Should avoid request under a DELIVERY MAN role", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.SALES_EXECUTIVE });
+        const response = await request(app)
+            .get(`/api/stores`)
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(response.status).toBe(HttpStatusCodes.FORBIDDEN);
     });
 
     it("Should return an array of 3 stores registered in database", async () => {

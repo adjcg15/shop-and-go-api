@@ -26,13 +26,10 @@ const updateStoreValidationSchema: Schema = {
     address: {
         in: ["body"],
         trim: true,
-        isString: {
-            errorMessage: "Body value address must be a string",
-        },
         isLength: {
-            options: { max: 255 },
+            options: { max: 255, min: 1 },
             errorMessage:
-                "Body value address must have a maximum length of 255 characters",
+                "Body value address can't be ampty and must have a maximum length of 255 characters",
         },
     },
     openingTime: {

@@ -310,6 +310,21 @@ async function insertE2EGetNearestStoreTestData() {
     return nearestStore;
 }
 
+async function insertE2EUpdateStoreTestData() {
+    const store = await db.Store.create({
+        name: "Abarrotera Cuevas Plaza Crystal",
+        address: "Avenida Lázaro Cárdenas",
+        openingTime: "08:00:00.00",
+        closingTime: "19:00:00.00",
+        latitude: 19.432608,
+        longitude: -99.133209,
+    });
+    
+    return {
+        idStore: store.id
+    };
+}
+
 export {
     insertE2EGetProductsByStoreTestData,
     insertE2EGetProductsWithStockInStoreTestData,
@@ -318,4 +333,5 @@ export {
     insertE2EGetStoresTestData,
     insertE2EGetStoreInventoriesTestData,
     insertE2EGetNearestStoreTestData,
+    insertE2EUpdateStoreTestData
 };
