@@ -353,4 +353,45 @@ describe("POST /api/stores/:idStore", () => {
             details: ErrorMessages.STORE_LOCATION_DUPLICATED
         });
     });
+
+    it("Should create store", async () => {
+        const newStore = {
+            name: "New store name",
+            address: "New store address",
+            openingTime: "07:00:00",
+            closingTime: "23:00:00",
+            latitude: 19.54823,
+            longitude: -96.93329
+        };
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .post(`/api/stores`)
+            .set("Authorization", `Bearer ${token}`)
+            .send(newStore);
+
+        expect(response.status).toBe(HttpStatusCodes.CREATED);
+        expect(response.body).toMatchObject({
+            id: expect.any(Number),
+            ...newStore
+        });
+    });
+
+    it("Should display an error message indicating that the database server connection failed", async () => {
+        await db.sequelize.close();
+        
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .post(`/api/stores`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({
+                name: "New store name",
+                address: "New store address",
+                openingTime: "07:00:00",
+                closingTime: "23:00:00",
+                latitude: 19.54823,
+                longitude: -96.93329
+            });
+        
+        expect(response.status).toBe(HttpStatusCodes.INTERNAL_SERVER_ERROR);
+    });
 });
