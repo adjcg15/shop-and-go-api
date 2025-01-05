@@ -5,14 +5,19 @@ import db from "../../../models";
 import { HttpStatusCodes } from "../../../types/enums/http";
 import { signToken } from "../../../lib/token_store";
 import UserRoles from "../../../types/enums/user_roles";
+import { insertE2EUpdateStoreTestData } from "../../../test_data/e2e/stores_test_data";
 
 describe("PUT /api/stores/:idStore", () => {
     let app: Express;
+    let idStore = 0;
 
     beforeAll(async () => {
         app = createApp();
 
         await db.sequelize.sync({ force: true });
+
+        const newStore = await insertE2EUpdateStoreTestData();
+        idStore = newStore.idStore;
     });
 
     it("Should avoid request under a GUEST role", async () => {
@@ -321,5 +326,62 @@ describe("PUT /api/stores/:idStore", () => {
             });
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
         expect(Array.isArray(response.body.details)).toBe(true);
+    });
+
+    it("Should validate store existance", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .put(`/api/stores/1000000`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({
+                name: "New store name",
+                address: "New store address",
+                openingTime: "08:00:00",
+                closingTime: "22:00:00",
+                latitude: 19.54823,
+                longitude: -96.93329
+            });
+        expect(response.status).toBe(HttpStatusCodes.NOT_FOUND);
+    });
+
+    it("Should update store information", async () => {
+        const newStore = {
+            name: "New store name",
+            address: "New store address",
+            openingTime: "08:00:00",
+            closingTime: "22:00:00",
+            latitude: 19.54823,
+            longitude: -96.93329
+        };
+
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .put(`/api/stores/${idStore}`)
+            .set("Authorization", `Bearer ${token}`)
+            .send(newStore);
+        expect(response.status).toBe(HttpStatusCodes.OK);
+        expect(response.body).toMatchObject({
+            id: idStore,
+            ...newStore
+        });
+    });
+
+    it("Should display an error message indicating that the database server connection failed", async () => {
+        await db.sequelize.close();
+        
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .put(`/api/stores/1`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({
+                name: "New store name",
+                address: "New store address",
+                openingTime: "08:00:00",
+                closingTime: "22:00:00",
+                latitude: 19.54823,
+                longitude: -96.93329
+            });
+        
+        expect(response.status).toBe(HttpStatusCodes.INTERNAL_SERVER_ERROR);
     });
 });
