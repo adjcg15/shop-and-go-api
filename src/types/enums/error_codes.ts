@@ -81,6 +81,11 @@ enum CreateEmployeeErrorCodes {
     EMPLOYEE_ALREADY_EXISTS = EndpointContexts.CREATE_EMPLOYEE + "-400003",
 }
 
+enum CreateStoreErrorCodes {
+    STORE_NAME_DUPLICATED = EndpointContexts.CREATE_STORE + "-400001",
+    STORE_LOCATION_DUPLICATED = EndpointContexts.CREATE_STORE + "-400002"
+}
+
 export {
     CreatePaymentMethodErrorCodes,
     DeletePaymentMethodErrorCodes,
@@ -95,4 +100,5 @@ export {
     CreateAddressMethodErrorCodes,
     DeleteAddressErrorCodes,
     CreateEmployeeErrorCodes,
+    CreateStoreErrorCodes
 };

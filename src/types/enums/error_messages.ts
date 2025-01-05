@@ -4,6 +4,8 @@ enum ErrorMessages {
     ISSUER_NOT_FOUND = "The issuer with the specified id is not registered",
     PRODUCT_NOT_FOUND = "The product with the specified id is not registered",
     STORE_NOT_FOUND = "The store with the specified id is not registered",
+    STORE_NAME_DUPLICATED = "The store with the given name already exists",
+    STORE_LOCATION_DUPLICATED = "The store with the given location (latitude and longitude) already exists",
     DELIVERY_ADDRESS_NOT_FOUND = "The delivery address with the specified id is not registered",
     ORDER_STATUS_NOT_FOUND = "The order status with the specified id is not registered",
     STOCK_NOT_AVAILABLE = "The order could not be placed because at least one product is not satisfied with its current stock",
