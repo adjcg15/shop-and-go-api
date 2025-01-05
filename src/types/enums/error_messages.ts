@@ -19,7 +19,9 @@ enum ErrorMessages {
     NO_STORE_NEARBY = "No stores within 5km radius",
     ADDRESS_ALREADY_EXISTS = "The address already exists, verify it",
     ADDRESS_NOT_FOUND = "The adddress with the specified id is not registered",
-    CLIENT_ALREADY_EXISTS = "The client with the specified phone number already exists"
+    CLIENT_ALREADY_EXISTS = "The client with the specified phone number already exists",
+    EMPLOYEE_POSITION_NOT_FOUND = "The employee position with the specified id is not registered",
+    EMPLOYEE_ALREADY_EXISTS = "The employee already exists, verify it",
 }
 
 export { 
