@@ -182,6 +182,21 @@ async function insertE2EGetStoresTestData() {
     });
 }
 
+async function insertE2EGetStoreTestData() {
+    const store = await db.Store.create({
+        name: "Plaza Crystal",
+        address: "Avenida Lázaro Cárdenas",
+        openingTime: "08:00:00.00",
+        closingTime: "19:00:00.00",
+        latitude: 19.432608,
+        longitude: -99.133209,
+    });
+
+    return {
+        idStore: store.id,
+    };
+}
+
 async function insertE2EGetStoreInventoriesTestData() {
     const dairyCategory = await db.ProductCategory.create({
         name: "Lacteos",
@@ -299,6 +314,7 @@ export {
     insertE2EGetProductsByStoreTestData,
     insertE2EGetProductsWithStockInStoreTestData,
     insertE2EGetIssuingBanksTestData,
+    insertE2EGetStoreTestData,
     insertE2EGetStoresTestData,
     insertE2EGetStoreInventoriesTestData,
     insertE2EGetNearestStoreTestData,
