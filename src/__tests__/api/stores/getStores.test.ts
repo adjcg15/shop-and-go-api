@@ -19,6 +19,39 @@ describe("/api/stores", () => {
         await insertE2EGetStoresTestData();
     });
 
+    it("Should avoid request under a GUEST role", async () => {
+        const response = await request(app).get(`/api/stores`);
+
+        expect(response.status).toBe(HttpStatusCodes.UNAUTHORIZED);
+    });
+
+    it("Should avoid request under a CLIENT role", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.CLIENT });
+        const response = await request(app)
+            .get(`/api/stores`)
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(response.status).toBe(HttpStatusCodes.FORBIDDEN);
+    });
+
+    it("Should avoid request under a SALES EXECUTIVE role", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.SALES_EXECUTIVE });
+        const response = await request(app)
+            .get(`/api/stores`)
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(response.status).toBe(HttpStatusCodes.FORBIDDEN);
+    });
+
+    it("Should avoid request under a DELIVERY MAN role", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.SALES_EXECUTIVE });
+        const response = await request(app)
+            .get(`/api/stores`)
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(response.status).toBe(HttpStatusCodes.FORBIDDEN);
+    });
+
     it("Should return an array of 3 stores registered in database", async () => {
         const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
         const response = await request(app)
