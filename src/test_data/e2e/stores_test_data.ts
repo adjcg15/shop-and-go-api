@@ -311,7 +311,15 @@ async function insertE2EGetNearestStoreTestData() {
 }
 
 async function insertE2EUpdateStoreTestData() {
-    const store = await db.Store.create({
+    const storeAlreadyRegistered = await db.Store.create({
+        name: "Abarrotera Cuevas Plaza Museo",
+        address: "Avenida Lázaro Cárdenas",
+        openingTime: "08:00:00.00",
+        closingTime: "19:00:00.00",
+        latitude: 19.182608,
+        longitude: -99.198209,
+    });
+    const storeToUpdate = await db.Store.create({
         name: "Abarrotera Cuevas Plaza Crystal",
         address: "Avenida Lázaro Cárdenas",
         openingTime: "08:00:00.00",
@@ -321,8 +329,22 @@ async function insertE2EUpdateStoreTestData() {
     });
     
     return {
-        idStore: store.id
+        idStoreToUpdate: storeToUpdate.id,
+        storeAlreadyRegistered
     };
+}
+
+async function insertE2ECreateStoreTestData() {
+    const store = await db.Store.create({
+        name: "Abarrotera Cuevas Plaza Crystal",
+        address: "Avenida Lázaro Cárdenas",
+        openingTime: "08:00:00.00",
+        closingTime: "19:00:00.00",
+        latitude: 19.432608,
+        longitude: -99.133209,
+    });
+    
+    return store.toJSON();
 }
 
 export {
@@ -333,5 +355,6 @@ export {
     insertE2EGetStoresTestData,
     insertE2EGetStoreInventoriesTestData,
     insertE2EGetNearestStoreTestData,
-    insertE2EUpdateStoreTestData
+    insertE2EUpdateStoreTestData,
+    insertE2ECreateStoreTestData
 };

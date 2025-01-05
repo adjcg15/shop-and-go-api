@@ -1,10 +1,10 @@
-import { InferAttributes } from "sequelize";
+import { InferAttributes, Op, UniqueConstraintError } from "sequelize";
 import db from "../models";
 import SQLException from "../exceptions/services/SQLException";
 import Store from "../models/Store";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { ErrorMessages } from "../types/enums/error_messages";
-import { GetStoreErrorCodes } from "../types/enums/error_codes";
+import { CreateStoreErrorCodes, GetStoreErrorCodes, UpdateStoreErrorCodes } from "../types/enums/error_codes";
 import { HttpStatusCodes } from "../types/enums/http";
 
 async function getStores() {
@@ -42,18 +42,73 @@ async function updateStore(store: InferAttributes<Store>) {
             );
         }
 
-        await dbStore.update(store);
+        const duplicatedStore = await db.Store.findOne({
+            where: { 
+                id: { [Op.ne]: store.id },
+                latitude: store.latitude, 
+                longitude: store.longitude 
+            }
+        });
 
+        if(duplicatedStore) {
+            throw new BusinessLogicException(
+                ErrorMessages.STORE_LOCATION_DUPLICATED,
+                UpdateStoreErrorCodes.STORE_LOCATION_DUPLICATED
+            );
+        }
+
+        await dbStore.update(store);
         updatedStore = dbStore.toJSON();
     } catch (error: any) {
         if (error.isTrusted) {
             throw error;
+        } else if(error instanceof UniqueConstraintError) {
+            throw new BusinessLogicException(
+                ErrorMessages.STORE_NAME_DUPLICATED, 
+                UpdateStoreErrorCodes.STORE_NAME_DUPLICATED
+            );
         } else {
             throw new SQLException(error);
         }
     }
 
     return updatedStore;
+}
+
+async function createStore(storeInformation: Omit<InferAttributes<Store>, "id">) {
+    let newStore: InferAttributes<Store> | null = null;
+
+    try {
+        let dbStore = await db.Store.findOne({
+            where: { 
+                latitude: storeInformation.latitude, 
+                longitude: storeInformation.longitude 
+            }
+        });
+
+        if(dbStore !== null) {
+            throw new BusinessLogicException(
+                ErrorMessages.STORE_LOCATION_DUPLICATED,
+                CreateStoreErrorCodes.STORE_LOCATION_DUPLICATED
+            );
+        }
+
+        dbStore = await db.Store.create(storeInformation);
+        newStore = dbStore.toJSON();
+    } catch (error: any) {
+        if (error.isTrusted) {
+            throw error;
+        } else if(error instanceof UniqueConstraintError) {
+            throw new BusinessLogicException(
+                ErrorMessages.STORE_NAME_DUPLICATED, 
+                CreateStoreErrorCodes.STORE_NAME_DUPLICATED
+            );
+        } else {
+            throw new SQLException(error);
+        }
+    }
+
+    return newStore;
 }
 
 async function getStore(idStore: number) {
@@ -81,4 +136,4 @@ async function getStore(idStore: number) {
     return store;
 }
 
-export { updateStore, getStores, getStore };
+export { updateStore, getStores, getStore, createStore };
