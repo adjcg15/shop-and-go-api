@@ -8,7 +8,7 @@ import { Sequelize } from "sequelize";
 import { signToken } from "../../../lib/token_store";
 import UserRoles from "../../../types/enums/user_roles";
 
-describe("/api/stores", () => {
+describe("GET /api/stores", () => {
     let app: Express;
 
     beforeAll(async () => {
