@@ -90,6 +90,12 @@ enum CreateEmployeeErrorCodes {
     EMPLOYEE_ALREADY_EXISTS = EndpointContexts.CREATE_EMPLOYEE + "-400003",
 }
 
+enum UpdateEmployeeErrorCodes {
+    EMPLOYEE_NOT_FOUND = EndpointContexts.UPDATE_EMPLOYEE + "-400001",
+    STORE_NOT_FOUND = EndpointContexts.CREATE_EMPLOYEE + "-400002",
+    EMPLOYEE_POSITION_NOT_FOUND = EndpointContexts.CREATE_EMPLOYEE + "-400003",
+}
+
 enum CreateStoreErrorCodes {
     STORE_NAME_DUPLICATED = EndpointContexts.CREATE_STORE + "-400001",
     STORE_LOCATION_DUPLICATED = EndpointContexts.CREATE_STORE + "-400002"
@@ -115,6 +121,7 @@ export {
     CreateAddressMethodErrorCodes,
     DeleteAddressErrorCodes,
     CreateEmployeeErrorCodes,
+    UpdateEmployeeErrorCodes,
     CreateStoreErrorCodes,
     UpdateStoreErrorCodes
 };
