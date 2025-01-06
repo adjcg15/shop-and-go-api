@@ -11,7 +11,7 @@ export default (sequelize: Sequelize) => {
         },
         creationDate: {
             type: DataTypes.DATE,
-            field: "contrasena",
+            field: "fechaCreacion",
             allowNull: false
         },
         reason: {
