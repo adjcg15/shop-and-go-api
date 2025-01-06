@@ -18,3 +18,5 @@ router.get(
     injectDefaultGetIncidentsListQueryMiddleware,
     getIncidentsListController
 );
+
+export default router;
