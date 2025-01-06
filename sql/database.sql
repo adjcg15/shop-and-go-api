@@ -55,7 +55,8 @@ CREATE TABLE Pedidos (
     idDireccionEntrega INT NOT NULL,
     idMetodoPago INT NOT NULL,
     idEstadoPedido INT NOT NULL,
-    idTrabajador INT NULL
+    idTrabajador INT NULL,
+    idSucursal INT NULL
 );
 
 
@@ -149,6 +150,8 @@ ALTER TABLE Pedidos ADD CONSTRAINT FK_Pedidos_Clientes FOREIGN KEY (idCliente) R
 ALTER TABLE Pedidos ADD CONSTRAINT FK_Pedidos_DireccionesEntrega FOREIGN KEY (idDireccionEntrega) REFERENCES DireccionesEntrega (idDireccionEntrega);
 ALTER TABLE Pedidos ADD CONSTRAINT FK_Pedidos_MetodosPago FOREIGN KEY (idMetodoPago) REFERENCES MetodosPago (idMetodoPago);
 ALTER TABLE Pedidos ADD CONSTRAINT FK_Pedidos_EstadosPedido FOREIGN KEY (idEstadoPedido) REFERENCES EstadosPedido (idEstadoPedido);
+ALTER TABLE Pedidos ADD CONSTRAINT FK_Pedidos_Trabajadores FOREIGN KEY (idTrabajador) REFERENCES Trabajadores (idTrabajador);
+ALTER TABLE Pedidos ADD CONSTRAINT FK_Pedidos_Sucursales FOREIGN KEY (idSucursal) REFERENCES Sucursales (idSucursal);
 
 ALTER TABLE Incidencias ADD CONSTRAINT FK_Incidencias_Pedidos FOREIGN KEY (idPedido) REFERENCES Pedidos (idPedido) ON DELETE CASCADE;
 
