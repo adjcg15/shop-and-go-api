@@ -38,13 +38,19 @@ export default (sequelize: Sequelize) => {
         idStore: {
             type: DataTypes.INTEGER,
             field: "idSucursal"
+        },
+        idDeliveryMan: {
+            type: DataTypes.INTEGER,
+            field: "idTrabajador"
         }
     }, {
         sequelize,
         tableName: "Pedidos",
         timestamps: false,
         defaultScope: {
-            attributes: { exclude: ["idEstadoPedido", "idDireccionEntrega", "idCliente", "idMetodoPago", "idSucursal"] }
+            attributes: { 
+                exclude: ["idEstadoPedido", "idDireccionEntrega", "idCliente", "idMetodoPago", "idSucursal", "idTrabajador"] 
+            }
         }
     });
 
