@@ -34,13 +34,17 @@ export default (sequelize: Sequelize) => {
         idPaymentMethod: {
             type: DataTypes.INTEGER,
             field: "idMetodoPago"
+        },
+        idStore: {
+            type: DataTypes.INTEGER,
+            field: "idSucursal"
         }
     }, {
         sequelize,
         tableName: "Pedidos",
         timestamps: false,
         defaultScope: {
-            attributes: { exclude: ["idEstadoPedido", "idDireccionEntrega", "idCliente", "idMetodoPago"] }
+            attributes: { exclude: ["idEstadoPedido", "idDireccionEntrega", "idCliente", "idMetodoPago", "idSucursal"] }
         }
     });
 
