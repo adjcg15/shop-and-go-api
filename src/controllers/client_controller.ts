@@ -4,6 +4,10 @@ import { IClientAddress, IPaymentMethodWithIssuer } from "../types/interfaces/re
 import { IClientAddressId, IClientByIdParams, IPaymentMethodByIdParams } from "../types/interfaces/request_parameters";
 import { createAddressToClient, createClient, createPaymentMethodToClient, deleteAddressFromClient, deletePaymentMethodFromClient, getAddressesFromClient, getPaymentMethodsFromClient, updateClient } from "../services/clients_service";
 import { IClientBody, IClientAddressBody, IPaymentMethodBody } from "../types/interfaces/request_bodies";
+import { getStores } from "../services/stores_service";
+import BusinessLogicException from "../exceptions/business/BusinessLogicException";
+import { ErrorMessages } from "../types/enums/error_messages";
+import { findNearestStore, validateNearestStoreDistance } from "../lib/distance_service";
 
 async function createPaymentMethodToClientController(
     req: Request<IClientByIdParams, {}, IPaymentMethodBody, {}>,
@@ -132,6 +136,22 @@ async function createAddressToClientController(
     try {
         const { idClient } = req.params;
         const { street, streetNumber, neighborhood, municipality, city, postalCode, state, latitude, longitude, apartmentNumber } = req.body;
+
+        const stores = await getStores();
+
+        if (stores.length === 0) {
+            throw new BusinessLogicException(
+                ErrorMessages.NO_STORE_NEARBY
+            )
+        } else {
+            const nearestStore = findNearestStore(
+                latitude!,
+                longitude!,
+                stores
+            );
+
+            validateNearestStoreDistance(nearestStore.minDistance);
+        }
 
         const newAddress = await createAddressToClient(
             idClient!,
