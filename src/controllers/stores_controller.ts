@@ -2,6 +2,7 @@ import { InferAttributes } from "sequelize";
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
 import {
+    getProductInventoryInStore,
     getProductsInStore,
     getProductWithStockInStore,
     getStoreInventories,
@@ -10,6 +11,7 @@ import { getStore, getStores, updateStore } from "../services/stores_service";
 import { IProductsListPaginationQuery } from "../types/interfaces/request_queries";
 import {
     IProductByBarCodeParams,
+    IProductByIdParams,
     IStoreByIdParams,
 } from "../types/interfaces/request_parameters";
 import {
@@ -27,6 +29,7 @@ import {
     validateNearestStoreDistance,
 } from "../lib/distance_service";
 import UserRoles from "../types/enums/user_roles";
+import Inventory from "../models/Inventory";
 
 async function updateStoreController(
     req: Request<IStoreByIdParams, {}, Omit<InferAttributes<Store>, "id">, {}>,
@@ -71,6 +74,25 @@ async function getProductsInStoreController(
         );
 
         res.status(HttpStatusCodes.OK).json(products);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function getProductInventoryInStoreController(
+    req: Request<IProductByIdParams & IStoreByIdParams, {}, {}, {}>,
+    res: Response<InferAttributes<Inventory>>,
+    next: NextFunction
+) {
+    try {
+        const { idProduct, idStore } = req.params;
+
+        const inventory = await getProductInventoryInStore(
+            idStore!,
+            idProduct!
+        );
+
+        res.status(HttpStatusCodes.OK).json(inventory);
     } catch (error) {
         next(error);
     }
@@ -170,6 +192,7 @@ async function getNearestStoreController(
 
 export {
     getProductsInStoreController,
+    getProductInventoryInStoreController,
     getStoresController,
     getStoreController,
     getProductWithStockInStoreController,

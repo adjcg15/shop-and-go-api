@@ -40,7 +40,7 @@ router.get(
 router.post(
     "/",
     checkTokenValidity,
-    allowRoles([UserRoles.ADMINISTRATOR]),
+    allowRoles([UserRoles.ADMINISTRATOR, UserRoles.SALES_EXECUTIVE]),
     checkSchema(createProductWithInventoriesValidationsSchema),
     validateRequestSchemaMiddleware,
     createProductWithInventoriesController
@@ -58,6 +58,7 @@ router.put(
 router.get(
     "/:idProduct/inventories",
     checkSchema(getProductInventoriesValidationSchema),
+    validateRequestSchemaMiddleware,
     getProductInventoriesByIdProductController
 );
 

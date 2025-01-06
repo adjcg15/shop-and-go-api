@@ -2,6 +2,7 @@ import { Router } from "express";
 import { checkSchema } from "express-validator";
 import {
     getNearestStoreController,
+    getProductInventoryInStoreController,
     getProductsInStoreController,
     getProductWithStockInStoreController,
     getStoreController,
@@ -11,6 +12,7 @@ import {
 } from "../controllers/stores_controller";
 import validateRequestSchemaMiddleware from "../middlewares/schema_validator";
 import {
+    getProductInventoryInStore,
     getProductsInStoreValidationSchema,
     getProductWithStockInStoreValidationSchema,
     getStoreInventoriesValidationSchema,
@@ -50,6 +52,13 @@ router.get(
     checkSchema(getProductWithStockInStoreValidationSchema),
     validateRequestSchemaMiddleware,
     getProductWithStockInStoreController
+);
+
+router.get(
+    "/:idStore/products/:idProduct/inventory",
+    checkSchema(getProductInventoryInStore),
+    validateRequestSchemaMiddleware,
+    getProductInventoryInStoreController
 );
 
 router.get(

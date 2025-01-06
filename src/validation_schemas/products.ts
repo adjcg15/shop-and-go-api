@@ -65,6 +65,25 @@ const getAllProductsValidationSchema: Schema = {
     },
 };
 
+const getProductInventoryInStore: Schema = {
+    idStore: {
+        in: ["params"],
+        isInt: {
+            options: { min: 1 },
+            errorMessage: "Parameter idStore must be a positive integer",
+        },
+        toInt: true,
+    },
+    idProduct: {
+        in: ["params"],
+        isInt: {
+            options: { min: 1 },
+            errorMessage: "Parameter idProduct must be a positive integer",
+        },
+        toInt: true,
+    },
+};
+
 const getProductValidationSchema: Schema = {
     barCode: {
         in: ["params"],
@@ -348,7 +367,7 @@ const updateProductWithInventoriesValidationsSchema: Schema = {
                         !idIsValid ||
                         !idStoreIsValid ||
                         typeof item.stock !== "number" ||
-                        item.stock < 1 ||
+                        item.stock < 0 ||
                         typeof item.expirationDate !== "string" ||
                         !/\d{4}-\d{2}-\d{2}/.test(item.expirationDate)
                     ) {
@@ -403,6 +422,7 @@ export {
     getProductsInStoreValidationSchema,
     getAllProductsValidationSchema,
     getProductValidationSchema,
+    getProductInventoryInStore,
     getProductInventoriesValidationSchema,
     createProductWithInventoriesValidationsSchema,
     updateProductWithInventoriesValidationsSchema,

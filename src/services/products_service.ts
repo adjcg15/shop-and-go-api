@@ -15,6 +15,7 @@ import {
     GetProductWithStockInStoreErrorCodes,
     UpdateProductErrorCodes,
     GetProductErrorCodes,
+    GetProductInventoryInStoreErrorCodes,
 } from "../types/enums/error_codes";
 import { IInventoryWithOptionalProductIdBody } from "../types/interfaces/request_bodies";
 import Product from "../models/Product";
@@ -82,6 +83,55 @@ async function getProductsInStore(
     }
 
     return productsList;
+}
+
+async function getProductInventoryInStore(idStore: number, idProduct: number) {
+    let inventory: InferAttributes<Inventory> | null = null;
+    try {
+        const store = await db.Store.findByPk(idStore);
+
+        if (store === null) {
+            throw new BusinessLogicException(
+                ErrorMessages.STORE_NOT_FOUND,
+                GetProductInventoryInStoreErrorCodes.STORE_NOT_FOUND,
+                HttpStatusCodes.NOT_FOUND
+            );
+        }
+
+        const product = await db.Product.findByPk(idProduct);
+
+        if (product == null) {
+            throw new BusinessLogicException(
+                ErrorMessages.STORE_NOT_FOUND,
+                GetProductInventoryInStoreErrorCodes.PRODUCT_NOT_FOUND,
+                HttpStatusCodes.NOT_FOUND
+            );
+        }
+
+        const inventoryDB = await db.Inventory.findOne({
+            where: {
+                idProduct,
+                idStore,
+            },
+        });
+
+        if (inventoryDB === null) {
+            throw new BusinessLogicException(
+                ErrorMessages.STORE_NOT_FOUND,
+                GetProductInventoryInStoreErrorCodes.INVENTORY_DOES_NOT_EXIST,
+                HttpStatusCodes.NOT_FOUND
+            );
+        }
+
+        inventory = inventoryDB.toJSON();
+    } catch (error: any) {
+        if (error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+    return inventory;
 }
 
 async function getAllProducts(pagination: { offset: number; limit: number }) {
@@ -487,6 +537,7 @@ async function getStoreInventories(idStore: number, productsId: number[]) {
 
 export {
     getProductsInStore,
+    getProductInventoryInStore,
     getAllProducts,
     getProduct,
     getProductInventoriesByIdProduct,
