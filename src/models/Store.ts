@@ -2,6 +2,7 @@ import { Association, BelongsToManyAddAssociationMixin, BelongsToManyAddAssociat
 import Product from "./Inventory";
 import Employee from "./Employee";
 import { IDB } from "../types/interfaces/db";
+import Order from "./Order";
 
 export default class Store extends Model<InferAttributes<Store>, InferCreationAttributes<Store>> {
     declare id: CreationOptional<number>;
@@ -14,6 +15,7 @@ export default class Store extends Model<InferAttributes<Store>, InferCreationAt
 
     declare products?: NonAttribute<Product[]>;
     declare employees?: NonAttribute<Employee[]>;
+    declare orders?: NonAttribute<Order[]>;
 
     declare getProducts: BelongsToManyGetAssociationsMixin<Product>;
     declare addProduct: BelongsToManyAddAssociationMixin<Product, number>;
@@ -36,10 +38,22 @@ export default class Store extends Model<InferAttributes<Store>, InferCreationAt
     declare hasEmployees: HasManyHasAssociationsMixin<Employee, number>;
     declare countEmployees: HasManyCountAssociationsMixin;
     declare createEmployee: HasManyCreateAssociationMixin<Employee, "idStore">;
+    
+    declare getOrders: HasManyGetAssociationsMixin<Order>;
+    declare addOrder: HasManyAddAssociationMixin<Order, number>;
+    declare addOrders: HasManyAddAssociationsMixin<Order, number>;
+    declare setOrders: HasManySetAssociationsMixin<Order, number>;
+    declare removeOrder: HasManyRemoveAssociationMixin<Order, number>;
+    declare removeOrders: HasManyRemoveAssociationsMixin<Order, number>;
+    declare hasOrder: HasManyHasAssociationMixin<Order, number>;
+    declare hasOrders: HasManyHasAssociationsMixin<Order, number>;
+    declare countOrders: HasManyCountAssociationsMixin;
+    declare createOrder: HasManyCreateAssociationMixin<Order, "idStore">;
 
     declare static associations: {
         products: Association<Store, Product>;
         employees: Association<Store, Employee>;
+        orders: Association<Store, Order>;
     };
 
     static associate(models: IDB) {
@@ -52,6 +66,10 @@ export default class Store extends Model<InferAttributes<Store>, InferCreationAt
         Store.hasMany(models.Employee, {
             foreignKey: "idSucursal",
             as: "employees"
+        });
+        Store.hasMany(models.Order, {
+            foreignKey: "idSucursal",
+            as: "orders"
         });
     }
 }

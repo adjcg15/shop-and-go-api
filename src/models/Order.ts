@@ -6,6 +6,7 @@ import Client from "./Client";
 import PaymentMethod from "./PaymentMethod";
 import Incident from "./Incident";
 import Product from "./Product";
+import Store from "./Store";
 
 export default class Order extends Model<InferAttributes<Order>, InferCreationAttributes<Order>> {
     declare id: CreationOptional<number>;
@@ -20,6 +21,9 @@ export default class Order extends Model<InferAttributes<Order>, InferCreationAt
     declare client?: NonAttribute<Client>;
     declare idPaymentMethod: ForeignKey<PaymentMethod["id"]>;
     declare paymentMethod?: NonAttribute<PaymentMethod>;
+    declare idStore: ForeignKey<Store["id"]>;
+    declare store?: NonAttribute<Store>;
+
     declare incident?: NonAttribute<Incident>;
     declare products?: NonAttribute<Product[]>;
 
@@ -59,6 +63,10 @@ export default class Order extends Model<InferAttributes<Order>, InferCreationAt
         Order.belongsTo(models.PaymentMethod, {
             foreignKey: "idMetodoPago",
             as: "paymentMethod"
+        });
+        Order.belongsTo(models.Store, {
+            foreignKey: "idSucursal",
+            as: "store"
         });
         Order.hasOne(models.Incident, {
             foreignKey: "idPedido",
