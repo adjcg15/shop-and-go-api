@@ -14,6 +14,7 @@ enum EndpointContexts {
     DELETE_ADDRESS = "DLAD",
     CREATE_CLIENT = "CRCL",
     CREATE_EMPLOYEE = "CREM",
+    UPDATE_EMPLOYEE = "UPEM",
     CREATE_STORE = "CSTR",
     UPDATE_STORE = "USTR"
 }

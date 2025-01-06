@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
 import { IEmployeeBody } from "../types/interfaces/request_bodies";
-import { createEmployee } from "../services/employees_service";
+import { createEmployee, updateEmployee } from "../services/employees_service";
+import { IEmployeeByIdParams } from "../types/interfaces/request_parameters";
 
 async function createEmployeeController(
     req: Request<{}, {}, IEmployeeBody, {}>,
@@ -28,6 +29,32 @@ async function createEmployeeController(
     }
 }
 
+async function updateEmployeeController(
+    req: Request<IEmployeeByIdParams, {}, IEmployeeBody, {}>,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const idEmployee = req.params.idEmployee;
+        const { fullName, password, idStore, idPosition } = req.body;
+
+        const updatedEmployee = await updateEmployee(
+            idEmployee!,
+            {
+                fullName,
+                password,
+                idStore,
+                idPosition
+            }
+        );
+
+        res.status(HttpStatusCodes.OK).json(updatedEmployee);
+    } catch (error) {
+        next(error);
+    }
+}
+
 export {
-    createEmployeeController
+    createEmployeeController,
+    updateEmployeeController,
 };

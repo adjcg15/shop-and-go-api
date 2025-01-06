@@ -26,6 +26,10 @@ interface IProductCategoryIdParams {
     idCategory?: number;
 }
 
+interface IEmployeeByIdParams {
+    idEmployee?: number;
+}
+
 export {
     IStoreByIdParams,
     IClientByIdParams,
@@ -34,4 +38,5 @@ export {
     IPaymentMethodByIdParams,
     IClientAddressId,
     IProductCategoryIdParams,
+    IEmployeeByIdParams
 };

@@ -5,7 +5,7 @@ import db from "../models";
 import EmployeePosition from "../models/EmployeePosition";
 import Employee from "../models/Employee";
 import Store from "../models/Store";
-import { CreateEmployeeErrorCodes } from "../types/enums/error_codes";
+import { CreateEmployeeErrorCodes, UpdateEmployeeErrorCodes } from "../types/enums/error_codes";
 import { ErrorMessages } from "../types/enums/error_messages";
 import UserRoles from "../types/enums/user_roles";
 import { IEmployeeWithPosition } from "../types/interfaces/response_bodies";
@@ -104,7 +104,79 @@ async function createEmployee(
     }
 }
 
+async function updateEmployee(
+    idEmployee: number,
+    newEmployee: {
+        fullName?: string,
+        password?: string,
+        idStore?: number,
+        idPosition?: number,
+    }
+) {
+    let updatedEmployee; 
+
+    try {
+        const employee = await Employee.findByPk(idEmployee);
+
+        if (employee === null) {
+            throw new BusinessLogicException(
+              ErrorMessages.EMPLOYEE_NOT_FOUND,
+              UpdateEmployeeErrorCodes.EMPLOYEE_NOT_FOUND
+            );
+        }
+
+        const { fullName, password, idStore, idPosition } = newEmployee;
+
+        const store = await Store.findByPk(idStore);
+
+        if (store === null) {
+            throw new BusinessLogicException(
+            ErrorMessages.STORE_NOT_FOUND,
+            UpdateEmployeeErrorCodes.STORE_NOT_FOUND
+            );
+        }
+
+        const position = await EmployeePosition.findByPk(idPosition);
+
+        if (position === null) {
+            throw new BusinessLogicException(
+                ErrorMessages.EMPLOYEE_POSITION_NOT_FOUND,
+                UpdateEmployeeErrorCodes.EMPLOYEE_POSITION_NOT_FOUND
+            );
+        }
+
+        let passwordHash;
+
+        if (password) {
+            passwordHash = hashString(password);
+        }
+
+        await employee.update(
+            {
+                fullName,
+                passwordHash,
+                idStore,
+                idPosition
+            },
+            {
+                where: { id: idEmployee },
+            }    
+        );
+
+        updatedEmployee = employee.toJSON();
+    } catch (error: any) {
+        if (error.isTrusted) {
+          throw error;
+        } else {
+          throw new SQLException(error);
+        }
+    }
+
+    return updatedEmployee;
+}
+
 export {
     getEmployeeById,
-    createEmployee
+    createEmployee,
+    updateEmployee
 };

@@ -105,27 +105,27 @@ describe ("POST api/employees", () => {
     it("should display an error message indicating that the database server connection failed", async () => {
         await db.sequelize.close();
     
-            db.sequelize = new Sequelize('database', 'username', 'password', {
-                host: 'invalid-host',
-                port: 9999,
-                dialect: 'mssql',
-            });
-    
-            const employeeData = {
-                fullName: "María Pérez",
-                user: "mperez123",
-                password: "Hola123-",
-                registrationDate: "2023-01-19",
-                idStore: idStore,
-                idPosition: idPosition,
-            };
-        
-            const response = await request(app).post(`/api/employees`)
-            .set("Authorization", `Bearer ${token}`)
-            .send(employeeData);
-            
-            expect(response.status).toBe(HttpStatusCodes.INTERNAL_SERVER_ERROR);
+        db.sequelize = new Sequelize('database', 'username', 'password', {
+            host: 'invalid-host',
+            port: 9999,
+            dialect: 'mssql',
         });
+
+        const employeeData = {
+            fullName: "María Pérez",
+            user: "mperez123",
+            password: "Hola123-",
+            registrationDate: "2023-01-19",
+            idStore: idStore,
+            idPosition: idPosition,
+        };
+    
+        const response = await request(app).post(`/api/employees`)
+        .set("Authorization", `Bearer ${token}`)
+        .send(employeeData);
+        
+        expect(response.status).toBe(HttpStatusCodes.INTERNAL_SERVER_ERROR);
+    });
 
     afterAll(async () => {
         db.sequelize = new Sequelize("database", "username", "password", {
