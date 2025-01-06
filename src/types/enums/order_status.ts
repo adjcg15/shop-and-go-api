@@ -1,8 +1,8 @@
 enum OrderStatus {
     CREATED = "En proceso de validación",
-    CANCELED = "Cancelada",
-    SENT = "Enviada",
-    DELIVERED = "Entregada"
+    CANCELED = "Cancelado",
+    SENT = "Enviado",
+    DELIVERED = "Entregado"
 }
 
 export {
