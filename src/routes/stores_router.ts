@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { checkSchema } from "express-validator";
 import {
+    createStoreController,
     getNearestStoreController,
     getProductInventoryInStoreController,
     getProductsInStoreController,
@@ -25,17 +26,27 @@ import {
     checkTokenValidity,
     initializeOptionalSession,
 } from "../middlewares/access_control";
-import { getStoreValidationSchema } from "../validation_schemas/stores";
+import { createStoreValidationSchema, getStoreValidationSchema } from "../validation_schemas/stores";
 import { updateStoreValidationSchema } from "../validation_schemas/stores";
 
 const router = Router();
 
 router.put(
     "/:idStore",
-    initializeOptionalSession([UserRoles.ADMINISTRATOR]),
+    checkTokenValidity,
+    allowRoles([UserRoles.ADMINISTRATOR]),
     checkSchema(updateStoreValidationSchema),
     validateRequestSchemaMiddleware,
     updateStoreController
+);
+
+router.post(
+    "/",
+    checkTokenValidity,
+    allowRoles([UserRoles.ADMINISTRATOR]),
+    checkSchema(createStoreValidationSchema),
+    validateRequestSchemaMiddleware,
+    createStoreController
 );
 
 router.get(

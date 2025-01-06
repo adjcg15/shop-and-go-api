@@ -3,6 +3,8 @@ import Product from "../../models/Product";
 import Inventory from "../../models/Inventory";
 import Order from "../../models/Order";
 import OrderProduct from "../../models/OrderProduct";
+import EmployeePosition from "../../models/EmployeePosition";
+import Store from "../../models/Store";
 
 interface IInventoryWithOptionalProductIdBody extends Omit<InferAttributes<Inventory>, "id" | 'idProduct' | "idStore"> {
     id?: number;
@@ -69,6 +71,15 @@ interface IClientBody {
     phoneNumber?: string
 }
 
+interface IEmployeeBody {
+    fullName?: string,
+    user?: string,
+    password?: string,
+    registrationDate?: string,
+    idStore?: number,
+    idPosition?: number
+}
+
 export {
     IInventoryWithOptionalProductIdBody,
     IProductWithInventoriesBody,
@@ -79,5 +90,6 @@ export {
     IProductsByIdBody,
     ICoordinatesBody,
     IClientAddressBody,
-    IClientBody
+    IClientBody,
+    IEmployeeBody
 }

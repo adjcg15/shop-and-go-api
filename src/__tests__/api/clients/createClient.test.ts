@@ -7,7 +7,7 @@ import { CreateClientErrorCodes } from "../../../types/enums/error_codes";
 import { ErrorMessages } from "../../../types/enums/error_messages";
 import { Sequelize } from "sequelize";
 
-describe("/api/clients", () => {
+describe("POST api/clients", () => {
     let app: Express;
 
     beforeAll(async () => {

@@ -84,6 +84,22 @@ enum DeleteAddressErrorCodes {
     DELIVERY_ADDRESS_NOT_FOUND = EndpointContexts.DELETE_ADDRESS + "-400002",
 }
 
+enum CreateEmployeeErrorCodes {
+    STORE_NOT_FOUND = EndpointContexts.CREATE_EMPLOYEE + "-400001",
+    EMPLOYEE_POSITION_NOT_FOUND = EndpointContexts.CREATE_EMPLOYEE + "-400002",
+    EMPLOYEE_ALREADY_EXISTS = EndpointContexts.CREATE_EMPLOYEE + "-400003",
+}
+
+enum CreateStoreErrorCodes {
+    STORE_NAME_DUPLICATED = EndpointContexts.CREATE_STORE + "-400001",
+    STORE_LOCATION_DUPLICATED = EndpointContexts.CREATE_STORE + "-400002"
+}
+
+enum UpdateStoreErrorCodes {
+    STORE_NAME_DUPLICATED = EndpointContexts.UPDATE_STORE + "-400001",
+    STORE_LOCATION_DUPLICATED = EndpointContexts.UPDATE_STORE + "-400002"
+}
+
 export {
     CreatePaymentMethodErrorCodes,
     DeletePaymentMethodErrorCodes,
@@ -98,4 +114,7 @@ export {
     CreateClientErrorCodes,
     CreateAddressMethodErrorCodes,
     DeleteAddressErrorCodes,
+    CreateEmployeeErrorCodes,
+    CreateStoreErrorCodes,
+    UpdateStoreErrorCodes
 };
