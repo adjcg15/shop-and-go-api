@@ -51,6 +51,13 @@ DECLARE @idEmisorBBVA INT;
 DECLARE @idClienteRodrigo INT;
 DECLARE @idClienteAngel INT;
 
+DECLARE @idEstadoPedidoCreado INT;
+DECLARE @idEstadoPedidoCancelado INT;
+DECLARE @idEstadoPedidoEnviado INT;
+DECLARE @idEstadoPedidoEntregado INT;
+
+DELETE FROM EstadosPedido;
+
 DELETE FROM MetodosPago;
 DELETE FROM EmisoresMetodosPago;
 
@@ -62,6 +69,15 @@ DELETE FROM Inventarios;
 DELETE FROM Productos;
 DELETE FROM Sucursales;
 DELETE FROM Categorias;
+
+--Llenar la tabla de estados de pedidos
+INSERT INTO EstadosPedido (nombre) VALUES
+('En proceso de validación'), ('Cancelado'), ('Enviado'), ('Entregado');
+
+SELECT @idEstadoPedidoCreado = idEstadoPedido FROM EstadosPedido WHERE nombre = 'En proceso de validación';
+SELECT @idEstadoPedidoCancelado = idEstadoPedido FROM EstadosPedido WHERE nombre = 'Cancelado';
+SELECT @idEstadoPedidoEnviado = idEstadoPedido FROM EstadosPedido WHERE nombre = 'Enviado';
+SELECT @idEstadoPedidoEntregado = idEstadoPedido FROM EstadosPedido WHERE nombre = 'Entregado';
 
 --Llenar la tabla de categorías
 INSERT INTO Categorias (nombre, esActiva) VALUES 
