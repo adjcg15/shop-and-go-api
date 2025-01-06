@@ -80,7 +80,7 @@ router.post(
   createClientController
 );
 
-router.put(
+router.patch(
   "/:idClient",
   checkTokenValidity,
   validateClientOwnership,
