@@ -46,10 +46,32 @@ DECLARE @idCategoriaLimpiezaHogar INT;
 DECLARE @idCargoAdmin INT;
 DECLARE @idCargoEjecutivo INT;
 DECLARE @idCargoRepartidor INT;
+
+DECLARE @idRepartidor1 INT;
+
 DECLARE @idEmisorBanamex INT;
 DECLARE @idEmisorBBVA INT;
+
 DECLARE @idClienteRodrigo INT;
 DECLARE @idClienteAngel INT;
+
+DECLARE @idMetodoPagoPreferidoRodrigo INT;
+
+DECLARE @idDireccionEntregaPreferidaRodrigo INT;
+
+DECLARE @idEstadoPedidoCreado INT;
+DECLARE @idEstadoPedidoCancelado INT;
+DECLARE @idEstadoPedidoEnviado INT;
+DECLARE @idEstadoPedidoEntregado INT;
+
+DECLARE @idPedidoCancelado1 INT;
+DECLARE @idPedidoCancelado2 INT;
+DECLARE @idPedidoCancelado3 INT;
+
+DELETE FROM Incidencias;
+DELETE FROM PedidosProductos;
+DELETE FROM Pedidos;
+DELETE FROM EstadosPedido;
 
 DELETE FROM MetodosPago;
 DELETE FROM EmisoresMetodosPago;
@@ -62,6 +84,15 @@ DELETE FROM Inventarios;
 DELETE FROM Productos;
 DELETE FROM Sucursales;
 DELETE FROM Categorias;
+
+--Llenar la tabla de estados de pedidos
+INSERT INTO EstadosPedido (nombre) VALUES
+('En proceso de validación'), ('Cancelado'), ('Enviado'), ('Entregado');
+
+SELECT @idEstadoPedidoCreado = idEstadoPedido FROM EstadosPedido WHERE nombre = 'En proceso de validación';
+SELECT @idEstadoPedidoCancelado = idEstadoPedido FROM EstadosPedido WHERE nombre = 'Cancelado';
+SELECT @idEstadoPedidoEnviado = idEstadoPedido FROM EstadosPedido WHERE nombre = 'Enviado';
+SELECT @idEstadoPedidoEntregado = idEstadoPedido FROM EstadosPedido WHERE nombre = 'Entregado';
 
 --Llenar la tabla de categorías
 INSERT INTO Categorias (nombre, esActiva) VALUES 
@@ -227,6 +258,8 @@ VALUES
 (26, 7, @idEmisorBanamex, 'a347cc70fb1d80b5376f1da54a87361a', '$2b$10$EFGHtQ19Jn6jBiKTBCWpN.joSnez14/DGev6pjmVGVFkI50cBqWom', '2115da1fb7311dd68e723037', '5c10aa0884f17e9727347a0ef895e5fc', 'Margarita López Viveros', 1, @idClienteRodrigo),
 (29, 3, @idEmisorBBVA, '0b9779953e3bfc06bcee94ef9a813bc8', '$2b$10$mUvA2nwIE7TVDlQ024Wrhe3LeOPBOXO7raa3t2a6PISbNssoemB5e', '18f3889fb4ca2fed5b0cf58d', '726be28dd251784b6a127b485ad4eb89', 'Miguel Aguilar López', 1, @idClienteRodrigo);
 
+SELECT @idMetodoPagoPreferidoRodrigo = idMetodoPago FROM MetodosPago WHERE numeroTarjetaEncriptado = '81cc6aa5a713c62b2868497a696792df';
+
 --Llenar la tabla de trabajadores con sus respectivos roles
 INSERT INTO CargosTrabajador (nombre) 
 VALUES ('Ejecutivo de ventas'), ('Administrador'), ('Repartidor');
@@ -252,6 +285,7 @@ VALUES ('Ángel de Jesús De la cruz García', 'admin', '$2a$12$Hg2zf5PeoguYwtnA
 ('Ángel de Jesús De la cruz García', 'repartidor', '$2a$12$Hg2zf5PeoguYwtnAm6lwV.B1zhvCj/4C2BywOsJCFlpeD3caSrsi2',
 '2023-01-04', 1, 1, @idSucursal1, @idCargoRepartidor);
 
+SELECT @idRepartidor1 = idTrabajador FROM Trabajadores WHERE usuario = 'repartidor';
 
 INSERT INTO DireccionesEntrega (
 	[calle],
@@ -271,3 +305,39 @@ VALUES ('C Adalberto Tejeda ', '403', 'A','Salvador Díaz Miron', 'Xalapa-Enríq
 ('Agustín F. Blancas', '7', NULL, 'Col del Maestro', 'Xalapa-Enríquez', 'Xalapa', '91030', 'Veracruz', 19.541299, -96.925154, 1, @idClienteRodrigo),
 ('Naranjas', '6', 'B', 'Framboyanes', 'Xalapa-Enríquez', 'Xalapa', '91015', 'Veracruz', 19.561216, -96.937488, 1, @idClienteAngel),
 ('Ismael Cristein', '547', NULL, 'Rafael Lucio', 'Xalapa-Enríquez', 'Xalapa', '91110', 'Veracruz', 19.565027, -96.921050, 1, @idClienteAngel);
+
+SELECT @idDireccionEntregaPreferidaRodrigo = idDireccionEntrega FROM DireccionesEntrega WHERE calle = 'C Adalberto Tejeda ';
+
+--Llenar la tabla de pedidos
+INSERT INTO Pedidos (
+	fechaSolicitud, 
+	fechaEntrega, 
+	idCliente, 
+	idMetodoPago, 
+	idDireccionEntrega, 
+	idEstadoPedido, 
+	idSucursal, 
+	idTrabajador
+) VALUES
+('2025-01-06 14:30:00', null, @idClienteRodrigo, @idMetodoPagoPreferidoRodrigo, 
+@idDireccionEntregaPreferidaRodrigo, @idEstadoPedidoCancelado, @idSucursal1, @idRepartidor1),
+('2025-01-05 10:12:00', null, @idClienteRodrigo, @idMetodoPagoPreferidoRodrigo, 
+@idDireccionEntregaPreferidaRodrigo, @idEstadoPedidoCancelado, @idSucursal1, @idRepartidor1),
+('2025-01-02 15:21:00', null, @idClienteRodrigo, @idMetodoPagoPreferidoRodrigo, 
+@idDireccionEntregaPreferidaRodrigo, @idEstadoPedidoCancelado, @idSucursal1, @idRepartidor1);
+
+SELECT @idPedidoCancelado1 = idPedido FROM Pedidos WHERE fechaSolicitud = '2025-01-06 14:30:00';
+SELECT @idPedidoCancelado2 = idPedido FROM Pedidos WHERE fechaSolicitud = '2025-01-05 10:12:00';
+SELECT @idPedidoCancelado3 = idPedido FROM Pedidos WHERE fechaSolicitud = '2025-01-02 15:21:00';
+
+--Llenar la tabla de pedidos-productos
+INSERT INTO PedidosProductos (cantidad, idProducto, idPedido) VALUES
+(2, @idProductoArrozConLeche, @idPedidoCancelado1),
+(5, @idProductoPiniaMielKilo, @idPedidoCancelado2),
+(1, @idProductoCoca3L, @idPedidoCancelado3);
+
+--Llenar la tabla de incidencias
+INSERT INTO Incidencias (fechaCreacion, motivo, idPedido) VALUES
+('2025-01-06 14:54:00', 'La espera supero el tiempo límite estipulado', @idPedidoCancelado1),
+('2025-01-05 10:27:00', 'Uno de los productos del pedido se dañó', @idPedidoCancelado2),
+('2025-01-02 16:21:00', 'No se logró encontrar la dirección de entrega', @idPedidoCancelado3);
