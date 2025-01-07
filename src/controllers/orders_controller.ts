@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
-import { IOrderWithQuantitiesOfProductsBody } from "../types/interfaces/request_bodies";
-import { createOrder, getOrdersByEmployeeAndStatus, getOrdersToAssign } from "../services/orders_service";
+import { IDeliverOrderBody, IOrderWithQuantitiesOfProductsBody } from "../types/interfaces/request_bodies";
+import { createOrder, deliverOrder, getOrdersByEmployeeAndStatus, getOrdersToAssign } from "../services/orders_service";
 import { InferAttributes } from "sequelize";
 import { IEmployeeByIdParams } from "../types/interfaces/request_parameters";
 import { IOrdersForDeliveryQuery } from "../types/interfaces/request_queries";
@@ -10,6 +10,7 @@ import { OrderStatus } from "../types/enums/order_status";
 import { getStoreWhereEmployeeWorks } from "../services/stores_service";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { ErrorMessages } from "../types/enums/error_messages";
+import { isOrderBeingDeliveredByDeliveryMan } from "../services/incidents_service";
 
 async function createOrderController(
     req: Request<{}, {}, IOrderWithQuantitiesOfProductsBody, {}>,
@@ -74,8 +75,39 @@ async function getOrdersToAssignController(
     }
 }
 
+async function deliverOrderController(
+    req: Request<{}, {}, IDeliverOrderBody, {}>,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const idEmployee = req.user.id;
+        const idOrder = req.body.idOrder;
+
+        const isOrderOwner = await isOrderBeingDeliveredByDeliveryMan(idOrder, idEmployee);
+        if(!isOrderOwner) {
+            throw new BusinessLogicException(
+                ErrorMessages.ORDER_NOT_FOUND,
+                undefined,
+                HttpStatusCodes.NOT_FOUND
+            );
+        }
+
+        const deliveredOrder = await deliverOrder(
+            idEmployee,
+            idOrder!,
+        );
+
+        res.status(HttpStatusCodes.CREATED).send(deliveredOrder);
+    } catch (error) {
+        next(error);
+    }
+}
+
+
 export {
     createOrderController,
     getOrdersToDeliverController,
-    getOrdersToAssignController
+    getOrdersToAssignController,
+    deliverOrderController
 }

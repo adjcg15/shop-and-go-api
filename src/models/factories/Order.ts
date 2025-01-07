@@ -10,12 +10,12 @@ export default (sequelize: Sequelize) => {
             field: "idPedido"
         },
         dateOfPurchase: {
-            type: DataTypes.DATE,
+            type: DataTypes.STRING,
             field: "fechaSolicitud",
             allowNull: false
         },
         deliveryDate: {
-            type: DataTypes.DATE,
+            type: DataTypes.STRING,
             field: "fechaEntrega",
             allowNull: true
         },
