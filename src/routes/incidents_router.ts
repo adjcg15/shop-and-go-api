@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { allowRoles, checkTokenValidity } from "../middlewares/access_control";
 import UserRoles from "../types/enums/user_roles";
-import { getIncidentsListController } from "../controllers/incidents_controller";
-import { getIncidentsListValidationSchema } from "../validation_schemas/incidents";
+import { createIncidentController, getIncidentsListController } from "../controllers/incidents_controller";
+import { createIncidentValidationSchema, getIncidentsListValidationSchema } from "../validation_schemas/incidents";
 import { checkSchema } from "express-validator";
 import validateRequestSchemaMiddleware from "../middlewares/schema_validator";
 import { injectDefaultGetIncidentsListQueryMiddleware } from "../middlewares/value_injectors";
@@ -17,6 +17,15 @@ router.get(
     validateRequestSchemaMiddleware,
     injectDefaultGetIncidentsListQueryMiddleware,
     getIncidentsListController
+);
+
+router.post(
+    "/",
+    checkTokenValidity,
+    allowRoles([UserRoles.DELIVERY_MAN]),
+    checkSchema(createIncidentValidationSchema),
+    validateRequestSchemaMiddleware,
+    createIncidentController
 );
 
 export default router;
