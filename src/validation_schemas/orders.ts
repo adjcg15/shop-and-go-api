@@ -68,7 +68,22 @@ const deliverOrderValidationsSchema: Schema = {
     },
 }
 
+const getOrderToAssignByIdValidationSchema: Schema = {
+    idOrder: {
+        in: ["params"],
+        notEmpty: {
+            errorMessage: "idOrder is required"
+        },
+        isInt: {
+            options: { min: 1 },
+            errorMessage: "Parameter idOrder must be a positive integer",
+        },
+        toInt: true
+    },
+}
+
 export {
     createOrderValidationsSchema,
     deliverOrderValidationsSchema,
+    getOrderToAssignByIdValidationSchema
 }
