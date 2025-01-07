@@ -55,10 +55,19 @@ describe("GET /api/orders/orders-to-deliver", () => {
             port: 9999,
             dialect: "mssql",
         });
-        
-        const response = await request(app).get(`/api/product-categories`);
+
+        const response = await request(app).get(`/api/orders/orders-to-deliver`).set("Authorization", `Bearer ${token}`);
 
         expect(response.status).toBe(HttpStatusCodes.INTERNAL_SERVER_ERROR);
     });
 
+    afterAll(async () => {
+        db.sequelize = new Sequelize("database", "username", "password", {
+            host: "localhost",
+            port: 1433,
+            dialect: "mssql",
+        });
+        
+        await db.sequelize.close();
+    });
 });
