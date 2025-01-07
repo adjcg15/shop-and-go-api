@@ -4,8 +4,6 @@ import { Express } from "express";
 import { HttpStatusCodes } from "../../../types/enums/http";
 import db from "../../../models";
 import { Sequelize } from "sequelize";
-import UserRoles from "../../../types/enums/user_roles";
-import { signToken } from "../../../lib/token_store";
 import { insertE2EGetOrdersToDeliverTestData } from "../../../test_data/e2e/orders_test_data";
 
 describe("GET /api/orders/orders-to-deliver", () => {

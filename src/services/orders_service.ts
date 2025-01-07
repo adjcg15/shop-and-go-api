@@ -235,8 +235,111 @@ async function getOrdersToAssign(idStore: number) {
     return ordersList;
 }
 
+async function deliverOrder(
+    idEmployee: number,
+    idOrder: number,
+) {
+    let deliveredOrder = null;
+    const sequelize = db.sequelize;
+    const transaction = await sequelize.transaction();
+
+    try {
+        const deliveredStatus = await db.OrderStatus.findOne({
+            where: {title: OrderStatus.DELIVERED}
+        });
+
+        if (!deliveredStatus) {
+            throw new BusinessLogicException(
+                "The order status DELIVERED is not registered on database and is needed",
+                undefined,
+                HttpStatusCodes.INTERNAL_SERVER_ERROR
+            );
+        }
+
+        await db.Employee.update(
+            {
+                isAvailableForWork: true
+            },
+            {
+                where: { id: idEmployee },
+                transaction
+            }
+        );
+
+        const orderToDeliver = await db.Order.findByPk(idOrder);
+
+        if (!orderToDeliver) {
+            throw new BusinessLogicException(
+                "Order is not registered on database and is needed",
+                undefined,
+                HttpStatusCodes.NOT_FOUND
+            );
+        }
+
+        const deliveryDate = getCurrentDateTimeSQL();
+
+        await orderToDeliver.update(
+            {
+                idStatus: deliveredStatus.id,
+                deliveryDate: deliveryDate
+            },
+            {
+                where: { id: idOrder },
+                transaction
+            }
+        )
+
+        await transaction.commit();
+
+        deliveredOrder = orderToDeliver.toJSON();
+    } catch(error: any) {
+        await transaction.rollback();
+        
+        if(error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+
+    return deliveredOrder;
+}
+
+async function isOrderBeingDeliveredByDeliveryMan(idOrder: number, idDeliveryMan: number) {
+    let isOwner = false;
+
+    try {
+        const dbSentOrderStatus = await db.OrderStatus.findOne({ 
+            where: { title: OrderStatus.SENT }
+        });
+        if(!dbSentOrderStatus) {
+            throw new BusinessLogicException(
+                "The order status SENT is not registered on database and is needed",
+                undefined,
+                HttpStatusCodes.INTERNAL_SERVER_ERROR
+            );
+        }
+
+        const dbOrder = await db.Order.findOne({
+            where: { id: idOrder, idDeliveryMan, idStatus: dbSentOrderStatus.id }
+        });
+        
+        if(dbOrder) isOwner = true;
+    } catch (error: any) {
+        if(error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+
+    return isOwner;
+}
+
 export {
     createOrder,
     getOrdersByEmployeeAndStatus,
-    getOrdersToAssign
+    getOrdersToAssign,
+    deliverOrder,
+    isOrderBeingDeliveredByDeliveryMan
 }
