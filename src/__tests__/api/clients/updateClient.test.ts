@@ -5,7 +5,7 @@ import { HttpStatusCodes } from "../../../types/enums/http";
 import db from "../../../models";
 import { insertE2EUpdateClientTestData } from "../../../test_data/e2e/clients_test_data";
 
-describe("PUT /api/clients/:idClient", () => {
+describe("PATCH /api/clients/:idClient", () => {
     let app: Express;
     let idClient: number;
     let token: string = "";
@@ -28,7 +28,7 @@ describe("PUT /api/clients/:idClient", () => {
         const NEW_FULL_NAME = "Jane Doe";
         const NEW_BIRTHDATE = "1995-05-15";
 
-        const response = await request(app).put(`/api/clients/${idClient}`)
+        const response = await request(app).patch(`/api/clients/${idClient}`)
             .set("Authorization", `Bearer ${token}`)
             .send({ fullName: NEW_FULL_NAME, birthdate: NEW_BIRTHDATE });
 
@@ -38,7 +38,7 @@ describe("PUT /api/clients/:idClient", () => {
     it("Should update only the client's full name", async () => {
         const NEW_FULL_NAME = "Jane Doe";
 
-        const response = await request(app).put(`/api/clients/${idClient}`)
+        const response = await request(app).patch(`/api/clients/${idClient}`)
             .set("Authorization", `Bearer ${token}`)
             .send({ fullName: NEW_FULL_NAME });
 
@@ -48,7 +48,7 @@ describe("PUT /api/clients/:idClient", () => {
     it("Should update only the client's birthdate", async () => {
         const NEW_BIRTHDATE = "1995-05-15";
 
-        const response = await request(app).put(`/api/clients/${idClient}`)
+        const response = await request(app).patch(`/api/clients/${idClient}`)
             .set("Authorization", `Bearer ${token}`)
             .send({ birthdate: NEW_BIRTHDATE });
 
@@ -56,7 +56,7 @@ describe("PUT /api/clients/:idClient", () => {
     });
 
     it("Should return an error if no field is sent to update", async () => {
-        const response = await request(app).put(`/api/clients/${idClient}`)
+        const response = await request(app).patch(`/api/clients/${idClient}`)
             .set("Authorization", `Bearer ${token}`);
 
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
@@ -64,7 +64,7 @@ describe("PUT /api/clients/:idClient", () => {
 
     it("Should return an error if the token is invalid", async () => {
         const INVALID_TOKEN = "invalid.token.here";
-        const response = await request(app).put(`/api/clients/${idClient}`)
+        const response = await request(app).patch(`/api/clients/${idClient}`)
             .set("Authorization", `Bearer ${INVALID_TOKEN}`);
 
         expect(response.status).toBe(HttpStatusCodes.UNAUTHORIZED);

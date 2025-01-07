@@ -80,6 +80,10 @@ interface IEmployeeBody {
     idPosition?: number
 }
 
+interface IDeliverOrderBody {
+    idOrder: number,
+}
+
 export {
     IInventoryWithOptionalProductIdBody,
     IProductWithInventoriesBody,
@@ -91,5 +95,6 @@ export {
     ICoordinatesBody,
     IClientAddressBody,
     IClientBody,
-    IEmployeeBody
+    IEmployeeBody,
+    IDeliverOrderBody
 }

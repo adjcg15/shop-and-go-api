@@ -160,6 +160,15 @@ async function insertE2ECreateAddressTestData() {
         phoneNumber: "1234567890"
     });
 
+    await db.Store.create({
+        name: "El zorro Xalapa centro",
+        address: "Dr. Rafael Lucio 28, Zona Centro, Centro, 91000 Xalapa-Enríquez, Ver.",
+        openingTime: "07:00:00.00",
+        closingTime: "22:00:00.00",
+        latitude: 19.528761,
+        longitude: -96.922326,
+    })
+
     return {
         idClient: client.id
     }

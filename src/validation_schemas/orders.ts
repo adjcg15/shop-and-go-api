@@ -52,8 +52,23 @@ const createOrderValidationsSchema: Schema = {
             errorMessage: "Each product must have a valid idProduct (integer > 0) and amount (positive integer).",
         }
     }
-}    
+}
+
+const deliverOrderValidationsSchema: Schema = {
+    idOrder: {
+        in: ["body"],
+        notEmpty: {
+            errorMessage: "idOrder cannot be empty",
+        },
+        isInt: {
+            options: { min: 1 },
+            errorMessage: "idOrder must be a positive integer",
+        },
+        toInt: true
+    },
+}
 
 export {
-    createOrderValidationsSchema
+    createOrderValidationsSchema,
+    deliverOrderValidationsSchema,
 }

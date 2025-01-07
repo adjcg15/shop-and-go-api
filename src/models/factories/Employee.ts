@@ -25,7 +25,7 @@ export default (sequelize: Sequelize) => {
             allowNull: false
         },
         registrationDate: {
-            type: DataTypes.DATEONLY,
+            type: DataTypes.STRING,
             field: "fechaIngreso",
             allowNull: false
         },

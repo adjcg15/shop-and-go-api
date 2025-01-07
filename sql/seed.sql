@@ -68,6 +68,14 @@ DECLARE @idPedidoCancelado1 INT;
 DECLARE @idPedidoCancelado2 INT;
 DECLARE @idPedidoCancelado3 INT;
 
+DECLARE @idPedidoEnviado1 INT;
+DECLARE @idPedidoEnviado2 INT;
+DECLARE @idPedidoEnviado3 INT;
+
+DECLARE @idPedidoCreado1 INT;
+DECLARE @idPedidoCreado2 INT;
+DECLARE @idPedidoCreado3 INT;
+
 DELETE FROM Incidencias;
 DELETE FROM PedidosProductos;
 DELETE FROM Pedidos;
@@ -324,17 +332,46 @@ INSERT INTO Pedidos (
 ('2025-01-05 10:12:00', null, @idClienteRodrigo, @idMetodoPagoPreferidoRodrigo, 
 @idDireccionEntregaPreferidaRodrigo, @idEstadoPedidoCancelado, @idSucursal1, @idRepartidor1),
 ('2025-01-02 15:21:00', null, @idClienteRodrigo, @idMetodoPagoPreferidoRodrigo, 
-@idDireccionEntregaPreferidaRodrigo, @idEstadoPedidoCancelado, @idSucursal1, @idRepartidor1);
+@idDireccionEntregaPreferidaRodrigo, @idEstadoPedidoCancelado, @idSucursal1, @idRepartidor1),
+('2025-01-02 19:34:00', null, @idClienteRodrigo, @idMetodoPagoPreferidoRodrigo, 
+@idDireccionEntregaPreferidaRodrigo, @idEstadoPedidoEnviado, @idSucursal1, @idRepartidor1),
+('2025-01-05 09:12:00', null, @idClienteRodrigo, @idMetodoPagoPreferidoRodrigo, 
+@idDireccionEntregaPreferidaRodrigo, @idEstadoPedidoEnviado, @idSucursal1, @idRepartidor1),
+('2025-01-02 21:24:00', null, @idClienteRodrigo, @idMetodoPagoPreferidoRodrigo, 
+@idDireccionEntregaPreferidaRodrigo, @idEstadoPedidoEnviado, @idSucursal1, @idRepartidor1),
+('2025-01-04 20:48:00', null, @idClienteRodrigo, @idMetodoPagoPreferidoRodrigo, 
+@idDireccionEntregaPreferidaRodrigo, @idEstadoPedidoCreado, @idSucursal1, null),
+('2025-01-04 16:12:00', null, @idClienteRodrigo, @idMetodoPagoPreferidoRodrigo, 
+@idDireccionEntregaPreferidaRodrigo, @idEstadoPedidoCreado, @idSucursal1, null),
+('2025-01-04 09:07:00', null, @idClienteRodrigo, @idMetodoPagoPreferidoRodrigo, 
+@idDireccionEntregaPreferidaRodrigo, @idEstadoPedidoCreado, @idSucursal1, null);
 
 SELECT @idPedidoCancelado1 = idPedido FROM Pedidos WHERE fechaSolicitud = '2025-01-06 14:30:00';
 SELECT @idPedidoCancelado2 = idPedido FROM Pedidos WHERE fechaSolicitud = '2025-01-05 10:12:00';
 SELECT @idPedidoCancelado3 = idPedido FROM Pedidos WHERE fechaSolicitud = '2025-01-02 15:21:00';
+SELECT @idPedidoEnviado1 = idPedido FROM Pedidos WHERE fechaSolicitud = '2025-01-02 19:34:00';
+SELECT @idPedidoEnviado2 = idPedido FROM Pedidos WHERE fechaSolicitud = '2025-01-05 09:12:00';
+SELECT @idPedidoEnviado3 = idPedido FROM Pedidos WHERE fechaSolicitud = '2025-01-02 21:24:00';
+SELECT @idPedidoCreado1 = idPedido FROM Pedidos WHERE fechaSolicitud = '2025-01-04 20:48:00';
+SELECT @idPedidoCreado2 = idPedido FROM Pedidos WHERE fechaSolicitud = '2025-01-04 16:12:00';
+SELECT @idPedidoCreado3 = idPedido FROM Pedidos WHERE fechaSolicitud = '2025-01-04 09:07:00';
 
 --Llenar la tabla de pedidos-productos
 INSERT INTO PedidosProductos (cantidad, idProducto, idPedido) VALUES
 (2, @idProductoArrozConLeche, @idPedidoCancelado1),
 (5, @idProductoPiniaMielKilo, @idPedidoCancelado2),
-(1, @idProductoCoca3L, @idPedidoCancelado3);
+(1, @idProductoCoca3L, @idPedidoCancelado3),
+(4, @idProductoArrozConLeche, @idPedidoEnviado1),
+(5, @idProductoPiniaMielKilo, @idPedidoEnviado1),
+(2, @idProductoCoca3L, @idPedidoEnviado1),
+(3, @idProductoAlpuraDeslactosada, @idPedidoEnviado2),
+(4, @idProductoAtun, @idPedidoEnviado2),
+(2, @idProductoCoca3L, @idPedidoEnviado3),
+(1, @idProductoAlpuraDeslactosada, @idPedidoCreado1),
+(2, @idProductoAtun, @idPedidoCreado2),
+(1, @idProductoPanBlanco, @idPedidoCreado2),
+(1, @idProductoQuesoOaxaca, @idPedidoCreado2),
+(1, @idProductoSmirnoff, @idPedidoCreado3);
 
 --Llenar la tabla de incidencias
 INSERT INTO Incidencias (fechaCreacion, motivo, idPedido) VALUES
