@@ -25,6 +25,7 @@ enum ErrorMessages {
     CLIENT_ALREADY_EXISTS = "The client with the specified phone number already exists",
     EMPLOYEE_POSITION_NOT_FOUND = "The employee position with the specified id is not registered",
     EMPLOYEE_ALREADY_EXISTS = "The employee already exists, verify it",
+    STORE_OF_EMPLOYEE_NOT_FOUNT = "The is not any store related to the employee requesting the information"
 }
 
 export { 

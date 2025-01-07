@@ -5,7 +5,7 @@ import UserRoles from "../types/enums/user_roles";
 import { checkSchema } from "express-validator";
 import { createOrderValidationsSchema } from "../validation_schemas/orders";
 import validateRequestSchemaMiddleware from "../middlewares/schema_validator";
-import { createOrderController, getOrdersToDeliverController } from "../controllers/orders_controller";
+import { createOrderController, getOrdersToAssignController, getOrdersToDeliverController } from "../controllers/orders_controller";
 
 const router = Router();
 
@@ -24,6 +24,13 @@ router.get(
     checkTokenValidity,
     allowRoles([UserRoles.DELIVERY_MAN]),
     getOrdersToDeliverController
+);
+
+router.get(
+    "/orders-to-assign",
+    checkTokenValidity,
+    allowRoles([UserRoles.SALES_EXECUTIVE]),
+    getOrdersToAssignController
 );
 
 
