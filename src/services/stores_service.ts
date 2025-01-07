@@ -136,4 +136,23 @@ async function getStore(idStore: number) {
     return store;
 }
 
-export { updateStore, getStores, getStore, createStore };
+async function getStoreWhereEmployeeWorks(idEmployee: number) {
+    let store: InferAttributes<Store> | null = null;
+
+    try {
+        const employee = await db.Employee.findByPk(idEmployee);
+        if(employee) {
+            const dbStore = await db.Store.findByPk(employee.idStore);
+
+            if(dbStore) {
+                store = dbStore?.toJSON();
+            }
+        }
+    } catch (error: any) {
+        throw new SQLException(error);
+    }
+
+    return store;
+}
+
+export { updateStore, getStores, getStore, createStore, getStoreWhereEmployeeWorks };
