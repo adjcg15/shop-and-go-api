@@ -10,7 +10,7 @@ export default (sequelize: Sequelize) => {
             field: "idIncidencia"
         },
         creationDate: {
-            type: DataTypes.DATE,
+            type: DataTypes.DATEONLY,
             field: "fechaCreacion",
             allowNull: false
         },
