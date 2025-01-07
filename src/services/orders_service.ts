@@ -8,6 +8,7 @@ import { getCurrentDateTimeSQL } from "../lib/datetime_service";
 import { OrderStatus } from "../types/enums/order_status";
 import { InferAttributes } from "sequelize";
 import Order from "../models/Order";
+import { HttpStatusCodes } from "../types/enums/http";
 
 async function createOrder(
     order: { 
@@ -201,8 +202,41 @@ async function getOrdersByEmployeeAndStatus(
     return ordersList;
 }
 
+async function getOrdersToAssign(idStore: number) {
+    const ordersList: InferAttributes<Order>[] = [];
+
+    try {
+        const dbCreatedOrderStatus = await db.OrderStatus.findOne({ 
+            where: { title: OrderStatus.CREATED }
+        });
+        if(!dbCreatedOrderStatus) {
+            throw new BusinessLogicException(
+                "The order status CREATED is not registered on database and is needed",
+                undefined,
+                HttpStatusCodes.INTERNAL_SERVER_ERROR
+            );
+        }
+
+        const orders = await db.Order.findAll({
+            where: { idStore, idStatus: dbCreatedOrderStatus.id },
+            include: [{ association: db.Order.associations.deliveryAddress }],
+            order: [["dateOfPurchase", "ASC"]]
+        });
+
+        orders.forEach(order => ordersList.push(order.toJSON()));
+    } catch (error: any) {
+        if (error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+
+    return ordersList;
+}
 
 export {
     createOrder,
-    getOrdersByEmployeeAndStatus
+    getOrdersByEmployeeAndStatus,
+    getOrdersToAssign
 }
