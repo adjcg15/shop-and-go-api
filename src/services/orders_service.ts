@@ -240,6 +240,51 @@ async function getOrdersToAssign(idStore: number) {
     return ordersList;
 }
 
+async function getOrderToAssignByIdInStore(idStore: number, idOrder: number) {
+    let order: InferAttributes<Order>;
+
+    try {
+        const dbCreatedOrderStatus = await db.OrderStatus.findOne({
+            where: { title: OrderStatus.CREATED },
+        });
+        if (!dbCreatedOrderStatus) {
+            throw new BusinessLogicException(
+                "The order status CREATED is not registered on database and is needed",
+                undefined,
+                HttpStatusCodes.INTERNAL_SERVER_ERROR
+            );
+        }
+
+        const dbOrder = await db.Order.findOne({
+            where: { id: idOrder, idStore, idStatus: dbCreatedOrderStatus.id },
+            include: [
+                { association: db.Order.associations.deliveryAddress },
+                { association: db.Order.associations.client },
+                { association: db.Order.associations.products }
+            ],
+            order: [["dateOfPurchase", "ASC"]],
+        });
+
+        if(!dbOrder) {
+            throw new BusinessLogicException(
+                ErrorMessages.ORDER_NOT_FOUND,
+                undefined,
+                HttpStatusCodes.NOT_FOUND
+            );
+        }
+
+        order = dbOrder.toJSON();
+    } catch (error: any) {
+        if (error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+
+    return order;
+}
+
 async function deliverOrder(idEmployee: number, idOrder: number) {
     let deliveredOrder = null;
     const sequelize = db.sequelize;
@@ -351,4 +396,5 @@ export {
     getOrdersToAssign,
     deliverOrder,
     isOrderBeingDeliveredByDeliveryMan,
+    getOrderToAssignByIdInStore
 };
