@@ -3,9 +3,11 @@ import SQLException from "../exceptions/services/SQLException";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { IOrderProductsBody } from "../types/interfaces/request_bodies";
 import { ErrorMessages } from "../types/enums/error_messages";
-import { CreateOrderErrorCodes } from "../types/enums/error_codes";
+import { CreateOrderErrorCodes, GetOrdersByEmployeeAndStatus } from "../types/enums/error_codes";
 import { getCurrentDateTimeSQL } from "../lib/datetime_service";
 import { OrderStatus } from "../types/enums/order_status";
+import { InferAttributes } from "sequelize";
+import Order from "../models/Order";
 
 async function createOrder(
     order: { 
@@ -150,6 +152,67 @@ async function createOrder(
     }
 }
 
+async function getOrdersByEmployeeAndStatus(
+    idEmployee: number,
+    status: string
+) {
+    const ordersList: InferAttributes<Order>[] = [];
+
+    try {
+        const existingEmployee = await db.Employee.findByPk(idEmployee);
+
+        if (existingEmployee === null) {
+            throw new BusinessLogicException(
+                ErrorMessages.EMPLOYEE_NOT_FOUND,
+                GetOrdersByEmployeeAndStatus.EMPLOYEE_NOT_FOUND
+            );
+        }
+
+        const existingStatus = await db.OrderStatus.findOne({
+            where: { title: status }
+        })
+
+        if (existingStatus === null) {
+            throw new BusinessLogicException(
+                ErrorMessages.ORDER_STATUS_NOT_FOUND,
+                GetOrdersByEmployeeAndStatus.ORDER_STATUS_NOT_FOUND
+            );
+        }
+
+        const orders = await Order.findAll({
+            where: { idDeliveryMan: idEmployee, idStatus: existingStatus.id },
+            include: [
+                {
+                    association: 'deliveryAddress'
+                },
+                {
+                    association: 'client'
+                },
+                {
+                    association: 'products'
+                }
+            ]
+        })
+
+        orders.forEach((order) => {
+            ordersList.push({
+                ...order.toJSON(),
+            });
+        });
+
+    } catch (error: any) {
+        if (error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+
+    return ordersList;
+}
+
+
 export {
-    createOrder
+    createOrder,
+    getOrdersByEmployeeAndStatus
 }

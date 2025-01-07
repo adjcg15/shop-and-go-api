@@ -106,6 +106,11 @@ enum UpdateStoreErrorCodes {
     STORE_LOCATION_DUPLICATED = EndpointContexts.UPDATE_STORE + "-400002"
 }
 
+enum GetOrdersByEmployeeAndStatus {
+    EMPLOYEE_NOT_FOUND = EndpointContexts.GET_ORDERS_BY_EMPLOYEE_AND_STATUS + "-400001",
+    ORDER_STATUS_NOT_FOUND = EndpointContexts.GET_ORDERS_BY_EMPLOYEE_AND_STATUS + "-400002",
+}
+
 export {
     CreatePaymentMethodErrorCodes,
     DeletePaymentMethodErrorCodes,
@@ -123,5 +128,6 @@ export {
     CreateEmployeeErrorCodes,
     UpdateEmployeeErrorCodes,
     CreateStoreErrorCodes,
-    UpdateStoreErrorCodes
+    UpdateStoreErrorCodes,
+    GetOrdersByEmployeeAndStatus
 };
