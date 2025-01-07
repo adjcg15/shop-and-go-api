@@ -8,6 +8,7 @@ enum ErrorMessages {
     STORE_LOCATION_DUPLICATED = "The store with the given location (latitude and longitude) already exists",
     DELIVERY_ADDRESS_NOT_FOUND = "The delivery address with the specified id is not registered",
     ORDER_STATUS_NOT_FOUND = "The order status with the specified id is not registered",
+    ORDER_NOT_FOUND = "The order with the given id does not exists",
     STOCK_NOT_AVAILABLE = "The order could not be placed because at least one product is not satisfied with its current stock",
     INVENTORY_NOT_FOUND = "The inventory with the specified id is not registered",
     INVENTORY_DOES_NOT_EXIST = "At least one of the ordered products is not registered in the store's inventory",
