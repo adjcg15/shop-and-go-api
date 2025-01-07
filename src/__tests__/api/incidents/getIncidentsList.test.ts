@@ -52,7 +52,10 @@ describe("GET /api/incidents", () => {
     });
 
     it("Should validate offset filter format and return an array of feedback messages", async () => {
-        const response = await request(app).get(`/api/incidents?offset=juan`);
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .get(`/api/incidents?offset=juan`)
+            .set("Authorization", `Bearer ${token}`);
         const error = response.body;
 
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
@@ -61,7 +64,11 @@ describe("GET /api/incidents", () => {
     });
 
     it("Should validate limit filter format and return an array of feedback messages", async () => {
-        const response = await request(app).get(`/api/incidents?offset=juan`);
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .get(`/api/incidents?offset=juan`)
+            .set("Authorization", `Bearer ${token}`);
+        
         const error = response.body;
 
         expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
@@ -69,7 +76,7 @@ describe("GET /api/incidents", () => {
         expect(error.details.length).toBeGreaterThan(0);
     });
 
-    it("Should return an array of 3 product categories registered in database", async () => {
+    it("Should return an array of 3 incidents registered in database", async () => {
         const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
         const response = await request(app)
             .get(`/api/incidents`)
@@ -88,10 +95,76 @@ describe("GET /api/incidents", () => {
         });
     });
 
+    it("Should apply limit filter", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .get(`/api/incidents?limit=2`)
+            .set("Authorization", `Bearer ${token}`);
+        const incidentsSummary = response.body;
+
+        expect(response.status).toBe(HttpStatusCodes.OK);
+        expect(incidentsSummary.count).toBe(3);
+        expect(Array.isArray(incidentsSummary.incidents)).toBe(true);
+        expect(incidentsSummary.incidents.length).toBe(2);
+        incidentsSummary.incidents.forEach((incident:any) => {
+            expect(incident).toMatchObject({
+                id: expect.any(Number),
+                creationDate: expect.any(String),
+                reason: expect.any(String),
+                idOrder: expect.any(Number),
+            });
+        });
+    });
+
+    it("Should apply offset filter", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .get(`/api/incidents?offset=2`)
+            .set("Authorization", `Bearer ${token}`);
+        const incidentsSummary = response.body;
+
+        expect(response.status).toBe(HttpStatusCodes.OK);
+        expect(incidentsSummary.count).toBe(3);
+        expect(Array.isArray(incidentsSummary.incidents)).toBe(true);
+        expect(incidentsSummary.incidents.length).toBe(1);
+        incidentsSummary.incidents.forEach((incident:any) => {
+            expect(incident).toMatchObject({
+                id: expect.any(Number),
+                creationDate: expect.any(String),
+                reason: expect.any(String),
+                idOrder: expect.any(Number),
+            });
+        });
+    });
+
+    it("Should apply offset and limit filters", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app)
+            .get(`/api/incidents?limit=1&offset=2`)
+            .set("Authorization", `Bearer ${token}`);
+        const incidentsSummary = response.body;
+
+        expect(response.status).toBe(HttpStatusCodes.OK);
+        expect(incidentsSummary.count).toBe(3);
+        expect(Array.isArray(incidentsSummary.incidents)).toBe(true);
+        expect(incidentsSummary.incidents.length).toBe(1);
+        incidentsSummary.incidents.forEach((incident:any) => {
+            expect(incident).toMatchObject({
+                id: expect.any(Number),
+                creationDate: expect.any(String),
+                reason: expect.any(String),
+                idOrder: expect.any(Number),
+            });
+        });
+    });
+
     it("should display an error message indicating that the database server connection failed", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
         await db.sequelize.close();
         
-        const response = await request(app).get(`/api/incidents`);
+        const response = await request(app)
+            .get(`/api/incidents`)
+            .set("Authorization", `Bearer ${token}`);
 
         expect(response.status).toBe(HttpStatusCodes.INTERNAL_SERVER_ERROR);
     });
