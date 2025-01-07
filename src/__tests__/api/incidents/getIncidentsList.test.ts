@@ -18,6 +18,57 @@ describe("GET /api/incidents", () => {
         await insertE2EGetIncidentsListTestData();
     });
 
+    it("Should avoid request under a GUEST role", async () => {
+        const response = await request(app).get(`/api/incidents`);
+
+        expect(response.status).toBe(HttpStatusCodes.UNAUTHORIZED);
+    });
+
+    it("Should avoid request under a CLIENT role", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.CLIENT });
+        const response = await request(app)
+            .get(`/api/incidents`)
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(response.status).toBe(HttpStatusCodes.FORBIDDEN);
+    });
+
+    it("Should avoid request under a SALES EXECUTIVE role", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.SALES_EXECUTIVE });
+        const response = await request(app)
+            .get(`/api/incidents`)
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(response.status).toBe(HttpStatusCodes.FORBIDDEN);
+    });
+
+    it("Should avoid request under a DELIVERY MAN role", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.SALES_EXECUTIVE });
+        const response = await request(app)
+            .get(`/api/incidents`)
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(response.status).toBe(HttpStatusCodes.FORBIDDEN);
+    });
+
+    it("Should validate offset filter format and return an array of feedback messages", async () => {
+        const response = await request(app).get(`/api/incidents?offset=juan`);
+        const error = response.body;
+
+        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
+        expect(Array.isArray(error.details)).toBe(true);
+        expect(error.details.length).toBeGreaterThan(0);
+    });
+
+    it("Should validate limit filter format and return an array of feedback messages", async () => {
+        const response = await request(app).get(`/api/incidents?offset=juan`);
+        const error = response.body;
+
+        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
+        expect(Array.isArray(error.details)).toBe(true);
+        expect(error.details.length).toBeGreaterThan(0);
+    });
+
     it("Should return an array of 3 product categories registered in database", async () => {
         const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
         const response = await request(app)
@@ -35,5 +86,13 @@ describe("GET /api/incidents", () => {
                 idOrder: expect.any(Number),
             });
         });
+    });
+
+    it("should display an error message indicating that the database server connection failed", async () => {
+        await db.sequelize.close();
+        
+        const response = await request(app).get(`/api/incidents`);
+
+        expect(response.status).toBe(HttpStatusCodes.INTERNAL_SERVER_ERROR);
     });
 });
