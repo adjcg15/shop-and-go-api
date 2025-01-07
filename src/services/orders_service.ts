@@ -3,7 +3,7 @@ import SQLException from "../exceptions/services/SQLException";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { IOrderProductsBody } from "../types/interfaces/request_bodies";
 import { ErrorMessages } from "../types/enums/error_messages";
-import { CreateOrderErrorCodes, GetOrdersByEmployeeAndStatus } from "../types/enums/error_codes";
+import { CreateOrderErrorCodes } from "../types/enums/error_codes";
 import { getCurrentDateTimeSQL } from "../lib/datetime_service";
 import { OrderStatus } from "../types/enums/order_status";
 import { InferAttributes } from "sequelize";
@@ -159,15 +159,6 @@ async function getOrdersByEmployeeAndStatus(
     const ordersList: InferAttributes<Order>[] = [];
 
     try {
-        const existingEmployee = await db.Employee.findByPk(idEmployee);
-
-        if (existingEmployee === null) {
-            throw new BusinessLogicException(
-                ErrorMessages.EMPLOYEE_NOT_FOUND,
-                GetOrdersByEmployeeAndStatus.EMPLOYEE_NOT_FOUND
-            );
-        }
-
         const existingStatus = await db.OrderStatus.findOne({
             where: { title: status }
         })
@@ -175,7 +166,6 @@ async function getOrdersByEmployeeAndStatus(
         if (existingStatus === null) {
             throw new BusinessLogicException(
                 ErrorMessages.ORDER_STATUS_NOT_FOUND,
-                GetOrdersByEmployeeAndStatus.ORDER_STATUS_NOT_FOUND
             );
         }
 
