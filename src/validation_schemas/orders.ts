@@ -82,8 +82,34 @@ const getOrderToAssignByIdValidationSchema: Schema = {
     },
 }
 
+const createOrderToDeliverValidationSchema: Schema = {
+    idOrder: {
+        in: ["body"],
+        notEmpty: {
+            errorMessage: "idOrder is required"
+        },
+        isInt: {
+            options: { min: 1 },
+            errorMessage: "Parameter idOrder must be a positive integer",
+        },
+        toInt: true
+    },
+    idDeliveryMan: {
+        in: ["body"],
+        notEmpty: {
+            errorMessage: "idDeliveryMan is required"
+        },
+        isInt: {
+            options: { min: 1 },
+            errorMessage: "Parameter idDeliveryMan must be a positive integer",
+        },
+        toInt: true
+    },
+}
+
 export {
     createOrderValidationsSchema,
     deliverOrderValidationsSchema,
-    getOrderToAssignByIdValidationSchema
+    getOrderToAssignByIdValidationSchema,
+    createOrderToDeliverValidationSchema
 }

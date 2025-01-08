@@ -48,6 +48,7 @@ DECLARE @idCargoEjecutivo INT;
 DECLARE @idCargoRepartidor INT;
 
 DECLARE @idRepartidor1 INT;
+DECLARE @idRepartidorSinPedidosEnCurso INT;
 
 DECLARE @idEmisorBanamex INT;
 DECLARE @idEmisorBBVA INT;
@@ -291,9 +292,12 @@ VALUES ('Ángel de Jesús De la cruz García', 'admin', '$2a$12$Hg2zf5PeoguYwtnA
 ('Ángel de Jesús De la cruz García', 'ejecutivo', '$2a$12$Hg2zf5PeoguYwtnAm6lwV.B1zhvCj/4C2BywOsJCFlpeD3caSrsi2',
 '2023-01-04', 1, 1, @idSucursal1, @idCargoEjecutivo),
 ('Ángel de Jesús De la cruz García', 'repartidor', '$2a$12$Hg2zf5PeoguYwtnAm6lwV.B1zhvCj/4C2BywOsJCFlpeD3caSrsi2',
-'2023-01-04', 1, 1, @idSucursal1, @idCargoRepartidor);
+'2023-01-04', 1, 1, @idSucursal1, @idCargoRepartidor),
+('Juan Carlos Pérez Pérez', 'repartidor2', '$2a$12$Hg2zf5PeoguYwtnAm6lwV.B1zhvCj/4C2BywOsJCFlpeD3caSrsi2',
+'2024-12-12', 1, 1, @idSucursal1, @idCargoRepartidor);
 
-SELECT @idRepartidor1 = idTrabajador FROM Trabajadores WHERE usuario = 'repartidor';
+SELECT @idRepartidor1 = idTrabajador FROM Trabajadores WHERE usuario = 'repartidor' AND nombreCompleto = 'Ángel de Jesús De la cruz García';
+SELECT @idRepartidorSinPedidosEnCurso = idTrabajador FROM Trabajadores WHERE usuario = 'repartidor' AND nombreCompleto = 'Juan Carlos Pérez Pérez';
 
 INSERT INTO DireccionesEntrega (
 	[calle],

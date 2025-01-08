@@ -29,7 +29,7 @@ interface IOrderProductsBody extends Omit<InferAttributes<OrderProduct>, "id" | 
     idOrder?: number;
 }
 
-interface IOrderWithQuantitiesOfProductsBody extends Omit<InferAttributes<Order>, "dateOfPurchase" | "idStatus"> {
+interface IOrderWithQuantitiesOfProductsBody extends Omit<InferAttributes<Order>, "dateOfPurchase" | "idStatus"  | "idStore"> {
     idStore?: number;
     products?: IOrderProductsBody[]; 
 }
@@ -84,6 +84,11 @@ interface IDeliverOrderBody {
     idOrder: number,
 }
 
+interface IAssignOrderBody {
+    idOrder: number;
+    idDeliveryMan: number;
+}
+
 export {
     IInventoryWithOptionalProductIdBody,
     IProductWithInventoriesBody,
@@ -96,5 +101,6 @@ export {
     IClientAddressBody,
     IClientBody,
     IEmployeeBody,
-    IDeliverOrderBody
+    IDeliverOrderBody,
+    IAssignOrderBody
 }

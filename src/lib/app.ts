@@ -16,6 +16,8 @@ export default function createApp() {
 
     app.use(cors({
         origin: process.env.CLIENT_APPLICATION_HOST,
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
         optionsSuccessStatus: 200
     }));
 
