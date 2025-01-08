@@ -84,6 +84,11 @@ interface IDeliverOrderBody {
     idOrder: number,
 }
 
+interface IAssignOrderBody {
+    idOrder: number;
+    idDeliveryMan: number;
+}
+
 export {
     IInventoryWithOptionalProductIdBody,
     IProductWithInventoriesBody,
@@ -96,5 +101,6 @@ export {
     IClientAddressBody,
     IClientBody,
     IEmployeeBody,
-    IDeliverOrderBody
+    IDeliverOrderBody,
+    IAssignOrderBody
 }

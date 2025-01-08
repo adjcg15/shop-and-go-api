@@ -2,10 +2,10 @@ import { Router } from "express";
 import { checkTokenValidity, validateClientOwnership } from "../middlewares/access_control";
 import { allowRoles } from "../middlewares/access_control";
 import UserRoles from "../types/enums/user_roles";
-import { checkSchema } from "express-validator";
-import { createOrderValidationsSchema, deliverOrderValidationsSchema, getOrderToAssignByIdValidationSchema } from "../validation_schemas/orders";
+import { check, checkSchema } from "express-validator";
+import { createOrderToDeliverValidationSchema, createOrderValidationsSchema, deliverOrderValidationsSchema, getOrderToAssignByIdValidationSchema } from "../validation_schemas/orders";
 import validateRequestSchemaMiddleware from "../middlewares/schema_validator";
-import { createOrderController, deliverOrderController, getOrdersToAssignController, getOrdersToDeliverController, getOrderToAssignByIdController } from "../controllers/orders_controller";
+import { createOrderToDeliverController, createOrderController, deliverOrderController, getOrdersToAssignController, getOrdersToDeliverController, getOrderToAssignByIdController } from "../controllers/orders_controller";
 
 const router = Router();
 
@@ -24,6 +24,15 @@ router.get(
     checkTokenValidity,
     allowRoles([UserRoles.DELIVERY_MAN]),
     getOrdersToDeliverController
+);
+
+router.post(
+    "/orders-to-deliver",
+    checkTokenValidity,
+    allowRoles([UserRoles.SALES_EXECUTIVE]),
+    checkSchema(createOrderToDeliverValidationSchema),
+    validateRequestSchemaMiddleware,
+    createOrderToDeliverController
 );
 
 router.get(

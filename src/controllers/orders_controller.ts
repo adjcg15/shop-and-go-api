@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
-import { IDeliverOrderBody, IOrderWithQuantitiesOfProductsBody } from "../types/interfaces/request_bodies";
-import { createOrder, deliverOrder, getOrdersByEmployeeAndStatus, getOrdersToAssign, getOrderToAssignByIdInStore } from "../services/orders_service";
+import { IAssignOrderBody, IDeliverOrderBody, IOrderWithQuantitiesOfProductsBody } from "../types/interfaces/request_bodies";
+import { assignOrderToDeliveryMan, createOrder, deliverOrder, getOrdersByEmployeeAndStatus, getOrdersToAssign, getOrderToAssignByIdInStore } from "../services/orders_service";
 import { InferAttributes } from "sequelize";
 import { IEmployeeByIdParams, IOrderToAssignByIdParams } from "../types/interfaces/request_parameters";
 import { IOrdersForDeliveryQuery } from "../types/interfaces/request_queries";
@@ -124,11 +124,36 @@ async function deliverOrderController(
     }
 }
 
+async function createOrderToDeliverController(
+    req: Request<{}, {}, IAssignOrderBody, {}>,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const { idDeliveryMan, idOrder } = req.body;
+        const idEmployee = req.user.id;
+        const workplace = await getStoreWhereEmployeeWorks(idEmployee);
+
+        if(!workplace) {
+            throw new BusinessLogicException(ErrorMessages.STORE_OF_EMPLOYEE_NOT_FOUNT);
+        }
+
+        const assignedOrder = await assignOrderToDeliveryMan({
+            idDeliveryMan: idDeliveryMan!,
+            idOrder: idOrder!,
+            idStore: workplace.id
+        });
+        res.status(HttpStatusCodes.CREATED).json(assignedOrder);
+    } catch (error) {
+        next(error);
+    }
+}
 
 export {
     createOrderController,
     getOrdersToDeliverController,
     getOrdersToAssignController,
     deliverOrderController,
-    getOrderToAssignByIdController
+    getOrderToAssignByIdController,
+    createOrderToDeliverController
 }
