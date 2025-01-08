@@ -85,10 +85,6 @@ const createAddressToClientValidationSchema: Schema = {
         },
         notEmpty: {
             errorMessage: "Street number is required"
-        },
-        matches: {
-            options: /^\d+$/,
-            errorMessage: "Street number must contain only numeric characters"
         }
     },
     apartmentNumber: {
