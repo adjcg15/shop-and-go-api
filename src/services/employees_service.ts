@@ -5,7 +5,7 @@ import db from "../models";
 import EmployeePosition from "../models/EmployeePosition";
 import Employee from "../models/Employee";
 import Store from "../models/Store";
-import { CreateEmployeeErrorCodes, UpdateEmployeeErrorCodes } from "../types/enums/error_codes";
+import { CreateEmployeeErrorCodes, GetEmployeeErrorCodes, UpdateEmployeeErrorCodes } from "../types/enums/error_codes";
 import { ErrorMessages } from "../types/enums/error_messages";
 import UserRoles from "../types/enums/user_roles";
 import { IEmployeeWithPosition } from "../types/interfaces/response_bodies";
@@ -215,14 +215,6 @@ async function getEmployeePositions() {
     try {
         const positions = await db.EmployeePosition.findAll();
 
-        if(positions === null) {
-            throw new BusinessLogicException(
-                "The employee positions are not registered on database and are needed",
-                undefined,
-                HttpStatusCodes.INTERNAL_SERVER_ERROR
-            );
-        }
-
         positions.forEach((position) => employeePositions.push(position.toJSON()));
     } catch (error: any) {
         throw new SQLException(error);
@@ -231,10 +223,52 @@ async function getEmployeePositions() {
     return employeePositions;
 }
 
+async function getEmployees() {
+    const employees: InferAttributes<Employee>[] = [];
+
+    try {
+        const dbEmployees = await db.Employee.findAll();
+
+        dbEmployees.forEach((employee) => employees.push(employee.toJSON()));
+    } catch (error: any) {
+        throw new SQLException(error);
+    }
+
+    return employees;
+}
+
+async function getEmployee(idEmployee: number) {
+    let employee: InferAttributes<Employee> | null = null;
+
+    try {
+        const dbEmployee = await db.Employee.findByPk(idEmployee);
+
+        if (dbEmployee === null) {
+            throw new BusinessLogicException(
+                ErrorMessages.EMPLOYEE_NOT_FOUND,
+                GetEmployeeErrorCodes.EMPLOYEE_NOT_FOUND,
+                HttpStatusCodes.NOT_FOUND
+            );
+        }
+
+        employee = dbEmployee.toJSON();
+    } catch (error: any) {
+        if (error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+
+    return employee;
+}
+
 export {
     getEmployeeById,
     createEmployee,
     updateEmployee,
     getDeliveryMenAvailableForWorkOnStore,
-    getEmployeePositions
+    getEmployeePositions,
+    getEmployees,
+    getEmployee
 };
