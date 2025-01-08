@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
 import { IEmployeeBody } from "../types/interfaces/request_bodies";
-import { createEmployee, getDeliveryMenAvailableForWorkOnStore, updateEmployee } from "../services/employees_service";
+import { createEmployee, getDeliveryMenAvailableForWorkOnStore, getEmployeePositions, updateEmployee } from "../services/employees_service";
 import { IEmployeeByIdParams } from "../types/interfaces/request_parameters";
 import { getStoreWhereEmployeeWorks } from "../services/stores_service";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
@@ -77,8 +77,23 @@ async function getActiveDeliveryMenController(
     }
 }
 
+async function getEmployeePositionsController(
+    req: Request<{}, {}, {}, {}>,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const positions = await getEmployeePositions();
+
+        res.status(HttpStatusCodes.OK).json(positions);
+    } catch (error) {
+        next(error);
+    }
+}
+
 export {
     createEmployeeController,
     updateEmployeeController,
-    getActiveDeliveryMenController
+    getActiveDeliveryMenController,
+    getEmployeePositionsController
 };

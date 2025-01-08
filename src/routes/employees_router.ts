@@ -8,7 +8,7 @@ import { checkSchema } from "express-validator";
 import UserRoles from "../types/enums/user_roles";
 import validateRequestSchemaMiddleware from "../middlewares/schema_validator";
 import { createEmployeeSchema, updateEmployeeSchema } from "../validation_schemas/employee";
-import { createEmployeeController, getActiveDeliveryMenController, updateEmployeeController } from "../controllers/employee_controller";
+import { createEmployeeController, getActiveDeliveryMenController, getEmployeePositionsController, updateEmployeeController } from "../controllers/employee_controller";
 
 const router = Router();
 
@@ -37,4 +37,10 @@ router.get(
   getActiveDeliveryMenController
 );
 
+router.get(
+  "/positions",
+  checkTokenValidity,
+  allowRoles([UserRoles.ADMINISTRATOR]),
+  getEmployeePositionsController
+)
 export default router; 
