@@ -3,10 +3,10 @@ import createApp from '../../../lib/app';
 import { Express } from 'express';
 import db from '../../../models';
 import { HttpStatusCodes } from '../../../types/enums/http';
-import { insertE2EGetEmployeePositionsTestData } from '../../../test_data/e2e/employees_test_data';
+import { insertE2EGetEmployeesTestData } from '../../../test_data/e2e/employees_test_data';
 import { Sequelize } from "sequelize";
 
-describe ("GET api/employees/positions", () => {
+describe ("GET api/employees", () => {
     let app: Express;        
     let token: string = "";
 
@@ -15,7 +15,7 @@ describe ("GET api/employees/positions", () => {
 
         await db.sequelize.sync({ force: true });
 
-        await insertE2EGetEmployeePositionsTestData();
+        await insertE2EGetEmployeesTestData();
 
         const session = {username: "mlopez1234", password: "hola"};
         const response = await request(app).post(`/api/sessions`).send(session);
@@ -23,8 +23,8 @@ describe ("GET api/employees/positions", () => {
         token = administrator.token;
     });
 
-    it("Should get the employee positions from database", async () => {
-        const response = await request(app).get(`/api/employees/positions`)
+    it("Should get the employees from database", async () => {
+        const response = await request(app).get(`/api/employees`)
                 .set("Authorization", `Bearer ${token}`);
         expect(response.status).toBe(HttpStatusCodes.OK);
         expect(response.body).not.toBeNull;
@@ -39,7 +39,7 @@ describe ("GET api/employees/positions", () => {
             dialect: 'mssql',
         });
     
-        const response = await request(app).get(`/api/employees/positions`)
+        const response = await request(app).get(`/api/employees`)
         .set("Authorization", `Bearer ${token}`);
         
         expect(response.status).toBe(HttpStatusCodes.INTERNAL_SERVER_ERROR);
