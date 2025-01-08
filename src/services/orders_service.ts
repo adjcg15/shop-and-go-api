@@ -3,10 +3,10 @@ import SQLException from "../exceptions/services/SQLException";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
 import { IOrderProductsBody } from "../types/interfaces/request_bodies";
 import { ErrorMessages } from "../types/enums/error_messages";
-import { CreateOrderErrorCodes } from "../types/enums/error_codes";
+import { CreateOrderErrorCodes, CreateOrderToDeliverErrorCodes } from "../types/enums/error_codes";
 import { getCurrentDateTimeSQL } from "../lib/datetime_service";
 import { OrderStatus } from "../types/enums/order_status";
-import { InferAttributes } from "sequelize";
+import { InferAttributes, Transaction } from "sequelize";
 import Order from "../models/Order";
 import { HttpStatusCodes } from "../types/enums/http";
 
@@ -364,6 +364,89 @@ async function deliverOrder(idEmployee: number, idOrder: number) {
     return deliveredOrder;
 }
 
+async function assignOrderToDeliveryMan({
+    idOrder, idStore, idDeliveryMan
+}: { idOrder: number, idDeliveryMan: number, idStore: number }) {
+    let assignedOrder: InferAttributes<Order>;
+    let transaction: Transaction | null = null;
+
+    try {
+        const sentOrderStatus = await db.OrderStatus.findOne({
+            where: { title: OrderStatus.SENT },
+        });
+        if (!sentOrderStatus) {
+            throw new BusinessLogicException(
+                "The order status SENT is not registered on database and is needed",
+                undefined,
+                HttpStatusCodes.INTERNAL_SERVER_ERROR
+            );
+        }
+        const createdOrderStatus = await db.OrderStatus.findOne({
+            where: { title: OrderStatus.CREATED },
+        });
+        if (!createdOrderStatus) {
+            throw new BusinessLogicException(
+                "The order status CREATED is not registered on database and is needed",
+                undefined,
+                HttpStatusCodes.INTERNAL_SERVER_ERROR
+            );
+        }
+
+        const order = await db.Order.findOne(
+            { where: { idStore, id: idOrder, idStatus: createdOrderStatus.id } }
+        );
+        if(!order) {
+            throw new BusinessLogicException(
+                "The order was not found, maybe it is already assigned",
+                CreateOrderToDeliverErrorCodes.ORDER_NOT_FOUND
+            );
+        }
+
+        const deliveryMan = await db.Employee.findOne(
+            { where: { idStore, id: idDeliveryMan, isAvailableForWork: true, isActive: true } }
+        );
+        if(!deliveryMan) {
+            throw new BusinessLogicException(
+                "The employee was not found, maybe it is already full of work",
+                CreateOrderToDeliverErrorCodes.EMPLOYEE_NOT_FOUND
+            );
+        }
+        const totalAssignedOrdersToDeliveryMan = await db.Order.count(
+            { where: { idDeliveryMan: deliveryMan.id, idStatus: sentOrderStatus.id } }
+        );
+        const MAXIMUM_ORDERS_PER_DELIVERY_MAN = 3;
+        if(totalAssignedOrdersToDeliveryMan >= MAXIMUM_ORDERS_PER_DELIVERY_MAN) {
+            throw new BusinessLogicException(
+                "This delivery man has reached their maximum orders to deliver allowed",
+                CreateOrderToDeliverErrorCodes.EMPLOYEE_NOT_FOUND
+            );
+        }
+
+        transaction = await db.sequelize.transaction();
+
+        order.idStatus = sentOrderStatus.id;
+        order.idDeliveryMan = deliveryMan.id;
+        await order.save({ transaction });
+
+        deliveryMan.isAvailableForWork = (totalAssignedOrdersToDeliveryMan + 1) < MAXIMUM_ORDERS_PER_DELIVERY_MAN;
+        await deliveryMan.save({ transaction });
+
+        await transaction.commit();
+
+        assignedOrder = order.toJSON();
+    } catch (error: any) {
+        if(transaction) await transaction.rollback();
+
+        if (error.isTrusted) {
+            throw error;
+        } else {
+            throw new SQLException(error);
+        }
+    }
+
+    return assignedOrder;
+}
+
 async function isOrderBeingDeliveredByDeliveryMan(
     idOrder: number,
     idDeliveryMan: number
@@ -408,5 +491,6 @@ export {
     getOrdersToAssign,
     deliverOrder,
     isOrderBeingDeliveredByDeliveryMan,
-    getOrderToAssignByIdInStore
+    getOrderToAssignByIdInStore,
+    assignOrderToDeliveryMan
 };
