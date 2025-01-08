@@ -112,6 +112,10 @@ enum CreateOrderToDeliverErrorCodes {
     EMPLOYEE_FULL_OF_WORK = EndpointContexts.CREATE_ORDER_TO_DELIVER + "-400003"
 }
 
+enum GetEmployeeErrorCodes {
+    EMPLOYEE_NOT_FOUND = EndpointContexts.CREATE_ORDER_TO_DELIVER + "-400001",
+}
+
 export {
     CreatePaymentMethodErrorCodes,
     DeletePaymentMethodErrorCodes,
@@ -128,6 +132,7 @@ export {
     DeleteAddressErrorCodes,
     CreateEmployeeErrorCodes,
     UpdateEmployeeErrorCodes,
+    GetEmployeeErrorCodes,
     CreateStoreErrorCodes,
     UpdateStoreErrorCodes,
     CreateOrderToDeliverErrorCodes
