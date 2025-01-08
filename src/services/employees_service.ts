@@ -209,9 +209,32 @@ async function getDeliveryMenAvailableForWorkOnStore(idStore: number) {
     return deliveryMen;
 }
 
+async function getEmployeePositions() {
+    const employeePositions: InferAttributes<EmployeePosition>[] = [];
+
+    try {
+        const positions = await db.EmployeePosition.findAll();
+
+        if(positions === null) {
+            throw new BusinessLogicException(
+                "The employee positions are not registered on database and are needed",
+                undefined,
+                HttpStatusCodes.INTERNAL_SERVER_ERROR
+            );
+        }
+
+        positions.forEach((position) => employeePositions.push(position.toJSON()));
+    } catch (error: any) {
+        throw new SQLException(error);
+    }
+
+    return employeePositions;
+}
+
 export {
     getEmployeeById,
     createEmployee,
     updateEmployee,
-    getDeliveryMenAvailableForWorkOnStore
+    getDeliveryMenAvailableForWorkOnStore,
+    getEmployeePositions
 };
