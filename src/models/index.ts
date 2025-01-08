@@ -10,10 +10,12 @@ const db: Partial<IDB> = {};
 
 const sequelize = new Sequelize(config);
 
+const isProductionEnviroment = process.env.NODE_ENV === "production";
+
 fs
     .readdirSync(path.join(__dirname, "factories"))
     .filter(file => {
-        return file.indexOf(".") !== 0 && file.slice(-3) === ".ts";
+        return file.indexOf(".") !== 0 && file.slice(-3) === (isProductionEnviroment ? ".js" : ".ts");
     })
     .forEach(async file => {
         const { default: modelFactory } = require(path.join(__dirname, "factories", file));

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpStatusCodes } from "../types/enums/http";
 import { IEmployeeBody } from "../types/interfaces/request_bodies";
-import { createEmployee, getDeliveryMenAvailableForWorkOnStore, getEmployeePositions, updateEmployee } from "../services/employees_service";
+import { createEmployee, getDeliveryMenAvailableForWorkOnStore, getEmployee, getEmployeePositions, getEmployees, updateEmployee } from "../services/employees_service";
 import { IEmployeeByIdParams } from "../types/interfaces/request_parameters";
 import { getStoreWhereEmployeeWorks } from "../services/stores_service";
 import BusinessLogicException from "../exceptions/business/BusinessLogicException";
@@ -91,9 +91,41 @@ async function getEmployeePositionsController(
     }
 }
 
+async function getEmployeesController(
+    req: Request<{}, {}, {}, {}>,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const employees = await getEmployees();
+
+        res.status(HttpStatusCodes.OK).json(employees);
+    } catch (error) {
+        next(error);
+    }  
+}
+
+async function getEmployeeController(
+    req: Request<IEmployeeByIdParams, {}, {}, {}>,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const { idEmployee } = req.params;
+
+        const store = await getEmployee(idEmployee!);
+
+        res.status(HttpStatusCodes.OK).json(store);
+    } catch (error) {
+        next(error);
+    }  
+}
+
 export {
     createEmployeeController,
     updateEmployeeController,
     getActiveDeliveryMenController,
-    getEmployeePositionsController
+    getEmployeePositionsController,
+    getEmployeesController,
+    getEmployeeController
 };
