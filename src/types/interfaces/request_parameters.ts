@@ -30,6 +30,10 @@ interface IEmployeeByIdParams {
     idEmployee?: number;
 }
 
+interface IOrderToAssignByIdParams {
+    idOrder?: number;
+}
+
 export {
     IStoreByIdParams,
     IClientByIdParams,
@@ -38,5 +42,6 @@ export {
     IPaymentMethodByIdParams,
     IClientAddressId,
     IProductCategoryIdParams,
-    IEmployeeByIdParams
+    IEmployeeByIdParams,
+    IOrderToAssignByIdParams
 };
