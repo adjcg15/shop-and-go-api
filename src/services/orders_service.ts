@@ -146,6 +146,18 @@ async function createOrder(order: {
                     transaction,
                 }
             );
+            await db.Inventory.update(
+                {
+                    stock: sequelize.literal(`cantidad - ${product.amount}`),
+                },
+                {
+                    where: {
+                        idProduct: product.idProduct,
+                        idStore,
+                    },
+                    transaction,
+                }
+            );
         }
 
         await transaction.commit();
