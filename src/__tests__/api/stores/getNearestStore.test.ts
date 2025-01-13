@@ -61,6 +61,76 @@ describe("POST /api/stores/nearest-store", () => {
         expect(response.status).toBe(HttpStatusCodes.NOT_FOUND);
     });
 
+    it("Should return an error if latitude is missing", async () => {
+        const response = await request(app)
+            .post("/api/stores/nearest-store")
+            .send({
+                longitude: -96.92192879999999,
+            });
+
+        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
+        expect(Array.isArray(response.body.details)).toBe(true);
+    });
+
+    it("Should return an error if longitude is missing", async () => {
+        const response = await request(app)
+            .post("/api/stores/nearest-store")
+            .send({
+                latitude: 19.5287648,
+            });
+
+        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
+        expect(Array.isArray(response.body.details)).toBe(true);
+    });
+
+    it("Should return an error if latitude is not a float", async () => {
+        const response = await request(app)
+            .post("/api/stores/nearest-store")
+            .send({
+                latitude: "invalid",
+                longitude: -96.92192879999999,
+            });
+
+        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
+        expect(Array.isArray(response.body.details)).toBe(true);
+    });
+
+    it("Should return an error if longitude is not a float", async () => {
+        const response = await request(app)
+            .post("/api/stores/nearest-store")
+            .send({
+                latitude: 19.5287648,
+                longitude: "invalid",
+            });
+
+        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
+        expect(Array.isArray(response.body.details)).toBe(true);
+    });
+
+    it("Should return an error if latitude is out of range", async () => {
+        const response = await request(app)
+            .post("/api/stores/nearest-store")
+            .send({
+                latitude: 100,
+                longitude: -96.92192879999999,
+            });
+
+        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
+        expect(Array.isArray(response.body.details)).toBe(true);
+    });
+
+    it("Should return an error if longitude is out of range", async () => {
+        const response = await request(app)
+            .post("/api/stores/nearest-store")
+            .send({
+                latitude: 19.5287648,
+                longitude: 200,
+            });
+
+        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
+        expect(Array.isArray(response.body.details)).toBe(true);
+    });
+
     afterAll(async () => {
         await db.sequelize.close();
     });
