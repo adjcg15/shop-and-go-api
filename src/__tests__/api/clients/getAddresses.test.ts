@@ -4,6 +4,8 @@ import { Express } from "express";
 import db from "../../../models";
 import { insertE2EGetAddressesTestData } from "../../../test_data/e2e/clients_test_data";
 import { HttpStatusCodes } from "../../../types/enums/http";
+import { signToken } from "../../../lib/token_store";
+import UserRoles from "../../../types/enums/user_roles";
 
 describe("GET /api/clients/:idClient/addresses", () => {
     let app: Express;
@@ -59,6 +61,36 @@ describe("GET /api/clients/:idClient/addresses", () => {
             .set("Authorization", `Bearer ${INVALID_TOKEN}`);
         
         expect(response.status).toBe(HttpStatusCodes.UNAUTHORIZED);
+    });
+
+    it("Should avoid request under a GUEST role", async () => {
+        const response = await request(app).get(`/api/clients/${idClient}/addresses`);
+        
+        expect(response.status).toBe(HttpStatusCodes.UNAUTHORIZED);
+    });
+
+    it("Should avoid request under a SALES EXECUTIVE role", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.SALES_EXECUTIVE });
+        const response = await request(app).get(`/api/clients/${idClient}/addresses`)
+            .set("Authorization", `Bearer ${token}`);
+        
+        expect(response.status).toBe(HttpStatusCodes.FORBIDDEN);
+    });
+
+    it("Should avoid request under a ADMINISTRATOR role", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app).get(`/api/clients/${idClient}/addresses`)
+            .set("Authorization", `Bearer ${token}`);
+        
+        expect(response.status).toBe(HttpStatusCodes.FORBIDDEN);
+    });
+
+    it("Should avoid request under a DELIVERY MAN role", async () => { 
+        const token = signToken({ id: 1, userRole: UserRoles.DELIVERY_MAN });
+        const response = await request(app).get(`/api/clients/${idClient}/addresses`)
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(response.status).toBe(HttpStatusCodes.FORBIDDEN);
     });
 
     afterAll(async () => {
