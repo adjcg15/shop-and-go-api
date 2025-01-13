@@ -4,6 +4,8 @@ import { Express } from "express";
 import { HttpStatusCodes } from "../../../types/enums/http";
 import db from "../../../models";
 import { insertE2EUpdateClientTestData } from "../../../test_data/e2e/clients_test_data";
+import { signToken } from "../../../lib/token_store";
+import UserRoles from "../../../types/enums/user_roles";
 
 describe("PATCH /api/clients/:idClient", () => {
     let app: Express;
@@ -68,5 +70,87 @@ describe("PATCH /api/clients/:idClient", () => {
             .set("Authorization", `Bearer ${INVALID_TOKEN}`);
 
         expect(response.status).toBe(HttpStatusCodes.UNAUTHORIZED);
+    });
+
+    it("Should avoid request under a GUEST role", async () => {
+        const response = await request(app).patch(`/api/clients/${idClient}`);
+
+        expect(response.status).toBe(HttpStatusCodes.UNAUTHORIZED);
+    });
+
+    it("Should avoid request under a DELIVERY MAN role", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.DELIVERY_MAN });
+        const response = await request(app).patch(`/api/clients/${idClient}`)
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(response.status).toBe(HttpStatusCodes.FORBIDDEN);
+    });
+
+    it("Should avoid request under an ADMINISTRATOR role", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.ADMINISTRATOR });
+        const response = await request(app).patch(`/api/clients/${idClient}`)
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(response.status).toBe(HttpStatusCodes.FORBIDDEN);
+    });
+
+    it("Should avoid request under a SALES EXECUTIVE role", async () => {
+        const token = signToken({ id: 1, userRole: UserRoles.SALES_EXECUTIVE });
+        const response = await request(app).patch(`/api/clients/${idClient}`)
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(response.status).toBe(HttpStatusCodes.FORBIDDEN);
+    });
+
+    it("Should return an error if birthdate is not in the format YYYY-MM-DD", async () => {
+        const INVALID_BIRTHDATE = "15-05-1995";
+
+        const response = await request(app).patch(`/api/clients/${idClient}`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ birthdate: INVALID_BIRTHDATE });
+
+        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
+        expect(Array.isArray(response.body.details)).toBe(true);
+    });
+
+    it("Should return an error if birthdate is not between 18 and 120 years ago", async () => {
+        const INVALID_BIRTHDATE = "1800-01-01";
+
+        const response = await request(app).patch(`/api/clients/${idClient}`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ birthdate: INVALID_BIRTHDATE });
+
+        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
+    });
+
+    it("Should return an error if full name contains invalid characters", async () => {
+        const INVALID_FULL_NAME = "Jane123 Doe!";
+
+        const response = await request(app).patch(`/api/clients/${idClient}`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ fullName: INVALID_FULL_NAME });
+
+        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
+    });
+
+    it("Should return an error if full name does not contain at least a first name and a last name", async () => {
+        const INVALID_FULL_NAME = "Jane";
+
+        const response = await request(app).patch(`/api/clients/${idClient}`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ fullName: INVALID_FULL_NAME });
+
+        expect(response.status).toBe(HttpStatusCodes.BAD_REQUEST);
+        expect(Array.isArray(response.body.details)).toBe(true);
+    });
+
+    it("Should display an error message indicating that the database server connection failed", async () => {
+        await db.sequelize.close();
+
+        const response = await request(app).patch(`/api/clients/${idClient}`)
+            .set("Authorization", `Bearer ${token}`)
+            .send({ fullName: "Jane Doe" });
+
+        expect(response.status).toBe(HttpStatusCodes.INTERNAL_SERVER_ERROR);
     });
 });
